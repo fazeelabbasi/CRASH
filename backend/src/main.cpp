@@ -6,6 +6,8 @@
 //#include "web/server.h"
 #include "core/GameHost.h"
 #include "core/User.h"
+#include "web/Server.h"
+
 int main() {
     GameHost host;
     User adam = User("Adam");
@@ -16,4 +18,5 @@ int main() {
     host.round.addParticipant(doug);
     host.round.addParticipant(stan);
     printf("The winner is %s", host.playRound().name.c_str());
+    begin();
 }

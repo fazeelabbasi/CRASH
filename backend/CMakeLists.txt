@@ -13,17 +13,6 @@ include_directories(
         "${CMAKE_SOURCE_DIR}/libs/cpp-webserver/base64"
 )
 
-set(SOURCE_FILES
-        core/GameHost.cpp
-        core/GameHost.h
-        core/Round.cpp
-        core/Round.h
-        core/User.cpp
-        core/User.h
-        main.cpp
-        main.h
-)
-
 set(LIBRARY_FILES
         libs/cpp-webserver/base64/base64.cpp
         libs/cpp-webserver/base64/base64.h
@@ -35,9 +24,21 @@ set(LIBRARY_FILES
         libs/cpp-webserver/stdHelpers.h
         libs/cpp-webserver/UrlHelper.cpp
         libs/cpp-webserver/UrlHelper.h
-)
+        )
+set(SOURCE_FILES
+        src/core/GameHost.cpp
+        src/core/GameHost.h
+        src/core/Round.cpp
+        src/core/Round.h
+        src/core/User.cpp
+        src/core/User.h
+        src/web/Server.cpp
+        src/web/Server.h
+        src/main.cpp
+        src/main.h
+        )
 
 add_executable(avatar
-    ${LIBRARY_FILES}
-    ${SOURCE_FILES}
-)
+        ${LIBRARY_FILES}
+        ${SOURCE_FILES}
+        )
