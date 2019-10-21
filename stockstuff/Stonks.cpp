@@ -5,8 +5,9 @@
 #include <time.h>
 #include <math.h>
 #include <random>
-
 #define init_value 1
+
+#define crash_chance_increase 1
 #define d 0.0022
 #define v 0.0298
 #define seed 1
@@ -20,6 +21,8 @@ Stonks::Stonks(double avgRet, double volatility)
     crashPrice = -1;
     crashTime = -1;
 }
+
+
 
 void Stonks::generateGraph()
 {
@@ -42,7 +45,7 @@ void Stonks::generateGraph()
 
     while(rand() % 10000 > (crash_chance + delta_crash_chance) && timeStep < 300) {
         timeStep++;
-        crash_chance++;
+        crash_chance += crash_chance_increase;
         delta_crash_chance = 0;
 
         //cout << "Random shock: " << diffusion << endl;
