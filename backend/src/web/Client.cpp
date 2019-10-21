@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "server.h"
+#include "Client.h"
 
 #include <cpprest/http_client.h>
 #include <cpprest/filestream.h>
@@ -14,12 +14,12 @@ using namespace web::http;                  // Common HTTP functionality
 using namespace web::http::client;          // HTTP client features
 using namespace concurrency::streams;       // Asynchronous streams
 
-void server::start() {
+void Client::start() {
 
 }
 
 
-void server::fetch() {
+void Client::fetch() {
     std::cout << "Fetching";
     auto fileStream = std::make_shared<ostream>();
     pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile) {

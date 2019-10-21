@@ -2,11 +2,11 @@
 // Created by User on 2019-10-07.
 //
 
-#ifndef AVATAR_SERVER_H
-#define AVATAR_SERVER_H
+#ifndef AVATAR_CLIENT_H
+#define AVATAR_CLIENT_H
 
 
-class server {
+class Client {
 public:
     void start();
 
@@ -14,4 +14,4 @@ public:
 };
 
 
-#endif //AVATAR_SERVER_H
+#endif //AVATAR_CLIENT_H
