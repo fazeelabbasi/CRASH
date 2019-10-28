@@ -33,6 +33,7 @@ public:
     QPushButton *sell;
     QLCDNumber *lcdNumber;
     QCustomPlot *stockPlot;
+    QPushButton *readyButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -45,7 +46,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         stockDescription = new QTextBrowser(centralwidget);
         stockDescription->setObjectName(QString::fromUtf8("stockDescription"));
-        stockDescription->setGeometry(QRect(210, 330, 381, 191));
+        stockDescription->setGeometry(QRect(190, 350, 381, 191));
         amountInvesting = new QSlider(centralwidget);
         amountInvesting->setObjectName(QString::fromUtf8("amountInvesting"));
         amountInvesting->setGeometry(QRect(280, 290, 160, 22));
@@ -62,10 +63,13 @@ public:
         stockPlot = new QCustomPlot(centralwidget);
         stockPlot->setObjectName(QString::fromUtf8("stockPlot"));
         stockPlot->setGeometry(QRect(160, 10, 461, 271));
+        readyButton = new QPushButton(centralwidget);
+        readyButton->setObjectName(QString::fromUtf8("readyButton"));
+        readyButton->setGeometry(QRect(330, 320, 93, 28));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
+        menubar->setGeometry(QRect(0, 0, 800, 26));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -83,10 +87,11 @@ public:
         stockDescription->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text';\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text'; font-size:13pt;\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
         buy->setText(QCoreApplication::translate("MainWindow", "Buy", nullptr));
         sell->setText(QCoreApplication::translate("MainWindow", "Sell", nullptr));
+        readyButton->setText(QCoreApplication::translate("MainWindow", "Ready", nullptr));
     } // retranslateUi
 
 };
