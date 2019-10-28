@@ -8,6 +8,7 @@
 #include <QStatusBar>
 #include <qcustomplot.h>
 
+using namespace std;
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -33,7 +34,7 @@ public:
 
 
     //Fazeel's Code
-    void addpoint(double x, double y);
+    void addpoint(int x, int y);
     void plot();
 
 public slots:
@@ -48,8 +49,10 @@ private:
     double amountInvested;
     QTimer dataTimer;
 
-    //Fazeel's Code
     QVector<double> qv_x, qv_y;
+    int Time = 0;
+    vector<int> vect{3,4,5};
+
 
 private:
     Ui::MainWindow *ui;

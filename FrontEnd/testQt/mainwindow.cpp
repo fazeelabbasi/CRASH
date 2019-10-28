@@ -6,7 +6,10 @@
 #include <QStatusBar>
 #include <unistd.h>
 #include "qcustomplot.h"
+#include <vector>
+#include <bits/stdc++.h>
 
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -55,7 +58,7 @@ void MainWindow::editStockDescription(std::string description){
     ui->stockDescription->setText(qstr);
 }
 
-void MainWindow::addpoint(double x, double y)
+void MainWindow::addpoint(int x, int y)
 {
     qv_x.append(x);
     qv_y.append(y);
@@ -71,6 +74,10 @@ void MainWindow::plot()
 
 void MainWindow::on_readyButton_clicked()
 {
-    addpoint(2,4);
+    int tempy;
+    tempy = vect.front();
+    addpoint(Time,tempy);
+    Time++;
+    vect.erase(vect.begin());
     plot();
 }
