@@ -21,7 +21,7 @@ class Stock_CSV_Reader
         Stock_CSV_Reader();
         virtual ~Stock_CSV_Reader();
         void ReadAndOutput(int);
-        string CompanySelect();
+        vector<string> CompanySelect();
 
     protected:
 

@@ -29,12 +29,13 @@ Stock_CSV_Reader::~Stock_CSV_Reader()
     //dtor
 }
 
-string Stock_CSV_Reader::CompanySelect(){
+vector<string> Stock_CSV_Reader::CompanySelect(){
 	string name;
 	ifstream fin;
 	string line;
 	stringstream s;
 	vector <string> all;
+	vector<string> ret;
 	int i;
 	int x;
 
@@ -54,7 +55,10 @@ string Stock_CSV_Reader::CompanySelect(){
 	i = rand() % x;
 	name = all[i];
 
-	return name;
+	ret.push_back(name);
+	ret.push_back("Company Type Here");
+
+	return ret;
 
 }
 
@@ -63,7 +67,9 @@ void Stock_CSV_Reader::ReadAndOutput(int interval)
     double avg_ret = 0;
     double stdev = 0;
 
-    string name = CompanySelect();
+    vector<string> companyInfo = CompanySelect();
+    string name =  companyInfo[0];
+    string type = companyInfo[1];
     ifstream fin;
     fin.open(name+".csv");
 
