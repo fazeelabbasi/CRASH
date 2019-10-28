@@ -25,15 +25,31 @@ public:
     void buyingStocks(double amountBought);
     void sellingStocks(double amountSold);
     void editStockDescription(std::string description);
+
+    void testingGraph(int first,int second);
     //void graphData();
-    void setupRealtimeDataDemo(QCustomPlot *customPlot);
-    void realtimeDataSlot();
+   // void setupRealtimeDataDemo(QCustomPlot *customPlot);
+    //void realtimeDataSlot();
+
+
+    //Fazeel's Code
+    void addpoint(double x, double y);
+    void plot();
+
+public slots:
+    void plotNewOnButton(int x,int y);
+
+private slots:
+    void on_readyButton_clicked();
 
 private:
     //All variables defined will not be assigned by us. They only exist for the sake of code readability.
     double currentCapital; //These are doubles since I am not sure how large these numbers will get. I do not think we want these as decimals.
     double amountInvested;
     QTimer dataTimer;
+
+    //Fazeel's Code
+    QVector<double> qv_x, qv_y;
 
 private:
     Ui::MainWindow *ui;
