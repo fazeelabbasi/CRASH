@@ -4,7 +4,7 @@
 
 #ifndef AVATAR_ROUND_H
 #define AVATAR_ROUND_H
-
+#include "RoundStatus.h"
 #include "Player.h"
 #include <vector>
 
@@ -13,9 +13,11 @@ public:
     Round(std::vector<User> participants);
     Round();
     void addParticipant(User &user);
-
-public:
     std::vector<User> participants;
+    int roundNumber;
+    RoundStatus status;
+    int endTime;
+
 };
 
 
