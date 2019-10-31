@@ -5,7 +5,7 @@
 #include "main.h"
 //#include "web/server.h"
 #include "core/GameHost.h"
-#include "core/User.h"
+#include "core/Player.h"
 #include "web/Server.h"
 
 int main() {

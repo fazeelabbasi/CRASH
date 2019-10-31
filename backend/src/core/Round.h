@@ -5,7 +5,7 @@
 #ifndef AVATAR_ROUND_H
 #define AVATAR_ROUND_H
 
-#include "User.h"
+#include "Player.h"
 #include <vector>
 
 class Round {

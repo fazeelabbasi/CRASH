@@ -13,6 +13,8 @@ public:
     void init();
     void createRound();
     User& playRound();
+private:
+    vector<string> hashedPasswords; 
 };
 
 

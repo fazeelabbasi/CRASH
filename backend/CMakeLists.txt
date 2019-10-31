@@ -30,8 +30,8 @@ set(SOURCE_FILES
         src/core/GameHost.h
         src/core/Round.cpp
         src/core/Round.h
-        src/core/User.cpp
-        src/core/User.h
+        src/core/Player.cpp
+        src/core/Player.h
         src/web/Server.cpp
         src/web/Server.h
         src/main.cpp
