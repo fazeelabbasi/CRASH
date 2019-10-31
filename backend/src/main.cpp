@@ -10,13 +10,13 @@
 
 int main() {
     GameHost host;
-    User adam = User("Adam");
-    User doug = User("Doug");
-    User stan = User("Stan");
+    Player adam = Player("Adam");
+    Player doug = Player("Doug");
+    Player stan = Player("Stan");
     host.createRound();
-    host.round.addParticipant(adam);
-    host.round.addParticipant(doug);
-    host.round.addParticipant(stan);
+    host.round.addParticipant(&adam);
+    host.round.addParticipant(&doug);
+    host.round.addParticipant(&stan);
     printf("The winner is %s", host.playRound().name.c_str());
     begin();
 }

@@ -4,5 +4,8 @@
 
 #ifndef AVATAR_PLAYERSTATUS_H
 #define AVATAR_PLAYERSTATUS_H
-enum PlayerStatus (ALIVE, DEAD);
+enum PlayerStatus {
+    ALIVE,
+    DEAD
+};
 #endif //AVATAR_PLAYERSTATUS_H

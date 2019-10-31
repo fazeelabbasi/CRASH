@@ -2,23 +2,21 @@
 // Created by User on 2019-10-07.
 //
 
-#ifndef AVATAR_PLAYER_H
-#define AVATAR_PLAYER_H
+#pragma once
 
+#include "Player.fwd.h"
 #include <string>
-#include "Round.h"
-
+#include "Round.fwd.h"
+#include "PlayerStatus.h"
+#include <vector>
 class Player {
 public:
     Player(const std::string &name);
 
     std::string name;
     float money;
-    Round roundsPlayed[];
+    std::vector<Round*> roundsPlayed;
     PlayerStatus status;
     float netWorth;
 
 };
-
-
-#endif //AVATAR_PLAYER_H

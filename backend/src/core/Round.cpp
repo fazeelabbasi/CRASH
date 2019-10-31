@@ -3,12 +3,12 @@
 //
 
 #include "Round.h"
-
+#include "Player.h"
 #include <utility>
 
-Round::Round(std::vector<User> participants) : participants(std::move(participants)) {}
+Round::Round(std::vector<Player*> participants) : participants(std::move(participants)) {}
 Round::Round() : participants() {}
 
-void Round::addParticipant(User& user) {
+void Round::addParticipant(Player* user) {
     participants.push_back(user);
 }

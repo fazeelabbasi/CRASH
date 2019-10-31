@@ -1,24 +1,18 @@
-//
-// Created by User on 2019-10-07.
-//
+#pragma once
 
-#ifndef AVATAR_ROUND_H
-#define AVATAR_ROUND_H
 #include "RoundStatus.h"
-#include "Player.h"
+#include "Round.fwd.h"
+#include "Player.fwd.h"
 #include <vector>
 
 class Round {
 public:
-    Round(std::vector<User> participants);
+    Round(std::vector<Player*> participants);
     Round();
-    void addParticipant(User &user);
-    std::vector<User> participants;
+    void addParticipant(Player* user);
+    std::vector<Player*> participants;
     int roundNumber;
     RoundStatus status;
     int endTime;
 
 };
-
-
-#endif //AVATAR_ROUND_H

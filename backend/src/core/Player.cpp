@@ -3,5 +3,6 @@
 //
 
 #include "Player.h"
+#include <string>
 
-User::User(const std::string &name) : name(name) {}
+Player::Player(const std::string &name) : name(name) {}

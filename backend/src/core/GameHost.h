@@ -6,15 +6,17 @@
 #define AVATAR_GAMEHOST_H
 
 #include "Round.h"
+#include <string>
+#include <vector>
 
 class GameHost {
 public:
     Round round;
     void init();
     void createRound();
-    User& playRound();
+    Player& playRound();
 private:
-    vector<string> hashedPasswords; 
+    std::vector<std::string> hashedPasswords;
 };
 
 
