@@ -10,7 +10,6 @@ int main()
 
 	Server* s = new Server();
 	s->start();
-	//std::thread t(&Server::waitForClient, s);
 	std::thread t([&]() {
 		while (true) {
 			SOCKET sock = s->waitForClient();
