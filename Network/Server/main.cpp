@@ -2,6 +2,7 @@
 #include <thread>
 #include "iostream"
 #include <chrono>
+#include <vector>
 int main()
 {
 	std::cout << "Yeet" << std::endl;
@@ -10,11 +11,18 @@ int main()
 	s->start();
 	//std::thread t(&Server::waitForClient, s);
 	std::thread t([&]() {
+		std::vector<std::thread*> threads;
 		while (true) {
 			SOCKET sock = s->waitForClient();
 			//Client c();
-			//std::thread listen([&]() {
-				s->listenToClient(sock);
+			//std::thread listener(&Server::listenToClient, s, sock);
+			std::thread listen([&]() {
+				try {
+					s->listenToClient(sock);
+				}
+				catch (std::exception & ex) {
+					std::cout << "fuck me, right?" << std::endl;
+				}
 				/*s->clients.erase(
 					std::remove(
 						s->clients.begin(),
@@ -23,7 +31,11 @@ int main()
 					),
 					clients.end()
 				);*/
-			//});
+			});
+			Client c(sock, listen);
+			s->clients.push_back(c);
+			threads.push_back(&listen);
+			listen.detach();
 			//c.listener = &listen;
 		}
 	});

@@ -15,8 +15,8 @@
 void Server::start() {
 	std::cout << "Launching server" << std::endl;
 	int iResult;
-	
 	// Initialize Winsock
+	WSADATA wsaData;
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed with error: %d\n", iResult);
@@ -74,9 +74,6 @@ void Server::start() {
 }
 
 SOCKET Server::waitForClient() {
-	int iResult;
-
-	int iSendResult;
 	SOCKET ClientSocket = INVALID_SOCKET;
 
 	// Accept a client socket
