@@ -11,7 +11,6 @@ int main()
 	s->start();
 	//std::thread t(&Server::waitForClient, s);
 	std::thread t([&]() {
-		std::vector<std::thread*> threads;
 		while (true) {
 			SOCKET sock = s->waitForClient();
 			//Client c();
@@ -34,7 +33,6 @@ int main()
 			});
 			Client c(sock, listen);
 			s->clients.push_back(c);
-			threads.push_back(&listen);
 			listen.detach();
 			//c.listener = &listen;
 		}
