@@ -11,7 +11,20 @@ int main()
 	//std::thread t(&Server::waitForClient, s);
 	std::thread t([&]() {
 		while (true) {
-			s->waitForClient();
+			SOCKET sock = s->waitForClient();
+			//Client c();
+			//std::thread listen([&]() {
+				s->listenToClient(sock);
+				/*s->clients.erase(
+					std::remove(
+						s->clients.begin(),
+						s->clients.end(),
+						c
+					),
+					clients.end()
+				);*/
+			//});
+			//c.listener = &listen;
 		}
 	});
 	//t.detach();

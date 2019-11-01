@@ -73,78 +73,72 @@ void Server::start() {
 	}
 }
 
-void Server::waitForClient() {
+SOCKET Server::waitForClient() {
 	int iResult;
 
 	int iSendResult;
-	char recvbuf[DEFAULT_BUFLEN];
-	int recvbuflen = DEFAULT_BUFLEN;
 	SOCKET ClientSocket = INVALID_SOCKET;
 
 	// Accept a client socket
 	ClientSocket = accept(ListenSocket, NULL, NULL);
 	if (ClientSocket == INVALID_SOCKET) {
 		printf("accept failed with error: %d\n", WSAGetLastError());
-		return;
+		return ClientSocket;
 		//closesocket(ListenSocket);
 		//WSACleanup();
 		//throw 1;
 	}
 	printf("New client connected.\n");
-	Client* c = nullptr;
-	//std::thread *listener = new std::thread([&]() {
-		// Receive until the peer shuts down the connection
-		do {
-			iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-			if (iResult > 0) {
-				printf("Bytes received: %d\n", iResult);
-
-				//sendToClient(c, std::string(recvbuf, iResult));
-			}
-			else if (iResult == 0)
-				printf("Connection closing...\n");
-			else {
-				printf("recv failed with error: %d\n", WSAGetLastError());
-				return;
-				//closesocket(ClientSocket);
-				//WSACleanup();
-				//throw 1;
-			}
-
-		} while (iResult > 0);
-		// cleanup
-		printf("Connection closed.\n");
-		closesocket(ClientSocket);
-		clients.erase(
-			std::remove(
-				clients.begin(),
-				clients.end(),
-				c
-			),
-			clients.end()
-		);
-		//delete c;
-	//});
+	
+	return ClientSocket;
 
 	//c = new Client(&ClientSocket, listener);
 	//clients.push_back(c);
 
 }
 
-void Server::closeClient(Client* c) {
+void Server::listenToClient(SOCKET& sock) {
+	int iResult;
+	char recvbuf[DEFAULT_BUFLEN];
+	int recvbuflen = DEFAULT_BUFLEN;
+	// Receive until the peer shuts down the connection
+	do {
+		iResult = recv(sock, recvbuf, recvbuflen, 0);
+		if (iResult > 0) {
+			printf("Bytes received: %d\n", iResult);
+
+			//sendToClient(c, std::string(recvbuf, iResult));
+		}
+		else if (iResult == 0)
+			printf("Connection closing...\n");
+		else {
+			printf("recv failed with error: %d\n", WSAGetLastError());
+			return;
+			//closesocket(ClientSocket);
+			//WSACleanup();
+			//throw 1;
+		}
+
+	} while (iResult > 0);
+	// cleanup
+	printf("Connection closed.\n");
+	closesocket(sock);
+}
+
+void Server::closeClient(SOCKET& sock) {
 	int iResult;
 	// shutdown the connection since we're done
-	iResult = shutdown(*c->socket, SD_SEND);
+	iResult = shutdown(sock, SD_SEND);
 	if (iResult == SOCKET_ERROR) {
 		printf("shutdown failed with error: %d\n", WSAGetLastError());
-		closesocket(*c->socket);
+		closesocket(sock);
 		return;
 		//WSACleanup();
 		//throw 1;
 	}
 }
 
-void Server::sendToClient(Client* c, std::string message) {
+void Server::sendToClient(SOCKET& sock, std::string message) {
 	//if (*c->socket == INVALID_SOCKET) {
 	//	printf("Failed sending to client, invalid socket.\n");
 	//	closesocket(*c->socket);
@@ -152,10 +146,10 @@ void Server::sendToClient(Client* c, std::string message) {
 	//}
 	int iSendResult;
 	// Echo the buffer back to the sender
-	iSendResult = send(*c->socket, message.c_str(), message.length(), 0);
+	iSendResult = send(sock, message.c_str(), message.length(), 0);
 	if (iSendResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
-		closesocket(*c->socket);
+		closesocket(sock);
 		return;
 		//WSACleanup();
 		//throw 1;

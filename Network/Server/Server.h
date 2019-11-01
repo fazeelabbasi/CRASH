@@ -18,9 +18,10 @@ public:
 	std::vector<Client*> clients;
 public:
 	void start();
-	void waitForClient();
-	void closeClient(Client* c);
-	void sendToClient(Client* c, std::string);
+	SOCKET waitForClient();
+	void listenToClient(SOCKET& c);
+	void closeClient(SOCKET& c);
+	void sendToClient(SOCKET& sock, std::string);
 	void stop();
 };
 
