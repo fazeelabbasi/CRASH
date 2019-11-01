@@ -14,7 +14,7 @@
 class Server {
 	SOCKET ListenSocket = INVALID_SOCKET;
 public:
-	std::vector<Client> clients;
+	std::vector<Client*> clients;
 public:
 	void start();
 	SOCKET waitForClient();

@@ -3,6 +3,7 @@
 #include "iostream"
 #include <chrono>
 #include <vector>
+#include <algorithm>
 int main()
 {
 	std::cout << "Yeet" << std::endl;
@@ -13,18 +14,20 @@ int main()
 	std::thread t([&]() {
 		while (true) {
 			SOCKET sock = s->waitForClient();
+			Client* c;
 			std::thread listen([&]() {
 				s->listenToClient(sock);
-				/*s->clients.erase(
+				s->clients.erase(
 					std::remove(
 						s->clients.begin(),
 						s->clients.end(),
 						c
 					),
-					clients.end()
-				);*/
+					s->clients.end()
+				);
+				delete c;
 			});
-			Client c(sock, listen);
+			c = new Client(sock, listen);
 			s->clients.push_back(c);
 			listen.detach();
 			//c.listener = &listen;
