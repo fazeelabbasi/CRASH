@@ -36,7 +36,7 @@ set(SOURCE_FILES
         src/web/Server.h
         src/main.cpp
         src/main.h
-        )
+        ../network/server/server.cpp ../network/client/client.cpp ../network/client/client.h)
 
 add_executable(avatar
         ${LIBRARY_FILES}

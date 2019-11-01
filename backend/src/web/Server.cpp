@@ -73,6 +73,10 @@ void Request_Handler(webserver::http_request *r) {
                "<tr><td>User-Agent:</td><td>" + r->user_agent_ + "</td></tr>" +
                "</table>" +
                links;
+    } else if (r->path_ == "/zoop") {
+        title = "fuck";
+        r->answer_ = std::string("{\"fuck\":1}");
+        return;
     } else {
         r->status_ = "404 Not Found";
         title = "Wrong URL";
