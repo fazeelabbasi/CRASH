@@ -13,15 +13,8 @@ int main()
 	std::thread t([&]() {
 		while (true) {
 			SOCKET sock = s->waitForClient();
-			//Client c();
-			//std::thread listener(&Server::listenToClient, s, sock);
 			std::thread listen([&]() {
-				try {
-					s->listenToClient(sock);
-				}
-				catch (std::exception & ex) {
-					std::cout << "fuck me, right?" << std::endl;
-				}
+				s->listenToClient(sock);
 				/*s->clients.erase(
 					std::remove(
 						s->clients.begin(),
