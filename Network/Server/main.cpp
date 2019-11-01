@@ -35,11 +35,11 @@ int main()
 	for (int i=0;;i++) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		std::cout << "Beep!\t" << i << std::endl;
-		/*if (i % 2 == 0 && s->clients.size() > 0) {
-			s->sendToClient(s->clients.at(0), "fuck you");
+		if (i % 2 == 0 && s->clients.size() > 0) {
+			s->sendToClient(s->clients.at(0)->socket, "fuck you");
 		} else if (s->clients.size() > 1) {
-			s->sendToClient(s->clients.at(1), "suh dude");
-		}*/
+			s->sendToClient(s->clients.at(1)->socket, "suh dude");
+		}
 	}
 
 	s->stop();
