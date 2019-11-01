@@ -30,10 +30,8 @@ int main()
 			c = new Client(sock, listen);
 			s->clients.push_back(c);
 			listen.detach();
-			//c.listener = &listen;
 		}
 	});
-	//t.detach();
 	for (int i=0;;i++) {
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		std::cout << "Beep!\t" << i << std::endl;
