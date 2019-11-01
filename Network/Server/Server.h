@@ -8,14 +8,19 @@
 #include <WS2tcpip.h>
 #include <stdio.h>
 #include <vector>
+#include <thread>
+#include "Client.h"
 
 class Server {
 	WSADATA wsaData;
 	SOCKET ListenSocket = INVALID_SOCKET;
-	std::vector<SOCKET> clients;
+public:
+	std::vector<Client*> clients;
 public:
 	void start();
 	void waitForClient();
+	void closeClient(Client* c);
+	void sendToClient(Client* c, std::string);
 	void stop();
 };
 

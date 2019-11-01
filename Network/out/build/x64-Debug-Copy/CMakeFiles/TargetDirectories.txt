@@ -1,8 +1,0 @@
-C:/home/avatar/Network/out/build/x64-Debug-Copy/CMakeFiles/edit_cache.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/CMakeFiles/rebuild_cache.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Server/CMakeFiles/Server.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Server/CMakeFiles/edit_cache.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Server/CMakeFiles/rebuild_cache.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Client/CMakeFiles/Client.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Client/CMakeFiles/edit_cache.dir
-C:/home/avatar/Network/out/build/x64-Debug-Copy/Client/CMakeFiles/rebuild_cache.dir

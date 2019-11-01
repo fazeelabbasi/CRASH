@@ -9,5 +9,6 @@ public:
 	void start(PCSTR host);
 	void sendInfo();
 	void receiveInfo();
+	bool isConnected();
 	void stop();
 };

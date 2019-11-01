@@ -31,7 +31,7 @@ void Client::start(PCSTR host) {
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed with error: %d\n", iResult);
-		throw 1;
+		return;
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
@@ -44,7 +44,7 @@ void Client::start(PCSTR host) {
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
-		throw 1;
+		return;
 	}
 
 	// Attempt to connect to an address until one succeeds
@@ -56,7 +56,7 @@ void Client::start(PCSTR host) {
 		if (ConnectSocket == INVALID_SOCKET) {
 			printf("socket failed with error: %ld\n", WSAGetLastError());
 			WSACleanup();
-			throw 1;
+			return;
 		}
 
 		// Connect to server.
@@ -74,7 +74,7 @@ void Client::start(PCSTR host) {
 	if (ConnectSocket == INVALID_SOCKET) {
 		printf("Unable to connect to server!\n");
 		WSACleanup();
-		throw 1;
+		return;
 	}
 }
 
@@ -88,10 +88,14 @@ void Client::sendInfo() {
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
 		WSACleanup();
-		throw 1;
+		return;
 	}
 
 	printf("Bytes Sent: %ld\n", iResult);
+}
+
+bool Client::isConnected() {
+	return ConnectSocket != INVALID_SOCKET;
 }
 
 void Client::receiveInfo() {
@@ -111,6 +115,10 @@ void Client::receiveInfo() {
 			printf("recv failed with error: %d\n", WSAGetLastError());
 
 	} while (iResult > 0);
+
+	closesocket(ConnectSocket);
+	ConnectSocket = INVALID_SOCKET;
+	WSACleanup();
 }
 
 void Client::stop() {
@@ -122,10 +130,6 @@ void Client::stop() {
 		printf("shutdown failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
 		WSACleanup();
-		throw 1;
+		return;
 	}
-
-	closesocket(ConnectSocket);
-	ConnectSocket = INVALID_SOCKET;
-	WSACleanup();
 }
