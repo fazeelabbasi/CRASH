@@ -1,0 +1,21 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "Client.exe (Client\\Client.exe)",
+      "name": "Client.exe (Client\\Client.exe)",
+      "args": [
+        "localhost"
+      ]
+    },
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "Server.exe (Server\\Server.exe)",
+      "name": "Server.exe (Server\\Server.exe)"
+    },
+  ]
+}
