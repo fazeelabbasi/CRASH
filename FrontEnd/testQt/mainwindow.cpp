@@ -81,3 +81,9 @@ void MainWindow::on_readyButton_clicked()
     vect.erase(vect.begin());
     plot();
 }
+
+//void Vector2Point(vector<int> vector){
+//    int NumPoints = 3;
+
+//    vector.pop_back()
+//}

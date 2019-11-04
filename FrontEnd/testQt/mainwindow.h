@@ -51,7 +51,7 @@ private:
 
     QVector<double> qv_x, qv_y;
     int Time = 0;
-    vector<int> vect{3,4,5};
+    vector<int> vect{};
 
 
 private:

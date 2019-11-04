@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -34,6 +35,10 @@ public:
     QLCDNumber *lcdNumber;
     QCustomPlot *stockPlot;
     QPushButton *readyButton;
+    QWidget *formLayoutWidget;
+    QFormLayout *formLayout;
+    QWidget *formLayoutWidget_2;
+    QFormLayout *formLayout_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -66,6 +71,18 @@ public:
         readyButton = new QPushButton(centralwidget);
         readyButton->setObjectName(QString::fromUtf8("readyButton"));
         readyButton->setGeometry(QRect(330, 320, 93, 28));
+        formLayoutWidget = new QWidget(centralwidget);
+        formLayoutWidget->setObjectName(QString::fromUtf8("formLayoutWidget"));
+        formLayoutWidget->setGeometry(QRect(150, 190, 160, 80));
+        formLayout = new QFormLayout(formLayoutWidget);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setContentsMargins(0, 0, 0, 0);
+        formLayoutWidget_2 = new QWidget(centralwidget);
+        formLayoutWidget_2->setObjectName(QString::fromUtf8("formLayoutWidget_2"));
+        formLayoutWidget_2->setGeometry(QRect(140, 180, 160, 80));
+        formLayout_2 = new QFormLayout(formLayoutWidget_2);
+        formLayout_2->setObjectName(QString::fromUtf8("formLayout_2"));
+        formLayout_2->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
