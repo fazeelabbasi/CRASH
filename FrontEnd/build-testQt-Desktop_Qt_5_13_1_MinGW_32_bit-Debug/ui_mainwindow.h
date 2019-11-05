@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -27,13 +28,14 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QTextBrowser *stockDescription;
+    QGridLayout *gridLayout;
     QSlider *amountInvesting;
-    QPushButton *buy;
     QPushButton *sell;
     QLCDNumber *lcdNumber;
-    QCustomPlot *stockPlot;
+    QPushButton *buy;
     QPushButton *readyButton;
+    QCustomPlot *stockPlot;
+    QTextBrowser *stockDescription;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -44,28 +46,49 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        stockDescription = new QTextBrowser(centralwidget);
-        stockDescription->setObjectName(QString::fromUtf8("stockDescription"));
-        stockDescription->setGeometry(QRect(190, 350, 381, 191));
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         amountInvesting = new QSlider(centralwidget);
         amountInvesting->setObjectName(QString::fromUtf8("amountInvesting"));
-        amountInvesting->setGeometry(QRect(280, 290, 160, 22));
         amountInvesting->setOrientation(Qt::Horizontal);
-        buy = new QPushButton(centralwidget);
-        buy->setObjectName(QString::fromUtf8("buy"));
-        buy->setGeometry(QRect(520, 290, 113, 32));
+
+        gridLayout->addWidget(amountInvesting, 1, 1, 1, 1);
+
         sell = new QPushButton(centralwidget);
         sell->setObjectName(QString::fromUtf8("sell"));
-        sell->setGeometry(QRect(160, 290, 113, 32));
+
+        gridLayout->addWidget(sell, 1, 0, 2, 1);
+
         lcdNumber = new QLCDNumber(centralwidget);
         lcdNumber->setObjectName(QString::fromUtf8("lcdNumber"));
-        lcdNumber->setGeometry(QRect(450, 290, 64, 23));
-        stockPlot = new QCustomPlot(centralwidget);
-        stockPlot->setObjectName(QString::fromUtf8("stockPlot"));
-        stockPlot->setGeometry(QRect(160, 10, 461, 271));
+
+        gridLayout->addWidget(lcdNumber, 1, 2, 1, 1);
+
+        buy = new QPushButton(centralwidget);
+        buy->setObjectName(QString::fromUtf8("buy"));
+
+        gridLayout->addWidget(buy, 1, 3, 2, 1);
+
         readyButton = new QPushButton(centralwidget);
         readyButton->setObjectName(QString::fromUtf8("readyButton"));
-        readyButton->setGeometry(QRect(330, 320, 93, 28));
+
+        gridLayout->addWidget(readyButton, 2, 1, 1, 1);
+
+        stockPlot = new QCustomPlot(centralwidget);
+        stockPlot->setObjectName(QString::fromUtf8("stockPlot"));
+
+        gridLayout->addWidget(stockPlot, 0, 0, 1, 4);
+
+        stockDescription = new QTextBrowser(centralwidget);
+        stockDescription->setObjectName(QString::fromUtf8("stockDescription"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(stockDescription->sizePolicy().hasHeightForWidth());
+        stockDescription->setSizePolicy(sizePolicy);
+
+        gridLayout->addWidget(stockDescription, 3, 1, 1, 1);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -84,14 +107,14 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        sell->setText(QCoreApplication::translate("MainWindow", "Sell", nullptr));
+        buy->setText(QCoreApplication::translate("MainWindow", "Buy", nullptr));
+        readyButton->setText(QCoreApplication::translate("MainWindow", "Ready", nullptr));
         stockDescription->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9.75pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text'; font-size:13pt;\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
-        buy->setText(QCoreApplication::translate("MainWindow", "Buy", nullptr));
-        sell->setText(QCoreApplication::translate("MainWindow", "Sell", nullptr));
-        readyButton->setText(QCoreApplication::translate("MainWindow", "Ready", nullptr));
     } // retranslateUi
 
 };
