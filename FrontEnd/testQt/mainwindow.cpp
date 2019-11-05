@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->stockPlot->setInteraction(QCP::iRangeDrag,true);
+    ui->stockPlot->setInteraction(QCP::iRangeZoom,true);
     ui->stockPlot->addGraph();
     ui->stockPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCrossCircle);
     ui->stockPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
@@ -96,6 +98,10 @@ void MainWindow::on_readyButton_clicked()
     addpoint(Time++,temp[1]);
     plot();
     addpoint(Time++,temp[2]);
+    plot();
+
+    ui->stockPlot->xAxis->setRange(*std::min_element(qv_x.begin(),qv_x.end())-1,*std::max_element(qv_x.begin(),qv_x.end())+1);
+    ui->stockPlot->yAxis->setRange(*std::min_element(qv_y.begin(),qv_y.end())-1,*std::max_element(qv_y.begin(),qv_y.end())+1);
     plot();
 
     currentData.erase(currentData.begin());
