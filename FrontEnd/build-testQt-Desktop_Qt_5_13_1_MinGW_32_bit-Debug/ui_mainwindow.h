@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -35,10 +34,6 @@ public:
     QLCDNumber *lcdNumber;
     QCustomPlot *stockPlot;
     QPushButton *readyButton;
-    QWidget *formLayoutWidget;
-    QFormLayout *formLayout;
-    QWidget *formLayoutWidget_2;
-    QFormLayout *formLayout_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -71,22 +66,10 @@ public:
         readyButton = new QPushButton(centralwidget);
         readyButton->setObjectName(QString::fromUtf8("readyButton"));
         readyButton->setGeometry(QRect(330, 320, 93, 28));
-        formLayoutWidget = new QWidget(centralwidget);
-        formLayoutWidget->setObjectName(QString::fromUtf8("formLayoutWidget"));
-        formLayoutWidget->setGeometry(QRect(150, 190, 160, 80));
-        formLayout = new QFormLayout(formLayoutWidget);
-        formLayout->setObjectName(QString::fromUtf8("formLayout"));
-        formLayout->setContentsMargins(0, 0, 0, 0);
-        formLayoutWidget_2 = new QWidget(centralwidget);
-        formLayoutWidget_2->setObjectName(QString::fromUtf8("formLayoutWidget_2"));
-        formLayoutWidget_2->setGeometry(QRect(140, 180, 160, 80));
-        formLayout_2 = new QFormLayout(formLayoutWidget_2);
-        formLayout_2->setObjectName(QString::fromUtf8("formLayout_2"));
-        formLayout_2->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 26));
+        menubar->setGeometry(QRect(0, 0, 800, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -104,7 +87,7 @@ public:
         stockDescription->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9.75pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text'; font-size:13pt;\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
         buy->setText(QCoreApplication::translate("MainWindow", "Buy", nullptr));
         sell->setText(QCoreApplication::translate("MainWindow", "Sell", nullptr));

@@ -16,15 +16,19 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //Fazeel's Code
     ui->stockPlot->addGraph();
     ui->stockPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCrossCircle);
     ui->stockPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    setData(rawdata);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setData(vector<double> data){
+    currentData = data;
 }
 
 void MainWindow::plotNewOnButton(int first, int second){
@@ -58,7 +62,7 @@ void MainWindow::editStockDescription(std::string description){
     ui->stockDescription->setText(qstr);
 }
 
-void MainWindow::addpoint(int x, int y)
+void MainWindow::addpoint(double x, double y)
 {
     qv_x.append(x);
     qv_y.append(y);
@@ -72,18 +76,30 @@ void MainWindow::plot()
     ui->stockPlot->update();
 }
 
-void MainWindow::on_readyButton_clicked()
-{
-    int tempy;
-    tempy = vect.front();
-    addpoint(Time,tempy);
-    Time++;
-    vect.erase(vect.begin());
-    plot();
+vector<double> MainWindow::Vector2Point(){
+
+    vector<double> dataToPlot;
+    for (int i=0; i<NumPoints; i++)
+            dataToPlot.push_back(currentData[i]);
+
+
+    return dataToPlot;// data being returned is deleted from currentData when its is plotted(when the ready button is clicked)
+
 }
 
-//void Vector2Point(vector<int> vector){
-//    int NumPoints = 3;
+void MainWindow::on_readyButton_clicked()
+{
+    vector<double> temp = Vector2Point();
 
-//    vector.pop_back()
-//}
+    addpoint(Time++,temp[0]);
+    plot();
+    addpoint(Time++,temp[1]);
+    plot();
+    addpoint(Time++,temp[2]);
+    plot();
+
+    currentData.erase(currentData.begin());
+    currentData.erase(currentData.begin());
+    currentData.erase(currentData.begin());
+
+}
