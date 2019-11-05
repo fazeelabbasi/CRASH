@@ -44,38 +44,82 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(800, 600);
+        QFont font;
+        font.setKerning(false);
+        MainWindow->setFont(font);
+        MainWindow->setStyleSheet(QString::fromUtf8("background-color:black;"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         amountInvesting = new QSlider(centralwidget);
         amountInvesting->setObjectName(QString::fromUtf8("amountInvesting"));
+        amountInvesting->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"min-width: 5em;"));
         amountInvesting->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(amountInvesting, 1, 1, 1, 1);
 
         sell = new QPushButton(centralwidget);
         sell->setObjectName(QString::fromUtf8("sell"));
+        sell->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"border-style: outset;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"border-color: beige;\n"
+"font: bold 14px;\n"
+"min-width: 10em;\n"
+"padding: 6px"));
 
         gridLayout->addWidget(sell, 1, 0, 2, 1);
 
         lcdNumber = new QLCDNumber(centralwidget);
         lcdNumber->setObjectName(QString::fromUtf8("lcdNumber"));
+        lcdNumber->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"border-style: outset;\n"
+"\n"
+"border-radius: 10px;\n"
+"border-color: beige;\n"
+"font: bold 8px;\n"
+"min-width: 10em;\n"
+""));
 
         gridLayout->addWidget(lcdNumber, 1, 2, 1, 1);
 
         buy = new QPushButton(centralwidget);
         buy->setObjectName(QString::fromUtf8("buy"));
+        buy->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"border-style: outset;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"border-color: beige;\n"
+"font: bold 14px;\n"
+"min-width: 10em;\n"
+"padding: 6px"));
 
         gridLayout->addWidget(buy, 1, 3, 2, 1);
 
         readyButton = new QPushButton(centralwidget);
         readyButton->setObjectName(QString::fromUtf8("readyButton"));
+        readyButton->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"border-style: outset;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"border-color: beige;\n"
+"font: bold 14px;\n"
+"min-width: 10em;\n"
+"padding: 6px"));
 
         gridLayout->addWidget(readyButton, 2, 1, 1, 1);
 
         stockPlot = new QCustomPlot(centralwidget);
         stockPlot->setObjectName(QString::fromUtf8("stockPlot"));
+        stockPlot->setStyleSheet(QString::fromUtf8("color:white;"));
 
         gridLayout->addWidget(stockPlot, 0, 0, 1, 4);
 
@@ -86,6 +130,15 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(stockDescription->sizePolicy().hasHeightForWidth());
         stockDescription->setSizePolicy(sizePolicy);
+        stockDescription->setStyleSheet(QString::fromUtf8("color:white;\n"
+"background-color: rgb(81, 81, 81);\n"
+"border-style: outset;\n"
+"border-width: 2px;\n"
+"border-radius: 10px;\n"
+"border-color: beige;\n"
+"font: bold 14px;\n"
+"min-width: 10em;\n"
+"padding: 6px"));
 
         gridLayout->addWidget(stockDescription, 3, 1, 1, 1);
 
@@ -113,8 +166,8 @@ public:
         stockDescription->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:9.75pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text'; font-size:13pt;\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:14px; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'.SF NS Text'; font-size:13pt; font-weight:400;\">About the stock. Data to be filled in.</span></p></body></html>", nullptr));
     } // retranslateUi
 
 };
