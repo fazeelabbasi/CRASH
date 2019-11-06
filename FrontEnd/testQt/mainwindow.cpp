@@ -8,6 +8,7 @@
 #include "qcustomplot.h"
 #include <vector>
 #include <bits/stdc++.h>
+#include "loginpage.h"
 
 using namespace std;
 
@@ -28,6 +29,9 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
+
 
 void MainWindow::setData(vector<double> data){
     currentData = data;
