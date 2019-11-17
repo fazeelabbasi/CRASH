@@ -8,6 +8,7 @@ int main(int argc, char** argv) {
 		printf("usage: %s server-name\n", argv[0]);
 		return 1;
 	}
+	printf("Launching client...\n");
 
 	Client* c = new Client();
 	c->start(argv[1]);

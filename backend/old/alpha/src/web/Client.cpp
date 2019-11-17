@@ -18,7 +18,6 @@ void Client::start() {
 
 }
 
-
 void Client::fetch() {
     std::cout << "Fetching";
     auto fileStream = std::make_shared<ostream>();

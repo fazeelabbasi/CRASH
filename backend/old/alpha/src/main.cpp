@@ -7,6 +7,7 @@
 #include "core/GameHost.h"
 #include "core/Player.h"
 #include "web/Server.h"
+#include "web/Client.h"
 
 int main() {
     GameHost host;
@@ -18,5 +19,7 @@ int main() {
     host.round.addParticipant(&doug);
     host.round.addParticipant(&stan);
     printf("The winner is %s", host.playRound().name.c_str());
-    begin();
+//    begin();
+    Client c;
+    c.fetch();
 }

@@ -92,22 +92,24 @@ SOCKET Server::waitForClient() {
 
 }
 
-void Server::listenToClient(SOCKET& sock) {
+void Server::listenToClient(SOCKET& sock, int id) {
 	int iResult;
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
 	// Receive until the peer shuts down the connection
 	do {
+		printf("Receiving from client %d\n", id);
 		iResult = recv(sock, recvbuf, recvbuflen, 0);
 		if (iResult > 0) {
-			printf("Bytes received: %d\n", iResult);
+			printf("Bytes received %d: %d\n", id, iResult);
 
 			//sendToClient(c, std::string(recvbuf, iResult));
 		}
 		else if (iResult == 0)
-			printf("Connection closing...\n");
+			printf("Connection closing %d...\n",id);
 		else {
-			printf("recv failed with error: %d\n", WSAGetLastError());
+			printf("Fucking hell mate\n");
+			printf("recv %d failed with error: %d\n", id, WSAGetLastError());
 			return;
 			//closesocket(ClientSocket);
 			//WSACleanup();
@@ -116,7 +118,7 @@ void Server::listenToClient(SOCKET& sock) {
 
 	} while (iResult > 0);
 	// cleanup
-	printf("Connection closed.\n");
+	printf("Connection closed. %d\n", id);
 	closesocket(sock);
 }
 

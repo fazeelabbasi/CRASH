@@ -34,6 +34,11 @@ set(SOURCE_FILES
         src/core/Player.h
         src/web/Server.cpp
         src/web/Server.h
+
+        src/web/Client.cpp
+        src/web/Client.h
+
+
         src/main.cpp
         src/main.h
         ../network/server/server.cpp ../network/client/client.cpp ../network/client/client.h)

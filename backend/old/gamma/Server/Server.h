@@ -18,7 +18,7 @@ public:
 public:
 	void start();
 	SOCKET waitForClient();
-	void listenToClient(SOCKET& c);
+	void listenToClient(SOCKET& c, int id);
 	void closeClient(SOCKET& c);
 	void sendToClient(SOCKET& sock, std::string);
 	void stop();
