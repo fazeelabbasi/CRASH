@@ -26,16 +26,10 @@ public:
     void buyingStocks(double amountBought);
     void sellingStocks(double amountSold);
     void editStockDescription(std::string description);
-
     void testingGraph(int first,int second);
-    //void graphData();
-   // void setupRealtimeDataDemo(QCustomPlot *customPlot);
-    //void realtimeDataSlot();
-
-
-    //Fazeel's Code
-    void addpoint(int x, int y);
+    void addpoint(double x, double y);
     void plot();
+    void setData(vector<double> data);
 
 public slots:
     void plotNewOnButton(int x,int y);
@@ -48,11 +42,12 @@ private:
     double currentCapital; //These are doubles since I am not sure how large these numbers will get. I do not think we want these as decimals.
     double amountInvested;
     QTimer dataTimer;
-
+    vector<double> Vector2Point();
     QVector<double> qv_x, qv_y;
     int Time = 0;
-    vector<int> vect{3,4,5};
-
+    vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
+    int NumPoints = 3;// Number of points plotted into the graph at a time
+    vector<double> currentData;
 
 private:
     Ui::MainWindow *ui;
