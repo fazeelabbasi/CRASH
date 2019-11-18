@@ -1,4 +1,4 @@
-#include "RoundLogic.h"
+#include "round/Game.h"
 #include <string>
 #include <vector>
 #include "Player.h"
@@ -11,7 +11,7 @@ using namespace std;
 
 Game::Game()
 {
-	loggedInUsers;
+	players;
 	roundTimer = 0;
 	roundsPlayed = 0;
 	roundStatus = "none";
@@ -28,9 +28,9 @@ void Game::clientLogin(const string& username)
 		cout << "Player already exists!" << endl;
 	} else {
 		Player login(username);
-		int newIndex = loggedInUsers.size();
+		int newIndex = players.size();
 		login.index = newIndex;
-		loggedInUsers.push_back(login);
+		players.push_back(login);
 	}
 }
 
@@ -39,9 +39,9 @@ void Game::clientUpdate(const Player& user)
 	// Need to implement a check here that a user with that name exists in the vector
 	Player update(user);
 	if(playerExists(update.name)) {
-		for (int i = 0; i < loggedInUsers.size(); i++) {
-			if (loggedInUsers[i].name == update.name) {
-				loggedInUsers[i] = update;
+		for (int i = 0; i < players.size(); i++) {
+			if (players[i].name == update.name) {
+				players[i] = update;
 			}
 		}
 	}
@@ -65,15 +65,15 @@ void Game::playRound()
 		// tellClientsRoundInfo(roundInfo);
 
 		// untested
-		for(int i = 0; i < loggedInUsers.size(); i++) {
-			cout << loggedInUsers[i].status << endl;
-			if (loggedInUsers[i].status == "IN" ) {
+		for(int i = 0; i < players.size(); i++) {
+			cout << players[i].status << endl;
+			if (players[i].status == "IN" ) {
 				validClients++;
 				/* Increments the valid client tracker and sets the status to OUT
 				 * The status should be set back to "IN" in the clientUpdate method
 				 * All clients that are still "OUT" (have not been updated) are removed
 				 */
-				loggedInUsers[i].status = "OUT";
+				players[i].status = "OUT";
 			}
 		}
 		roundStatus = "begin";
@@ -90,16 +90,16 @@ void Game::playRound()
 		 * This could be handled in the updateClient method.
 		 */
 		// Remove all users with an "OUT" status
-		for(int i = 0; i < loggedInUsers.size(); i++) {
-			if(loggedInUsers[i].status == "OUT") {
+		for(int i = 0; i < players.size(); i++) {
+			if(players[i].status == "OUT") {
 				// UNTESTED
-				loggedInUsers.erase(loggedInUsers.begin() + i);
+				players.erase(players.begin() + i);
 			}
 		}
 
 		// After removing all the clients, iterate over the entire array to update their index values accordingly
-		for (int i = 0; i < loggedInUsers.size(); i++) {
-			loggedInUsers[i].index = i;
+		for (int i = 0; i < players.size(); i++) {
+			players[i].index = i;
 		}
 
 	}
@@ -109,7 +109,7 @@ void Game::playRound()
 
 Player Game::getPlayer(const int& index)
 {
-	Player ret(loggedInUsers[index]);
+	Player ret(players[index]);
 	return ret;
 }
 
@@ -121,12 +121,12 @@ Player* Game::getPlayer(std::string username) {
 	int i = getPlayerIndex(username);
 	if (i==-1)
 		return nullptr;
-	return &loggedInUsers[i];
+	return &players[i];
 }
 
 int Game::getPlayerIndex(std::string username) {
-	for (int i = 0; i < loggedInUsers.size(); i++)
-		if (loggedInUsers[i].name == username)
+	for (int i = 0; i < players.size(); i++)
+		if (players[i].name == username)
 			return i;
 	return -1;
 }

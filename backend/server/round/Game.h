@@ -9,7 +9,7 @@ using namespace std;
 class Game
 {
 	public:
-		vector<Player> loggedInUsers;
+		vector<Player> players;
 		int roundsPlayed;
 		string roundStatus;
 		int validClients;
