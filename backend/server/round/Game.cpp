@@ -1,4 +1,4 @@
-#include "round/Game.h"
+#include "Game.h"
 #include <string>
 #include <vector>
 #include "Player.h"
@@ -30,19 +30,6 @@ void Game::clientLogin(const string& username)
 		int newIndex = players.size();
 		login.index = newIndex;
 		players.push_back(login);
-	}
-}
-
-void Game::clientUpdate(const Player& user)
-{
-	// Need to implement a check here that a user with that name exists in the vector
-	Player update(user);
-	if(playerExists(update.name)) {
-		for (int i = 0; i < players.size(); i++) {
-			if (players[i].name == update.name) {
-				players[i] = update;
-			}
-		}
 	}
 }
 

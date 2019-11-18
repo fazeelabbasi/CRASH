@@ -16,8 +16,6 @@ class Game
 		Game();
 		virtual ~Game();
 		void clientLogin(const string& username);
-		void clientUpdate(const Player& user); //fix this stuff
-		void playRound();
 
 		int getPlayerIndex(std::string username);
 		bool playerExists(const string& username);

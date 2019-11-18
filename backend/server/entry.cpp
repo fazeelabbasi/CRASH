@@ -55,9 +55,6 @@ void onMessage(uint16_t df, char *buffer) {
 	} else {
 		std::cout << "No action taken." << std::endl;
 	}
-
-
-
 	// server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
 }
 
@@ -67,12 +64,12 @@ void onDisconnect(uint16_t df) {
 
 void onConnect(uint16_t df) {
 	std::cout << df << " connected." << std::endl;
-	pthread_t t;
-	struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
-	args->source_fd=df;
-	if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
-		printf("shit's fucked yo\n");
-	}
+	// pthread_t t;
+	// struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+	// args->source_fd=df;
+	// if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
+	// 	printf("shit's fucked yo\n");
+	// }
 }
 
 
@@ -91,13 +88,19 @@ void roundLoop() {
 	for (;;) {
 		// WARMUP
 		{
+			std::cout << "Warmup started" << std::endl;
 			game.roundsPlayed++;
 			game.roundStatus = "warmup";
 		}
 
 		// BEGIN
 		{
-			this_thread::sleep_for(chrono::seconds(2));
+			for(;game.players.size()==0;) {
+				std::cout << "No players in the game! Waiting for more..." << std::endl;
+				this_thread::sleep_for(chrono::seconds(5));
+			}
+			std::cout << "Beginning round" << std::endl;
+			// this_thread::sleep_for(chrono::seconds(2));
 			game.roundStatus = "begin";
 			for (auto& player : game.players)
 				player.status = "WAITING";
@@ -106,7 +109,9 @@ void roundLoop() {
 		// WAIT (BLOCKING) 
 		{
 			bool done;
-			for (int roundTimer = 0; done || roundTimer > 30; roundTimer++) {
+			const int timeout = 30;
+			for (int roundTimer = 0; done || roundTimer > timeout; roundTimer++) {
+				// std::cout << "Waiting for all players to respond, " << (timeout - roundTimer) << "s remaining." << std::endl;
 				this_thread::sleep_for(chrono::seconds(1));
 				done=true;
 				for (auto& player : game.players)
@@ -117,6 +122,7 @@ void roundLoop() {
 
 		// END ROUND
 		{
+			std::cout << "Round over!" << std::endl;
 			for (auto& player : game.players) {
 				std::cout << "<" << player.name << "> $" << player.balance << std::endl;
 				player.status = "READY";
