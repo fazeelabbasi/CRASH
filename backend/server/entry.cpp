@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <thread>
 #include <chrono>
+#include <string>
 
 #include "Server.h"
 #include "round/RoundLogic.h"
@@ -10,9 +11,13 @@
 #include "round/StockGenerator.h"
 
 Server server(2878);
-RoundLogic roundLogic;
+RoundLogic game;
 
-
+/*
+====================================================
+====	Network Communication
+====================================================
+*/
 void * asyncSend(void *raw) {
 	struct Server::Connector *args = (struct Server::Connector *) raw;
 	for(;;) {
@@ -48,7 +53,68 @@ void onConnect(uint16_t df) {
 }
 
 
+/*
+====================================================
+====	Game Logic
+====================================================
+*/
+void addPlayer(std::string username) {
+	game.clientLogin(username);
+}
 
+
+
+void roundLoop() {
+	game.validClients = 0;
+	for (;;) {
+		game.roundsPlayed++;
+		game.roundTimer = 0;
+		game.roundStatus = "warmup";
+		game.clientsFinished = 0;
+
+		// Player asdfC = test.loggedInUsers[0];
+		// Player qwertyC = test.loggedInUsers[1];
+		// this_thread::sleep_for(chrono::seconds(2));
+		// for (int i = 0; i < test.loggedInUsers.size(); i++) {
+		// 	cout << "status: " << test.loggedInUsers[i].getStatus() << endl;
+		// 	if(test.loggedInUsers[i].getStatus() == "IN") {
+		// 		cout << "Valid client" << endl;
+		// 		test.validClients++;
+		// 		test.loggedInUsers[i].setStatus("OUT");
+		// 	}
+		// }
+		// test.roundStatus = "begin";
+		// asdfC.updateMoney((double)-10000);
+		// qwertyC.updateMoney((double)150);
+		// test.clientUpdate(qwertyC);
+		// test.clientUpdate(asdfC);
+		// while(test.clientsFinished < test.validClients && test.roundTimer < 2) {
+		// 	this_thread::sleep_for(chrono::seconds(1));
+		// 	test.roundTimer++;
+		// }
+
+		// for(int i = 0; i < test.loggedInUsers.size(); i++){
+		// 	if(test.loggedInUsers[i].getStatus() == "OUT"){
+		// 		test.loggedInUsers.erase(test.loggedInUsers.begin() + i);
+		// 	}
+		// }
+
+		// for(int i = 0; i < test.loggedInUsers.size(); i++){
+		// 	test.loggedInUsers[i].updateIndex(i);
+		// }
+
+		// cout << test.loggedInUsers[0].getMoney() << endl;
+		// cout << test.loggedInUsers[0].getName() << endl;
+		// cout << test.loggedInUsers[0].getIndex() << endl;
+	}
+}
+
+
+/*
+====================================================
+====	Entrypoint
+====================================================
+*/
 int main() {
 	std::cout << "Launching server" << std::endl;
 	std::cout << "Binding socket events...";
@@ -74,53 +140,7 @@ int main() {
 	std::cout << "\tOK!" << std::endl;
 	std::cout << "Server launched successfully!" << std::endl;
 
+	roundLoop();
 
 	return 0;
-}
-
-
-int roundTest()
-{
-	RoundLogic test;
-	test.roundsPlayed++;
-	test.roundTimer = 0;
-	test.roundStatus = "warmup";
-	test.clientsFinished = 0;
-	test.validClients = 0;
-	test.clientLogin("asdf");
-	test.clientLogin("qwerty");
-	Player asdfC = test.loggedInUsers[0];
-	Player qwertyC = test.loggedInUsers[1];
-	this_thread::sleep_for(chrono::seconds(2));
-	for (int i = 0; i < test.loggedInUsers.size(); i++) {
-		cout << "status: " << test.loggedInUsers[i].getStatus() << endl;
-		if(test.loggedInUsers[i].getStatus() == "IN") {
-			cout << "Valid client" << endl;
-			test.validClients++;
-			test.loggedInUsers[i].setStatus("OUT");
-		}
-	}
-	test.roundStatus = "begin";
-	asdfC.updateMoney((double)-10000);
-	qwertyC.updateMoney((double)150);
-	test.clientUpdate(qwertyC);
-	test.clientUpdate(asdfC);
-	while(test.clientsFinished < test.validClients && test.roundTimer < 2) {
-		this_thread::sleep_for(chrono::seconds(1));
-		test.roundTimer++;
-	}
-
-	for(int i = 0; i < test.loggedInUsers.size(); i++){
-		if(test.loggedInUsers[i].getStatus() == "OUT"){
-			test.loggedInUsers.erase(test.loggedInUsers.begin() + i);
-		}
-	}
-
-	for(int i = 0; i < test.loggedInUsers.size(); i++){
-		test.loggedInUsers[i].updateIndex(i);
-	}
-
-	cout << test.loggedInUsers[0].getMoney() << endl;
-	cout << test.loggedInUsers[0].getName() << endl;
-	cout << test.loggedInUsers[0].getIndex() << endl;
 }
