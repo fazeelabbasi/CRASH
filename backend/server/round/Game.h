@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class RoundLogic
+class Game
 {
 	public:
 		vector<Player> loggedInUsers;
@@ -16,8 +16,8 @@ class RoundLogic
 		int clientsFinished;
 		int roundTimer;
 
-		RoundLogic();
-		virtual ~RoundLogic();
+		Game();
+		virtual ~Game();
 		void clientLogin(const string& username);
 		void clientUpdate(const Player& user); //fix this stuff
 		void playRound();

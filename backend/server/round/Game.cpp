@@ -9,7 +9,7 @@
 
 using namespace std;
 
-RoundLogic::RoundLogic()
+Game::Game()
 {
 	loggedInUsers;
 	roundTimer = 0;
@@ -17,12 +17,12 @@ RoundLogic::RoundLogic()
 	roundStatus = "none";
 }
 
-RoundLogic::~RoundLogic()
+Game::~Game()
 {
 	//dtor
 }
 
-void RoundLogic::clientLogin(const string& username)
+void Game::clientLogin(const string& username)
 {
 	if(playerExists(username)) {
 		cout << "Player already exists!" << endl;
@@ -34,7 +34,7 @@ void RoundLogic::clientLogin(const string& username)
 	}
 }
 
-void RoundLogic::clientUpdate(const Player& user)
+void Game::clientUpdate(const Player& user)
 {
 	// Need to implement a check here that a user with that name exists in the vector
 	Player update(user);
@@ -47,7 +47,7 @@ void RoundLogic::clientUpdate(const Player& user)
 	}
 }
 
-void RoundLogic::playRound()
+void Game::playRound()
 {
 	while(true) {
 		// implement for loop for updating indices, and something else to get rid of inactive clients
@@ -107,31 +107,31 @@ void RoundLogic::playRound()
 
 
 
-Player RoundLogic::getPlayer(const int& index)
+Player Game::getPlayer(const int& index)
 {
 	Player ret(loggedInUsers[index]);
 	return ret;
 }
 
-bool RoundLogic::playerExists(const string& username) {
+bool Game::playerExists(const string& username) {
 	return getPlayerIndex(username) != -1;
 }
 
-Player* RoundLogic::getPlayer(std::string username) {
+Player* Game::getPlayer(std::string username) {
 	int i = getPlayerIndex(username);
 	if (i==-1)
 		return nullptr;
 	return &loggedInUsers[i];
 }
 
-int RoundLogic::getPlayerIndex(std::string username) {
+int Game::getPlayerIndex(std::string username) {
 	for (int i = 0; i < loggedInUsers.size(); i++)
 		if (loggedInUsers[i].name == username)
 			return i;
 	return -1;
 }
 
-void RoundLogic::setBalance(Player* p, double balance) {
+void Game::setBalance(Player* p, double balance) {
 	p->balance = balance;
 	// moneyAmount += money;
 	// netWorth += money;

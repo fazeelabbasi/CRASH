@@ -12,7 +12,7 @@
 #include "round/StockGenerator.h"
 
 Server server(2878);
-RoundLogic game;
+Game game;
 
 /*
 ====================================================
