@@ -5,6 +5,7 @@
 #include "StockGenerator.h"
 #include <iostream>
 #include <thread>
+#include <random>
 #include <chrono>
 
 using namespace std;
@@ -41,6 +42,12 @@ void RoundLogic::clientUpdate(const double& money, const string& username)
         for (int i = 0; i < loggedInUsers.size(); i++) {
             if (loggedInUsers[i].getName() == username) {
                 loggedInUsers[i].updateMoney(money);
+                if (money < 1) {
+                    loggedInUsers[i].setStatus(false);
+                    cout << "Set to false due to bankruptcy: " << loggedInUsers[i].getName() << endl;
+                } else {
+                    loggedInUsers[i].setStatus(true);
+                }
             }
         }
     }
@@ -121,7 +128,6 @@ void RoundLogic::playRound()
         for (int i = 0; i < loggedInUsers.size(); i++) {
             loggedInUsers[i].updateIndex(i);
         }
-
     }
 }
 
@@ -130,3 +136,63 @@ Player RoundLogic::getPlayer(const int& index)
     Player ret(loggedInUsers[index]);
     return ret;
 }
+
+/*int main() {
+    srand(1);
+    RoundLogic t;
+    for(int round = 1; round < 5; round++) {
+        cout << "Current round: " << round << endl;
+        t.clientsFinished = 0;
+        t.validClients = 0;
+        this_thread::sleep_for(chrono::seconds(1));
+        if(round == 1) {
+            t.clientLogin("player1");
+            t.clientLogin("player2");
+            t.clientLogin("player3");
+            t.clientLogin("player4");
+            t.clientLogin("player5");
+            cout << "Logged in players 1 to 5 on round " << round << endl;
+        }
+        for(int i = 0; i < t.loggedInUsers.size(); i++) {
+            cout << "Status of player " << i;
+            cout << ": " << t.loggedInUsers[i].getStatus() << endl;
+            if (t.loggedInUsers[i].getStatus()) {
+                t.validClients++;
+                t.loggedInUsers[i].setStatus(false);
+            }
+        }
+        t.clientUpdate((double)((rand() % 100) - 30), "player1");
+        t.clientUpdate((double)((rand() % 100) - 10), "player2");
+        t.clientUpdate((double)((rand() % 100) - 10), "player3");
+        t.clientUpdate((double)((rand() % 100) - 80), "player4");
+        if (round < 2) {
+            t.clientUpdate((double)(rand() % 100), "player5");
+        }
+        cout << "Waiting for requests..." << endl;
+        while(t.clientsFinished < t.validClients && t.roundTimer < 5) {
+            this_thread::sleep_for(chrono::seconds(1));
+            t.roundTimer++;
+        }
+        for(int i = 0; i < t.loggedInUsers.size(); i++) {
+            cout << "Post-update status of Player " << t.loggedInUsers[i].getName();
+            cout << ": " << t.loggedInUsers[i].getStatus() << endl;
+        }
+        for(int i = 0; i < t.loggedInUsers.size(); i++) {
+            cout << "Post-update money of Player " << t.loggedInUsers[i].getName();
+            cout << ": " << t.loggedInUsers[i].getMoney() << endl;
+        }
+        for(int i = 0; i < t.loggedInUsers.size(); i++) {
+            if(t.loggedInUsers[i].getMoney() < 1 || t.loggedInUsers[i].getStatus() == false) {
+                cout << "Pending deletion: " << t.loggedInUsers[i].getName() << endl;
+            }
+        }
+        for(int i = 0; i < t.loggedInUsers.size(); i++) {
+            if(t.loggedInUsers[i].getStatus() == false) {
+                // UNTESTED
+                cout << "Deleted player: " << t.loggedInUsers[i].getName() << endl;
+                t.loggedInUsers.erase(t.loggedInUsers.begin() + i);
+
+            }
+        }
+    }
+}*/

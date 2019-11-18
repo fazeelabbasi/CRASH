@@ -9,7 +9,7 @@ Player::Player()
 {
     name = "";
     moneyAmount = 0;
-    netWorth = 0;
+    assets = 0;
     status = false;
     index = -1;
 }
@@ -18,7 +18,7 @@ Player::Player(const string& username)
 {
     name = username;
     moneyAmount = 100;
-    netWorth = 100;
+    assets = 0;
     status = true;
     index = -1;
 }
@@ -27,7 +27,7 @@ Player::Player(const Player& copy)
 {
     name = copy.name;
     moneyAmount = copy.moneyAmount;
-    netWorth = copy.netWorth;
+    assets = copy.assets;
     status = copy.status;
     index = copy.index;
 }
@@ -77,11 +77,20 @@ void Player::setStatus(const bool& stat)
     status = stat;
 }
 
+double Player::getAssets() {
+    return assets;
+}
+
+void Player::setAssets(const double& new_assets) {
+    assets = new_assets;
+}
+
 /*int main() {
     Player test("testName");
     test.updateIndex(2);
     cout << test.getIndex() << endl;
-    test.updateMoney(2.3);
+    cout << test.getMoney() << endl;
+    test.updateMoney(123);
     cout << test.getMoney() << endl;
     Player test2(test);
     cout << test2.getIndex() << endl;

@@ -19,11 +19,13 @@ class Player
         string getName();
         bool getStatus();
         void setStatus(const bool& stat);
+        double getAssets();
+        void setAssets(const double& new_assets);
     protected:
 
     private:
         string name;
-        double moneyAmount, netWorth;
+        double moneyAmount, assets;
         bool status;
         int index;
 };
