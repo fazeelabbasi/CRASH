@@ -15,6 +15,7 @@ using namespace std;
 
 StockGenerator::StockGenerator(const double& ret, const double& volatility)
 {
+    srand(time(NULL));
     mu = ret;
     sigma = volatility;
     crashPrice = -1;
@@ -28,7 +29,7 @@ StockGenerator::~StockGenerator()
 
 void StockGenerator::generateGraph()
 {
-    srand(time(NULL));
+
     graph.clear();
     double stockQuote = init_value;
     int timeStep = 0;
@@ -93,7 +94,7 @@ vector<double> StockGenerator::getGraph()
     return graph;
 }
 
-/*int main()
+int main()
 {
     StockGenerator test(d,v);
     test.generateGraph();
@@ -105,4 +106,8 @@ vector<double> StockGenerator::getGraph()
     test.generateGraph();
     cout << "Crash price: " << test.getCrashPrice() << endl;
     cout << "Crash time: " << test.getCrashTime() << endl;
-}*/
+    vector<double> test123 = test.getGraph();
+    for (int i = 0; i < test123.size(); i++) {
+        cout << test123[i] << endl;
+    }
+}

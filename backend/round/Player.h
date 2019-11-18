@@ -18,6 +18,7 @@ class Player
         int getIndex();
         string getName();
         string getStatus();
+        void setStatus(const string& stat);
     protected:
 
     private:

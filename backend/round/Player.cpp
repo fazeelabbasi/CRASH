@@ -71,6 +71,11 @@ string Player::getName()
     return name;
 }
 
+void Player::setStatus(const string& stat)
+{
+    status = stat;
+}
+
 /*int main() {
     Player test("testName");
     test.updateIndex(2);
