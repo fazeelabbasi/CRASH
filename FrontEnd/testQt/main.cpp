@@ -11,6 +11,10 @@ int main(int argc, char *argv[])
     LoginPage login;
     login.show();
 
+    //Actual vector being used:
+    //vector<double> stockData = test.getGraph();
+    //setData(stockData);
+
 //    MainWindow w;
 //    w.horizontalBarLimits(30);
 //    w.editStockDescription("Testing 1,2");

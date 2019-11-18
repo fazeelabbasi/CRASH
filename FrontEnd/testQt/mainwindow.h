@@ -48,7 +48,7 @@ private:
     vector<double> Vector2Point();
     QVector<double> qv_x, qv_y;
     int Time = 0;
-    vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
+    //vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
     int NumPoints = 3;// Number of points plotted into the graph at a time
     vector<double> currentData;
     int numPlayers=0;
