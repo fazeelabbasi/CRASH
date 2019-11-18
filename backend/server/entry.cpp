@@ -9,8 +9,8 @@
 #include "round/Player.h"
 #include "round/StockGenerator.h"
 
-Server s(2878);
-
+Server server(2878);
+RoundLogic roundLogic;
 
 
 void * asyncSend(void *raw) {
@@ -18,15 +18,19 @@ void * asyncSend(void *raw) {
 	for(;;) {
 		usleep(5000000);
 		std::cout << "sending woohoo" << std::endl;
-		s.sendMessage(*args, "woohoo");
+		server.sendMessage(*args, "woohoo");
 	}
 	free(args);
 }
 
+void * listenBlocking(void *raw) {
+	for(;;)
+		server.loop();
+}
 void onInput(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	// Connector c = 
-	s.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
+	server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
 }
 
 void onDisconnect(uint16_t df) {
@@ -43,15 +47,34 @@ void onConnect(uint16_t df) {
 	}
 }
 
+
+
 int main() {
 	std::cout << "Launching server" << std::endl;
-	s.onConnect(&onConnect);
-	s.onDisconnect(&onDisconnect);
-	s.onInput(&onInput);
+	std::cout << "Binding socket events...";
+	{
+		server.onConnect(&onConnect);
+		server.onDisconnect(&onDisconnect);
+		server.onInput(&onInput);
+	}
+	std::cout << "\t\tOK!" << std::endl;
+	std::cout << "Binding socket to port...";
+	{
+		server.init();
+	}
+	std::cout << "\t\tOK!" << std::endl;
+	std::cout << "Creating socket background thread...";
+	{
+		pthread_t t;
+		if (pthread_create(&t, NULL, listenBlocking, NULL) != 0) {
+			std::cout << "FAIL!" << std::endl;
+			return 1;
+		}	
+	}
+	std::cout << "\tOK!" << std::endl;
+	std::cout << "Server launched successfully!" << std::endl;
 
-	s.init();
-	for(;;) s.loop();
-	std::cout << "we done now " << std::endl;
+
 	return 0;
 }
 
