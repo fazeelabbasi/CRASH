@@ -1,18 +1,23 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include "loginpage.h"
 #include "qcustomplot.h"
+using namespace std;
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.horizontalBarLimits(30);
-    w.editStockDescription("Testing 1,2");
+    LoginPage login;
+    login.show();
 
-    w.show();
-    w.plot();
-    w.addpoint(2,2);
+    //Actual vector being used:
+
+//     w.setData(stockData);
+
     return a.exec();
+
+
+
 
 }

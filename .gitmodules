@@ -1,3 +1,0 @@
-[submodule "backend/libs/cpp-webserver"]
-	path = backend/libs/cpp-webserver
-	url = https://github.com/ReneNyffenegger/cpp-webserver
