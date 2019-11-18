@@ -32,7 +32,9 @@ MainWindow::~MainWindow()
 }
 
 
-
+vector<double> MainWindow::getData(){
+    return currentData;
+}
 
 void MainWindow::setData(vector<double> data){
     currentData = data;

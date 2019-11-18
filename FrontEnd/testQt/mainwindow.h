@@ -23,6 +23,7 @@ public:
     ~MainWindow();
 
     //Note: making all methods void and public just for using purposes right now. This will need to be changed.
+    vector<double> getData();
     void horizontalBarLimits(double capital);
     void buyingStocks(double amountBought);
     void sellingStocks(double amountSold);
