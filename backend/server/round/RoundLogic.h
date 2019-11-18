@@ -12,7 +12,7 @@ class RoundLogic
         RoundLogic();
         virtual ~RoundLogic();
         void clientLogin(const string& username);
-        void clientUpdate(const double& money, );
+        void clientUpdate(const double& money, const string& username);
         int getRoundsPlayed();
         void playRound();
         Player getPlayer(const int& index);
