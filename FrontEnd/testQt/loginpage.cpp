@@ -29,7 +29,7 @@ void LoginPage::on_pushButton_clicked()
         vector<double> stockData = test.getGraph();
 
         w = new MainWindow(this);
-        w->horizontalBarLimits(30);
+        w->horizontalBarLimits(w->money);
         w->editStockDescription("Testing 1,2");
 
 //       w->editStockDescription(to_string(stockData[0]));

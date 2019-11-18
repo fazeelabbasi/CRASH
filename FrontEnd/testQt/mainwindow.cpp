@@ -48,7 +48,11 @@ void MainWindow::plotNewOnButton(int first, int second){
 }
 
 void MainWindow::horizontalBarLimits(double capital){ // this will set the range for the scroll bar. Amount investing.
-    ui->amountInvesting->setRange(0,capital);
+    int min = capital*.10 > 1 ? capital*.1 : 1;
+    if (capital <= 0){
+        min = 0;
+    }
+    ui->amountInvesting->setRange(min,capital);
 }
 
 void MainWindow::buyingStocks(double amountBought){
@@ -120,6 +124,7 @@ void MainWindow::on_readyButton_clicked()
 
     qv_x = {};
     qv_y = {};
+    Time = 0;
     ui->stockPlot->replot();
 
 
@@ -166,17 +171,24 @@ void MainWindow::Lose(){
 
 void MainWindow::on_buy_clicked()
 {
-    money++;
+   int current = ui->lcdNumber->value();
+   money += current;
    string s = ("Your Money : "+ to_string(money));
-
-
+   horizontalBarLimits(money);
    QString qstr = QString::fromStdString(s);
+   s = "\nAssets: "+ to_string(assets);
+   qstr += QString::fromStdString(s);
    ui->yourStats->setText(qstr);
 }
 
 void MainWindow::on_sell_clicked()
 {
-    editStockDescription("lol but backwards");
+    int current = ui->lcdNumber->value();
+    money -= current;
+    string s = ("Your Money : "+ to_string(money));
+    horizontalBarLimits(money);
+    QString qstr = QString::fromStdString(s);
+    ui->yourStats->setText(qstr);
 }
 
 

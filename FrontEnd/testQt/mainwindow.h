@@ -37,6 +37,7 @@ public:
 
     //TEMP VARIABLES
     int money = 1000 ;
+    int assets = 0;
 
 public slots:
     void plotNewOnButton(int x,int y);
