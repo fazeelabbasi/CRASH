@@ -29,7 +29,7 @@ void RoundLogic::clientLogin(const string& username)
 	} else {
 		Player login(username);
 		int newIndex = loggedInUsers.size();
-		login.updateIndex(newIndex);
+		login.index = newIndex;
 		loggedInUsers.push_back(login);
 	}
 }
@@ -38,40 +38,13 @@ void RoundLogic::clientUpdate(const Player& user)
 {
 	// Need to implement a check here that a user with that name exists in the vector
 	Player update(user);
-	if(playerExists(update.getName())) {
+	if(playerExists(update.name)) {
 		for (int i = 0; i < loggedInUsers.size(); i++) {
-			if (loggedInUsers[i].getName() == update.getName()) {
+			if (loggedInUsers[i].name == update.name) {
 				loggedInUsers[i] = update;
 			}
 		}
 	}
-}
-
-string RoundLogic::getStatus()
-{
-	return roundStatus;
-}
-
-int RoundLogic::getRoundsPlayed()
-{
-	return roundsPlayed;
-}
-
-bool RoundLogic::playerExists(const string& username)
-{
-	for (int i = 0; i < loggedInUsers.size(); i++) {
-		if (loggedInUsers[i].getName() == username) {
-			return true;
-		}
-	}
-	return false;
-}
-
-Player* getPlayer(std::string username) {
-	for (int i = 0; i < game.loggedInUsers.size(); i++)
-		if (game.loggedInUsers[i].getName() == username)
-			return &game.loggedInUsers[i];
-	return nullptr;
 }
 
 void RoundLogic::playRound()
@@ -93,14 +66,14 @@ void RoundLogic::playRound()
 
 		// untested
 		for(int i = 0; i < loggedInUsers.size(); i++) {
-			cout << loggedInUsers[i].getStatus() << endl;
-			if (loggedInUsers[i].getStatus() == "IN" ) {
+			cout << loggedInUsers[i].status << endl;
+			if (loggedInUsers[i].status == "IN" ) {
 				validClients++;
 				/* Increments the valid client tracker and sets the status to OUT
 				 * The status should be set back to "IN" in the clientUpdate method
 				 * All clients that are still "OUT" (have not been updated) are removed
 				 */
-				loggedInUsers[i].setStatus("OUT");
+				loggedInUsers[i].status = "OUT";
 			}
 		}
 		roundStatus = "begin";
@@ -118,7 +91,7 @@ void RoundLogic::playRound()
 		 */
 		// Remove all users with an "OUT" status
 		for(int i = 0; i < loggedInUsers.size(); i++) {
-			if(loggedInUsers[i].getStatus() == "OUT") {
+			if(loggedInUsers[i].status == "OUT") {
 				// UNTESTED
 				loggedInUsers.erase(loggedInUsers.begin() + i);
 			}
@@ -126,14 +99,44 @@ void RoundLogic::playRound()
 
 		// After removing all the clients, iterate over the entire array to update their index values accordingly
 		for (int i = 0; i < loggedInUsers.size(); i++) {
-			loggedInUsers[i].updateIndex(i);
+			loggedInUsers[i].index = i;
 		}
 
 	}
 }
 
+
+
 Player RoundLogic::getPlayer(const int& index)
 {
 	Player ret(loggedInUsers[index]);
 	return ret;
+}
+
+bool RoundLogic::playerExists(const string& username) {
+	return getPlayerIndex(username) != -1;
+}
+
+Player* RoundLogic::getPlayer(std::string username) {
+	int i = getPlayerIndex(username);
+	if (i==-1)
+		return nullptr;
+	return &loggedInUsers[i];
+}
+
+int RoundLogic::getPlayerIndex(std::string username) {
+	for (int i = 0; i < loggedInUsers.size(); i++)
+		if (loggedInUsers[i].name == username)
+			return i;
+	return -1;
+}
+
+void RoundLogic::setBalance(Player* p, double balance) {
+	p->balance = balance;
+	// moneyAmount += money;
+	// netWorth += money;
+	// if (moneyAmount < 1) {
+	// 	status = "OUT";
+	// 	cout << "Bankrupt" << endl;
+	// }
 }

@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <string>
+#include <sstream>
 
 #include "Server.h"
 #include "round/RoundLogic.h"
@@ -32,10 +33,33 @@ void * listenBlocking(void *raw) {
 	for(;;)
 		server.loop();
 }
-void onInput(uint16_t df, char *buffer) {
+void onMessage(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
-	// Connector c = 
-	server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
+	std::string msg(buffer);
+	if (msg.size() >= 4 && msg.substr(0,4) == "JOIN") {
+		game.clientLogin(msg.substr(4,msg.size()-1));
+		game.validClients++;
+	} else if (msg.size() > 4 && msg.substr(0,4) == "DONE") {
+		msg.erase(0,4);
+		std::string buf;
+		std::stringstream ss(msg);
+		std::string username;
+		ss >> username;
+		double balance;
+		ss >> balance;
+		Player* p = game.getPlayer(username);
+		if (p) {
+			game.setBalance(p, balance);
+		} else {
+			std::cout << "Failed to find player [" << username << "]" << std::endl;
+		}
+	} else {
+		std::cout << "No action taken." << std::endl;
+	}
+
+
+
+	// server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
 }
 
 void onDisconnect(uint16_t df) {
@@ -67,23 +91,27 @@ void addPlayer(std::string username) {
 void roundLoop() {
 	game.validClients = 0;
 	for (;;) {
-		game.roundsPlayed++;
-		game.roundTimer = 0;
-		game.roundStatus = "warmup";
-		game.clientsFinished = 0;
+		// WARMUP
+		{
+			game.roundsPlayed++;
+			game.roundTimer = 0;
+			game.roundStatus = "warmup";
+			game.clientsFinished = 0;
+		}
+		this_thread::sleep_for(chrono::seconds(2));
+		game.roundStatus = "begin";
+		// END ROUND
+		for (int i = 0; i < game.loggedInUsers.size(); i++) {
+			cout << "status: " << game.loggedInUsers[i].getStatus() << endl;
+			if(game.loggedInUsers[i].getStatus() == "IN") {
+				cout << "Valid client" << endl;
+				game.validClients++;
+				game.loggedInUsers[i].setStatus("OUT");
+			}
+		}
 
 		// Player asdfC = test.loggedInUsers[0];
 		// Player qwertyC = test.loggedInUsers[1];
-		// this_thread::sleep_for(chrono::seconds(2));
-		// for (int i = 0; i < test.loggedInUsers.size(); i++) {
-		// 	cout << "status: " << test.loggedInUsers[i].getStatus() << endl;
-		// 	if(test.loggedInUsers[i].getStatus() == "IN") {
-		// 		cout << "Valid client" << endl;
-		// 		test.validClients++;
-		// 		test.loggedInUsers[i].setStatus("OUT");
-		// 	}
-		// }
-		// test.roundStatus = "begin";
 		// asdfC.updateMoney((double)-10000);
 		// qwertyC.updateMoney((double)150);
 		// test.clientUpdate(qwertyC);
@@ -104,7 +132,7 @@ void roundLoop() {
 		// }
 
 		// cout << test.loggedInUsers[0].getMoney() << endl;
-		// cout << test.loggedInUsers[0].getName() << endl;
+		// cout << test.loggedInUsers[0].name << endl;
 		// cout << test.loggedInUsers[0].getIndex() << endl;
 	}
 }
@@ -121,7 +149,7 @@ int main() {
 	{
 		server.onConnect(&onConnect);
 		server.onDisconnect(&onDisconnect);
-		server.onInput(&onInput);
+		server.onInput(&onMessage);
 	}
 	std::cout << "\t\tOK!" << std::endl;
 	std::cout << "Binding socket to port...";

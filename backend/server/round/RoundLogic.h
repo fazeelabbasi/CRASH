@@ -9,27 +9,24 @@ using namespace std;
 class RoundLogic
 {
 	public:
-		RoundLogic();
-		virtual ~RoundLogic();
-		void clientLogin(const string& username);
-		void clientUpdate(const Player& user); //fix this stuff
-		int getRoundsPlayed();
-		void playRound();
-		Player getPlayer(const int& index);
-		string getStatus();
-		bool playerExists(const string& username);
-
 		vector<Player> loggedInUsers;
 		int roundsPlayed;
 		string roundStatus;
 		int validClients;
 		int clientsFinished;
 		int roundTimer;
-	protected:
 
-	private:
+		RoundLogic();
+		virtual ~RoundLogic();
+		void clientLogin(const string& username);
+		void clientUpdate(const Player& user); //fix this stuff
+		void playRound();
 
-
+		int getPlayerIndex(std::string username);
+		bool playerExists(const string& username);
+		Player getPlayer(const int& index);
+		Player* getPlayer(std::string username);
+		void setBalance(Player* p, double balance);
 };
 
 #endif // ROUNDLOGIC_H

@@ -7,25 +7,16 @@ using namespace std;
 
 class Player
 {
-    public:
-        Player();
-        Player(const string& username);
-        Player(const Player& copy);
-        virtual ~Player();
-        void updateMoney(const double& money);
-        double getMoney();
-        void updateIndex(const int& in);
-        int getIndex();
-        string getName();
-        string getStatus();
-        void setStatus(const string& stat);
-    protected:
+	public:
+		string name;
+		double balance, netWorth;
+		string status;
+		int index;
 
-    private:
-        string name;
-        double moneyAmount, netWorth;
-        string status;
-        int index;
+		Player();
+		Player(const string& username);
+		Player(const Player& copy);
+		virtual ~Player();
 };
 
 #endif // PLAYER_H
