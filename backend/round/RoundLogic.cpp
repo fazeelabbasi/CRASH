@@ -37,12 +37,12 @@ void RoundLogic::clientLogin(const string& username)
 void RoundLogic::clientUpdate(const Player& user)
 {
     // Need to implement a check here that a user with that name exists in the vector
-    /*if(playerExists(user.getName())) {
-        Player update(user);
+    Player update(user);
+    if(playerExists(update.getName())) {
         int updateIndex = update.getIndex();
         loggedInUsers[updateIndex] = update;
         loggedInUsers[updateIndex].setStatus("IN");
-    }*/
+    }
 
 }
 
