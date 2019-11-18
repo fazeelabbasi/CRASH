@@ -43,8 +43,8 @@ void onMessage(uint16_t df, char *buffer) {
 		ss >> username;
 		game.clientLogin(username);
 		std::cout << "<" << username << "> has joined the game!" << std::endl;
-	} else if (msg.size() >= 5 && msg.substr(0,5) == "FINISH") {
-		msg.erase(0,5);
+	} else if (msg.size() >= 6 && msg.substr(0,6) == "FINISH") {
+		msg.erase(0,6);
 		std::stringstream ss(msg);
 		std::string username;
 		ss >> username;
@@ -165,9 +165,9 @@ void roundLoop() {
 
 		// WAIT (BLOCKING) 
 		{
-			bool done;
+			bool done = false;
 			const int timeout = 30;
-			for (int roundTimer = 0; !done || roundTimer > timeout; roundTimer++) {
+			for (int roundTimer = 0; !done && roundTimer < timeout; roundTimer++) {
 				std::cout << "Waiting for all players to respond, " << (timeout - roundTimer) << "s remaining." << std::endl;
 				this_thread::sleep_for(chrono::seconds(1));
 				done=true;
