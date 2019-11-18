@@ -25,6 +25,9 @@ void LoginPage::on_pushButton_clicked()
         w = new MainWindow(this);
         w->horizontalBarLimits(30);
         w->editStockDescription("Testing 1,2");
+        StockGenerator test(0.01,0.02);
+        vector<double> stockData = test.getGraph();
+        w->setData(stockData);
         w->show();
         w->plot();
         hide();

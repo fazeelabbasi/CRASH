@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QStatusBar>
 #include <qcustomplot.h>
+#include "StockGenerator.h"
 
 using namespace std;
 QT_BEGIN_NAMESPACE
