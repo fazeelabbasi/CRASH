@@ -34,14 +34,13 @@ void RoundLogic::clientLogin(const string& username)
     }
 }
 
-void RoundLogic::clientUpdate(const Player& user)
+void RoundLogic::clientUpdate(const double& money, const string& username)
 {
-    // Need to implement a check here that a user with that name exists in the vector
-    Player update(user);
-    if(playerExists(update.getName())) {
+    // Now accepts a username and money, directly sets the money in the array
+    if(playerExists(username)) {
         for (int i = 0; i < loggedInUsers.size(); i++) {
-            if (loggedInUsers[i].getName() == update.getName()) {
-                loggedInUsers[i] = update;
+            if (loggedInUsers[i].getName() == username) {
+                loggedInUsers[i].updateMoney(money);
             }
         }
     }
@@ -80,6 +79,7 @@ void RoundLogic::playRound()
 
         // ledgerUpdate(loggedInUsers);
 
+        // Change avg return and volatility values here
         StockGenerator roundInfo(0.002, 0.01);
 
         // tellClientsRoundInfo(roundInfo);
@@ -87,13 +87,13 @@ void RoundLogic::playRound()
         // untested
         for(int i = 0; i < loggedInUsers.size(); i++) {
             cout << loggedInUsers[i].getStatus() << endl;
-            if (loggedInUsers[i].getStatus() == "IN" ) {
+            if (loggedInUsers[i].getStatus()) {
                 validClients++;
                 /* Increments the valid client tracker and sets the status to OUT
                  * The status should be set back to "IN" in the clientUpdate method
                  * All clients that are still "OUT" (have not been updated) are removed
                  */
-                loggedInUsers[i].setStatus("OUT");
+                loggedInUsers[i].setStatus(false);
             }
         }
         roundStatus = "begin";
@@ -111,7 +111,7 @@ void RoundLogic::playRound()
          */
         // Remove all users with an "OUT" status
         for(int i = 0; i < loggedInUsers.size(); i++) {
-            if(loggedInUsers[i].getStatus() == "OUT") {
+            if(loggedInUsers[i].getStatus() == false) {
                 // UNTESTED
                 loggedInUsers.erase(loggedInUsers.begin() + i);
             }

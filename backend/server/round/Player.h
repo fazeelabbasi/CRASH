@@ -17,14 +17,14 @@ class Player
         void updateIndex(const int& in);
         int getIndex();
         string getName();
-        string getStatus();
-        void setStatus(const string& stat);
+        bool getStatus();
+        void setStatus(const bool& stat);
     protected:
 
     private:
         string name;
         double moneyAmount, netWorth;
-        string status;
+        bool status;
         int index;
 };
 
