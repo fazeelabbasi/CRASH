@@ -9,7 +9,10 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
-                "client/both.c",
+                "client/net.cpp",
+                "client/net.h",
+                "client/entry.cpp",
+                "client/entry.h",
                 "-o",
                 "client/a.out",
                 "-lpthread"
