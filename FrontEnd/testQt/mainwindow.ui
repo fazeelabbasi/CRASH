@@ -35,39 +35,6 @@ min-width: 5em;</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0" rowspan="2">
-     <widget class="QPushButton" name="sell">
-      <property name="styleSheet">
-       <string notr="true">color:white;
-background-color: rgb(81, 81, 81);
-border-style: outset;
-border-width: 2px;
-border-radius: 10px;
-border-color: beige;
-font: bold 14px;
-min-width: 10em;
-padding: 6px</string>
-      </property>
-      <property name="text">
-       <string>Sell</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QLCDNumber" name="lcdNumber">
-      <property name="styleSheet">
-       <string notr="true">color:white;
-background-color: rgb(81, 81, 81);
-border-style: outset;
-
-border-radius: 10px;
-border-color: beige;
-font: bold 8px;
-min-width: 10em;
-</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="3" rowspan="2">
      <widget class="QPushButton" name="buy">
       <property name="styleSheet">
@@ -111,6 +78,39 @@ padding: 6px</string>
       </property>
      </widget>
     </item>
+    <item row="1" column="2">
+     <widget class="QLCDNumber" name="lcdNumber">
+      <property name="styleSheet">
+       <string notr="true">color:white;
+background-color: rgb(81, 81, 81);
+border-style: outset;
+
+border-radius: 10px;
+border-color: beige;
+font: bold 8px;
+min-width: 10em;
+</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2">
+     <widget class="QPushButton" name="sell">
+      <property name="styleSheet">
+       <string notr="true">color:white;
+background-color: rgb(81, 81, 81);
+border-style: outset;
+border-width: 2px;
+border-radius: 10px;
+border-color: beige;
+font: bold 14px;
+min-width: 10em;
+padding: 6px</string>
+      </property>
+      <property name="text">
+       <string>Sell</string>
+      </property>
+     </widget>
+    </item>
     <item row="3" column="1">
      <widget class="QTextBrowser" name="stockDescription">
       <property name="sizePolicy">
@@ -139,6 +139,27 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
+    <item row="3" column="0">
+     <widget class="QTextBrowser" name="yourStats">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:white;
+background-color: rgb(81, 81, 81);
+border-style: outset;
+border-width: 2px;
+border-radius: 10px;
+border-color: beige;
+font: bold 14px;
+min-width: 10em;
+padding: 6px</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -147,7 +168,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
   </widget>

@@ -67,6 +67,7 @@ void StockGenerator::generateGraph()
         }
         average += delta;
     }
+        graph.push_back(0.0);
     cout << "Crashed at timestep " << timeStep << " at price " << stockQuote << " with delta " << delta << endl;
     cout << "Lowest delta: " << lowest_delta << endl;
     crashPrice = stockQuote;

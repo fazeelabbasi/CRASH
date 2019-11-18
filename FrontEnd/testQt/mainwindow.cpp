@@ -1,10 +1,11 @@
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <string>
 #include <QString>
 #include <QTimer>
 #include <QStatusBar>
-#include <unistd.h>
+//#include <unistd.h>
 #include "qcustomplot.h"
 #include <vector>
 //#include <bits/stdc++.h>
@@ -23,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stockPlot->addGraph();
     ui->stockPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCrossCircle);
     ui->stockPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
-    setData(currentData);
+    ui->yourStats->setText("Money: 1000");
 }
 
 MainWindow::~MainWindow()
@@ -36,8 +37,10 @@ vector<double> MainWindow::getData(){
     return currentData;
 }
 
-void MainWindow::setData(vector<double> data){
-    currentData = data;
+void MainWindow::setData(vector<double> outerdata){
+   /* currentData = data;*/
+    for (int i=0; i<outerdata.size(); i++)
+            currentData.push_back(outerdata[i]);
 }
 
 void MainWindow::plotNewOnButton(int first, int second){
@@ -98,22 +101,45 @@ vector<double> MainWindow::Vector2Point(){
 
 void MainWindow::on_readyButton_clicked()
 {
-    vector<double> temp = Vector2Point();
+//    vector<double> temp = Vector2Point();
 
-    addpoint(Time++,temp[0]);
-    plot();
-    addpoint(Time++,temp[1]);
-    plot();
-    addpoint(Time++,temp[2]);
-    plot();
+//    addpoint(Time++,temp[0]);
+//    plot();
+//    addpoint(Time++,temp[1]);
+//    plot();
+//    addpoint(Time++,temp[2]);
+//    plot();
 
-    ui->stockPlot->xAxis->setRange(*std::min_element(qv_x.begin(),qv_x.end())-1,*std::max_element(qv_x.begin(),qv_x.end())+1);
-    ui->stockPlot->yAxis->setRange(*std::min_element(qv_y.begin(),qv_y.end())-1,*std::max_element(qv_y.begin(),qv_y.end())+1);
-    plot();
+//    ui->stockPlot->xAxis->setRange(*std::min_element(qv_x.begin(),qv_x.end())-1,*std::max_element(qv_x.begin(),qv_x.end())+1);
+//    ui->stockPlot->yAxis->setRange(*std::min_element(qv_y.begin(),qv_y.end())-1,*std::max_element(qv_y.begin(),qv_y.end())+1);
+//    plot();
 
-    currentData.erase(currentData.begin());
-    currentData.erase(currentData.begin());
-    currentData.erase(currentData.begin());
+//    currentData.erase(currentData.begin());
+//    currentData.erase(currentData.begin());
+//    currentData.erase(currentData.begin());
+
+    qv_x = {};
+    qv_y = {};
+    ui->stockPlot->replot();
+
+
+    for (int i =0;i<currentData.size();i++) {
+        addpoint(Time++,currentData[i]);
+        plot();
+        ui->stockPlot->xAxis->setRange(*std::min_element(qv_x.begin(),qv_x.end())-1,*std::max_element(qv_x.begin(),qv_x.end())+1);
+        ui->stockPlot->yAxis->setRange(*std::min_element(qv_y.begin(),qv_y.end())-1,*std::max_element(qv_y.begin(),qv_y.end())+1);
+        plot();
+//        Sleep(100);
+         QEventLoop obj;
+        for (int i = 0; i < 50000;i++) {
+
+           obj.processEvents();
+        }
+    }
+
+
+
+
 
 }
 
@@ -137,3 +163,20 @@ void MainWindow::Lose(){
         numPlayers--;
     }
 }
+
+void MainWindow::on_buy_clicked()
+{
+    money++;
+   string s = ("Your Money : "+ to_string(money));
+
+
+   QString qstr = QString::fromStdString(s);
+   ui->yourStats->setText(qstr);
+}
+
+void MainWindow::on_sell_clicked()
+{
+    editStockDescription("lol but backwards");
+}
+
+

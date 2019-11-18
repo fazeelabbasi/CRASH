@@ -22,15 +22,26 @@ void LoginPage::on_pushButton_clicked()
 
 
     if(username == "admin" && password == "admin"){
+
+//        StockGenerator test(0.002,0.01);
+        StockGenerator test(0.005,0.05);
+        test.generateGraph();
+        vector<double> stockData = test.getGraph();
+
         w = new MainWindow(this);
         w->horizontalBarLimits(30);
         w->editStockDescription("Testing 1,2");
-        StockGenerator test(0.01,0.02);
-        vector<double> stockData = test.getGraph();
-        w->setData({1,2,3});
+
+//       w->editStockDescription(to_string(stockData[0]));
+//        for(int i =0;i< stockData.size();i++){
+//        printf("%f",stockData[i]);
+//        }
+
+        w->setData(stockData);
         w->show();
         w->plot();
-//        printf("%d",w->getData()[0]);
+
+
         hide();
     }
 

@@ -93,7 +93,7 @@ vector<double> StockGenerator::getGraph()
     return graph;
 }
 
-/*int main()
+int main()
 {
     StockGenerator test(d,v);
     test.generateGraph();
@@ -105,4 +105,4 @@ vector<double> StockGenerator::getGraph()
     test.generateGraph();
     cout << "Crash price: " << test.getCrashPrice() << endl;
     cout << "Crash time: " << test.getCrashTime() << endl;
-}*/
+}
