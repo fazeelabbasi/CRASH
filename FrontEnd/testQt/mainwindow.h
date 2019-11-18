@@ -30,6 +30,9 @@ public:
     void addpoint(double x, double y);
     void plot();
     void setData(vector<double> data);
+    void Win();
+    void Lose();
+
 
 public slots:
     void plotNewOnButton(int x,int y);
@@ -48,6 +51,7 @@ private:
     vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
     int NumPoints = 3;// Number of points plotted into the graph at a time
     vector<double> currentData;
+    int numPlayers=0;
 
 private:
     Ui::MainWindow *ui;
