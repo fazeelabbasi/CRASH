@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include "Server.h"
-#include "round/RoundLogic.h"
+#include "round/Game.h"
 #include "round/Player.h"
 #include "round/StockGenerator.h"
 
@@ -36,8 +36,8 @@ void * listenBlocking(void *raw) {
 void onMessage(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	std::string msg(buffer);
-	if (msg.size() >= 4 && msg.substr(0,4) == "JOIN") {
-		game.clientLogin(msg.substr(4,msg.size()-1));
+	if (msg.size() >= 4 && msg.substr(0,5) == "LOGIN") {
+		game.clientLogin(msg.substr(5,msg.size()-1));
 		game.validClients++;
 	} else if (msg.size() > 4 && msg.substr(0,4) == "DONE") {
 		msg.erase(0,4);
@@ -98,15 +98,21 @@ void roundLoop() {
 			game.roundStatus = "warmup";
 			game.clientsFinished = 0;
 		}
-		this_thread::sleep_for(chrono::seconds(2));
-		game.roundStatus = "begin";
+		// BEGIN
+		{
+			this_thread::sleep_for(chrono::seconds(2));
+			game.roundStatus = "begin";
+			for (auto& player : game.players)
+		}
 		// END ROUND
-		for (int i = 0; i < game.loggedInUsers.size(); i++) {
-			cout << "status: " << game.loggedInUsers[i].getStatus() << endl;
-			if(game.loggedInUsers[i].getStatus() == "IN") {
-				cout << "Valid client" << endl;
-				game.validClients++;
-				game.loggedInUsers[i].setStatus("OUT");
+		{
+			for (int i = 0; i < game.players.size(); i++) {
+				cout << "status: " << game.players[i].status << endl;
+				if(game.players[i].status == "IN") {
+					cout << "Valid client" << endl;
+					game.validClients++;
+					game.players[i].status = "OUT";
+				}
 			}
 		}
 
