@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "Player.h"
+#include "StockGenerator.h"
 #include <iostream>
 
 using namespace std;
@@ -48,14 +49,18 @@ void RoundLogic::playRound()
 {
     while(true) {
         // implement for loop for updating indices, and something else to get rid of inactive clients
+        roundsPlayed++;
         roundTimer = 0;
-        status = "warmup";
+        roundStatus = "warmup";
         clientsFinished = 0;
         validClients = 0;
-        sleep(25);
-        ledgerUpdate(loggedInUsers);
+        // sleep(25);
+        // ledgerUpdate(loggedInUsers);
+
         // Generate stock here as roundInfo
-        tellClientsRoundInfo(roundInfo);
+        StockGenerator roundInfo(0.002, 0.01);
+
+        // tellClientsRoundInfo(roundInfo);
         // untested
         for(int i = 0; i < loggedInUsers.size(); i++) {
             cout << loggedInUsers[i].getStatus() << endl;
@@ -63,11 +68,10 @@ void RoundLogic::playRound()
                 validClients++;
             }
         }
-        status = "begin";
+        roundStatus = "begin";
         // scrapped the sleep(25) because the round times are variable
-        status = "end";
-        while(clientFinished < validClients && roundTimer < 25) {
-            sleep(1);
+        while(clientsFinished < validClients && roundTimer < 30) {
+            // sleep(1);
             roundTimer++;
         }
 
