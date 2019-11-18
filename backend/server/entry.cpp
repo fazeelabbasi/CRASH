@@ -3,6 +3,10 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+#include "round/RoundLogic.h"
+#include "round/Player.h"
+#include "round/StockGenerator.h"
+
 Server s(2878);
 
 
@@ -45,4 +49,51 @@ int main() {
     for(;;) s.loop();
     std::cout << "we done now " << std::endl;
     return 0;
+}
+
+
+int roundTest()
+{
+    RoundLogic test;
+    test.roundsPlayed++;
+    test.roundTimer = 0;
+    test.roundStatus = "warmup";
+    test.clientsFinished = 0;
+    test.validClients = 0;
+    test.clientLogin("asdf");
+    test.clientLogin("qwerty");
+    Player asdfC = test.loggedInUsers[0];
+    Player qwertyC = test.loggedInUsers[1];
+    this_thread::sleep_for(chrono::seconds(2));
+    for (int i = 0; i < test.loggedInUsers.size(); i++) {
+        cout << "status: " << test.loggedInUsers[i].getStatus() << endl;
+        if(test.loggedInUsers[i].getStatus() == "IN") {
+            cout << "Valid client" << endl;
+            test.validClients++;
+            test.loggedInUsers[i].setStatus("OUT");
+        }
+    }
+    test.roundStatus = "begin";
+    asdfC.updateMoney((double)-10000);
+    qwertyC.updateMoney((double)150);
+    test.clientUpdate(qwertyC);
+    test.clientUpdate(asdfC);
+    while(test.clientsFinished < test.validClients && test.roundTimer < 2) {
+        this_thread::sleep_for(chrono::seconds(1));
+        test.roundTimer++;
+    }
+
+    for(int i = 0; i < test.loggedInUsers.size(); i++){
+        if(test.loggedInUsers[i].getStatus() == "OUT"){
+            test.loggedInUsers.erase(test.loggedInUsers.begin() + i);
+        }
+    }
+
+    for(int i = 0; i < test.loggedInUsers.size(); i++){
+        test.loggedInUsers[i].updateIndex(i);
+    }
+
+    cout << test.loggedInUsers[0].getMoney() << endl;
+    cout << test.loggedInUsers[0].getName() << endl;
+    cout << test.loggedInUsers[0].getIndex() << endl;
 }
