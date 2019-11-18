@@ -94,7 +94,7 @@ vector<double> StockGenerator::getGraph()
     return graph;
 }
 
-int main()
+/*int main()
 {
     StockGenerator test(d,v);
     test.generateGraph();
@@ -110,4 +110,4 @@ int main()
     for (int i = 0; i < test123.size(); i++) {
         cout << test123[i] << endl;
     }
-}
+}*/

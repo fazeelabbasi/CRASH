@@ -39,11 +39,12 @@ void RoundLogic::clientUpdate(const Player& user)
     // Need to implement a check here that a user with that name exists in the vector
     Player update(user);
     if(playerExists(update.getName())) {
-        int updateIndex = update.getIndex();
-        loggedInUsers[updateIndex] = update;
-        loggedInUsers[updateIndex].setStatus("IN");
+        for (int i = 0; i < loggedInUsers.size(); i++) {
+            if (loggedInUsers[i].getName() == update.getName()) {
+                loggedInUsers[i] = update;
+            }
+        }
     }
-
 }
 
 string RoundLogic::getStatus()
@@ -130,18 +131,48 @@ Player RoundLogic::getPlayer(const int& index)
     return ret;
 }
 
-/*int main()
+int main()
 {
     RoundLogic test;
+    test.roundsPlayed++;
+    test.roundTimer = 0;
+    test.roundStatus = "warmup";
+    test.clientsFinished = 0;
+    test.validClients = 0;
     test.clientLogin("asdf");
     test.clientLogin("qwerty");
-    Player testplayer = test.getPlayer(1);
-    cout << testplayer.getName() << endl;
-    testplayer.updateMoney(12345);
-    test.clientUpdate(testplayer);
-    Player test2 = test.getPlayer(1);
-    cout << test2.getMoney() << endl;
-    cout << test2.getStatus() << endl;
-    cout << test.playerExists("asdf") << endl;
-    cout << test.playerExists("asdfsadasfasdsa") << endl;
-}*/
+    Player asdfC = test.loggedInUsers[0];
+    Player qwertyC = test.loggedInUsers[1];
+    this_thread::sleep_for(chrono::seconds(2));
+    for (int i = 0; i < test.loggedInUsers.size(); i++) {
+        cout << "status: " << test.loggedInUsers[i].getStatus() << endl;
+        if(test.loggedInUsers[i].getStatus() == "IN") {
+            cout << "Valid client" << endl;
+            test.validClients++;
+            test.loggedInUsers[i].setStatus("OUT");
+        }
+    }
+    test.roundStatus = "begin";
+    asdfC.updateMoney((double)-10000);
+    qwertyC.updateMoney((double)150);
+    test.clientUpdate(qwertyC);
+    test.clientUpdate(asdfC);
+    while(test.clientsFinished < test.validClients && test.roundTimer < 2) {
+        this_thread::sleep_for(chrono::seconds(1));
+        test.roundTimer++;
+    }
+
+    for(int i = 0; i < test.loggedInUsers.size(); i++){
+        if(test.loggedInUsers[i].getStatus() == "OUT"){
+            test.loggedInUsers.erase(test.loggedInUsers.begin() + i);
+        }
+    }
+
+    for(int i = 0; i < test.loggedInUsers.size(); i++){
+        test.loggedInUsers[i].updateIndex(i);
+    }
+
+    cout << test.loggedInUsers[0].getMoney() << endl;
+    cout << test.loggedInUsers[0].getName() << endl;
+    cout << test.loggedInUsers[0].getIndex() << endl;
+}

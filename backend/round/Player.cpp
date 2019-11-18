@@ -37,16 +37,17 @@ Player::~Player()
     //dtor
 }
 
-void Player::updateMoney(const float& money)
+void Player::updateMoney(const double& money)
 {
     moneyAmount += money;
     netWorth += money;
     if (moneyAmount < 1) {
         status = "OUT";
+        cout << "Bankrupt" << endl;
     }
 }
 
-float Player::getMoney()
+double Player::getMoney()
 {
     return moneyAmount;
 }

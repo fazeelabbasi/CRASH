@@ -12,15 +12,12 @@ class RoundLogic
         RoundLogic();
         virtual ~RoundLogic();
         void clientLogin(const string& username);
-        void clientUpdate(const Player& user);
+        void clientUpdate(const Player& user); //fix this stuff
         int getRoundsPlayed();
         void playRound();
         Player getPlayer(const int& index);
         string getStatus();
         bool playerExists(const string& username);
-    protected:
-
-    private:
 
         vector<Player> loggedInUsers;
         int roundsPlayed;
@@ -28,6 +25,11 @@ class RoundLogic
         int validClients;
         int clientsFinished;
         int roundTimer;
+    protected:
+
+    private:
+
+
 };
 
 #endif // ROUNDLOGIC_H

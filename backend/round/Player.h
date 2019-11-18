@@ -12,8 +12,8 @@ class Player
         Player(const string& username);
         Player(const Player& copy);
         virtual ~Player();
-        void updateMoney(const float& money);
-        float getMoney();
+        void updateMoney(const double& money);
+        double getMoney();
         void updateIndex(const int& in);
         int getIndex();
         string getName();
@@ -23,7 +23,7 @@ class Player
 
     private:
         string name;
-        float moneyAmount, netWorth;
+        double moneyAmount, netWorth;
         string status;
         int index;
 };
