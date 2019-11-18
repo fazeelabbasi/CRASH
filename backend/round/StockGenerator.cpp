@@ -28,6 +28,7 @@ StockGenerator::~StockGenerator()
 
 void StockGenerator::generateGraph()
 {
+    srand(time(NULL));
     graph.clear();
     double stockQuote = init_value;
     int timeStep = 0;
@@ -92,9 +93,8 @@ vector<double> StockGenerator::getGraph()
     return graph;
 }
 
-int main()
+/*int main()
 {
-    srand(3);
     StockGenerator test(d,v);
     test.generateGraph();
     cout << "Crash price: " << test.getCrashPrice() << endl;
@@ -105,4 +105,4 @@ int main()
     test.generateGraph();
     cout << "Crash price: " << test.getCrashPrice() << endl;
     cout << "Crash time: " << test.getCrashTime() << endl;
-}
+}*/

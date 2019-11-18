@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "StockGenerator.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -54,7 +56,7 @@ void RoundLogic::playRound()
         roundStatus = "warmup";
         clientsFinished = 0;
         validClients = 0;
-        // sleep(25);
+        this_thread::sleep_for(chrono::seconds(25));
         // ledgerUpdate(loggedInUsers);
 
         // Generate stock here as roundInfo
@@ -71,7 +73,7 @@ void RoundLogic::playRound()
         roundStatus = "begin";
         // scrapped the sleep(25) because the round times are variable
         while(clientsFinished < validClients && roundTimer < 30) {
-            // sleep(1);
+            this_thread::sleep_for(chrono::seconds(1));
             roundTimer++;
         }
 
