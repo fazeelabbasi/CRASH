@@ -9,14 +9,17 @@
 #include <errno.h>
 #include <arpa/inet.h> 
 #include <pthread.h>
+#include <iostream>
 #include "net.h"
 
 void* Network::sendRaw(void *raw) {
     int iResult;
     struct sendInfo *info = (struct sendInfo*) raw;
+    std::cout << "Sending raw message on [" << info->sockfd << "] <" << info->sendbuf << ">" << std::endl;
     iResult = send(info->sockfd, info->sendbuf, (int)strlen(info->sendbuf), 0);
     printf("[%d]\tBytes Sent: %d\n",info->sockfd, iResult);
     // return iResult;
+    free(info->sendbuf);
     free(raw);
 }
 
@@ -24,7 +27,10 @@ void Network::sendAsync(int sockfd, char* sendbuf) {
     pthread_t t;
     struct sendInfo *info = (struct sendInfo*) malloc(sizeof(struct sendInfo));
     info->sockfd = sockfd;
-    info->sendbuf = sendbuf;
+    info->sendbuf = (char*) malloc(sizeof(sendbuf));
+    memcpy(info->sendbuf,sendbuf,sizeof(sendbuf));
+
+    std::cout << "Sending async message on [" << info->sockfd << "] <" << info->sendbuf << ">" << std::endl;
     if (pthread_create(&t, NULL, Network::sendRaw, (void *) info) != 0) {
         printf("Failed to send message\n");
     }

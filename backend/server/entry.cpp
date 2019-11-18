@@ -73,6 +73,33 @@ void onConnect(uint16_t df) {
 }
 
 
+void * setupServer(void* raw) {
+	std::cout << "Launching server" << std::endl;
+	std::cout << "Binding socket events...";
+	{
+		server.onConnect(&onConnect);
+		server.onDisconnect(&onDisconnect);
+		server.onInput(&onMessage);
+	}
+	std::cout << "\t\tOK!" << std::endl;
+	std::cout << "Binding socket to port...";
+	{
+		server.init();
+	}
+	std::cout << "\t\tOK!" << std::endl;
+	std::cout << "Creating socket background thread...";
+	{
+		// pthread_t t;
+		// if (pthread_create(&t, NULL, listenBlocking, NULL) != 0) {
+		// 	std::cout << "FAIL!" << std::endl;
+		// 	return 1;
+		// }	
+		listenBlocking(nullptr);
+	}
+	std::cout << "\tOK!" << std::endl;
+	std::cout << "Server launched successfully!" << std::endl;
+}
+
 /*
 ====================================================
 ====	Game Logic
@@ -138,29 +165,12 @@ void roundLoop() {
 ====================================================
 */
 int main() {
-	std::cout << "Launching server" << std::endl;
-	std::cout << "Binding socket events...";
-	{
-		server.onConnect(&onConnect);
-		server.onDisconnect(&onDisconnect);
-		server.onInput(&onMessage);
+	pthread_t t;
+	if (pthread_create(&t, NULL, setupServer, NULL) != 0) {
+		std::cout << "FAIL!" << std::endl;
+		return 1;
 	}
-	std::cout << "\t\tOK!" << std::endl;
-	std::cout << "Binding socket to port...";
-	{
-		server.init();
-	}
-	std::cout << "\t\tOK!" << std::endl;
-	std::cout << "Creating socket background thread...";
-	{
-		pthread_t t;
-		if (pthread_create(&t, NULL, listenBlocking, NULL) != 0) {
-			std::cout << "FAIL!" << std::endl;
-			return 1;
-		}	
-	}
-	std::cout << "\tOK!" << std::endl;
-	std::cout << "Server launched successfully!" << std::endl;
+	//setupServer();
 
 	roundLoop();
 
