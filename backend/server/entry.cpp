@@ -36,11 +36,41 @@ void * listenBlocking(void *raw) {
 void onMessage(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	std::string msg(buffer);
-	if (msg.size() >= 4 && msg.substr(0,5) == "LOGIN") {
-		game.clientLogin(msg.substr(5,msg.size()-1));
-	} else if (msg.size() > 4 && msg.substr(0,4) == "DONE") {
+	if (msg.size() >= 5 && msg.substr(0,5) == "LOGIN") {
+		msg.erase(0,5);
+		std::stringstream ss(msg);
+		std::string username;
+		ss >> username;
+		game.clientLogin(username);
+		std::cout << "<" << username << "> has joined the game!" << std::endl;
+	} else if (msg.size() >= 5 && msg.substr(0,5) == "FINISH") {
+		msg.erase(0,5);
+		std::stringstream ss(msg);
+		std::string username;
+		ss >> username;
+		Player* p = game.getPlayer(username);
+		if (p) {
+			p->status = "FINISHED";
+			std::cout << "Set <" << p->name << "> status to FINISHED" << std::endl;
+		} else {
+			std::cout << "Failed to update status for <" << username << ">" << std::endl;
+		}
+	} else if (msg.size() >= 7 && msg.substr(0,7) == "BALANCE") {
+		msg.erase(0,7);
+		std::stringstream ss(msg);
+		std::string username;
+		ss >> username;
+		double balance;
+		ss >> balance;
+		Player* p = game.getPlayer(username);
+		if (p) {
+			p->balance = balance;
+			std::cout << "Updated <" << p->name << "> balance to $" << p->balance << std::endl;
+		} else {
+			std::cout << "Failed updating balance for <" << username << ">" << std::endl;
+		}
+	} else if (msg.size() >= 4 && msg.substr(0,4) == "DONE") {
 		msg.erase(0,4);
-		std::string buf;
 		std::stringstream ss(msg);
 		std::string username;
 		ss >> username;
@@ -138,7 +168,7 @@ void roundLoop() {
 			bool done;
 			const int timeout = 30;
 			for (int roundTimer = 0; !done || roundTimer > timeout; roundTimer++) {
-				// std::cout << "Waiting for all players to respond, " << (timeout - roundTimer) << "s remaining." << std::endl;
+				std::cout << "Waiting for all players to respond, " << (timeout - roundTimer) << "s remaining." << std::endl;
 				this_thread::sleep_for(chrono::seconds(1));
 				done=true;
 				for (auto& player : game.players)
