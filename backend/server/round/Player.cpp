@@ -10,7 +10,7 @@ Player::Player()
     name = "";
     moneyAmount = 0;
     netWorth = 0;
-    status = "OUT";
+    status = false;
     index = -1;
 }
 
@@ -19,7 +19,7 @@ Player::Player(const string& username)
     name = username;
     moneyAmount = 100;
     netWorth = 100;
-    status = "IN";
+    status = true;
     index = -1;
 }
 
@@ -37,16 +37,17 @@ Player::~Player()
     //dtor
 }
 
-void Player::updateMoney(const float& money)
+void Player::updateMoney(const double& money)
 {
-    moneyAmount += money;
-    netWorth += money;
+    // Now just updates the money to the new value instead of taking the change
+    moneyAmount = money;
     if (moneyAmount < 1) {
-        status = "OUT";
+        status = false;
+        cout << "Bankrupt" << endl;
     }
 }
 
-float Player::getMoney()
+double Player::getMoney()
 {
     return moneyAmount;
 }
@@ -61,7 +62,7 @@ int Player::getIndex()
     return index;
 }
 
-string Player::getStatus()
+bool Player::getStatus()
 {
     return status;
 }
@@ -69,6 +70,11 @@ string Player::getStatus()
 string Player::getName()
 {
     return name;
+}
+
+void Player::setStatus(const bool& stat)
+{
+    status = stat;
 }
 
 /*int main() {

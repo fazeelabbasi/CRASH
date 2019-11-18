@@ -9,7 +9,10 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
-                "client/both.c",
+                "client/net.cpp",
+                "client/net.h",
+                "client/entry.cpp",
+                "client/entry.h",
                 "-o",
                 "client/a.out",
                 "-lpthread"
@@ -31,6 +34,12 @@
                 "server/entry.cpp",
                 "server/Server.h",
                 "server/Server.cpp",
+                "server/round/Player.cpp",
+                "server/round/Player.h",
+                "server/round/RoundLogic.cpp",
+                "server/round/RoundLogic.h",
+                "server/round/StockGenerator.cpp",
+                "server/round/StockGenerator.h",
                 "-o",
                 "server/a.out",
                 "-lpthread"
