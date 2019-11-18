@@ -38,7 +38,6 @@ void onMessage(uint16_t df, char *buffer) {
 	std::string msg(buffer);
 	if (msg.size() >= 4 && msg.substr(0,5) == "LOGIN") {
 		game.clientLogin(msg.substr(5,msg.size()-1));
-		game.validClients++;
 	} else if (msg.size() > 4 && msg.substr(0,4) == "DONE") {
 		msg.erase(0,4);
 		std::string buf;
@@ -49,7 +48,7 @@ void onMessage(uint16_t df, char *buffer) {
 		ss >> balance;
 		Player* p = game.getPlayer(username);
 		if (p) {
-			game.setBalance(p, balance);
+			p->balance = balance;
 		} else {
 			std::cout << "Failed to find player [" << username << "]" << std::endl;
 		}
@@ -89,57 +88,40 @@ void addPlayer(std::string username) {
 
 
 void roundLoop() {
-	game.validClients = 0;
 	for (;;) {
 		// WARMUP
 		{
 			game.roundsPlayed++;
-			game.roundTimer = 0;
 			game.roundStatus = "warmup";
-			game.clientsFinished = 0;
 		}
+
 		// BEGIN
 		{
 			this_thread::sleep_for(chrono::seconds(2));
 			game.roundStatus = "begin";
 			for (auto& player : game.players)
+				player.status = "WAITING";
 		}
-		// END ROUND
+
+		// WAIT (BLOCKING) 
 		{
-			for (int i = 0; i < game.players.size(); i++) {
-				cout << "status: " << game.players[i].status << endl;
-				if(game.players[i].status == "IN") {
-					cout << "Valid client" << endl;
-					game.validClients++;
-					game.players[i].status = "OUT";
-				}
+			bool done;
+			for (int roundTimer = 0; done || roundTimer > 30; roundTimer++) {
+				this_thread::sleep_for(chrono::seconds(1));
+				done=true;
+				for (auto& player : game.players)
+					if (player.status != "FINISHED")
+						done=false;
 			}
 		}
 
-		// Player asdfC = test.loggedInUsers[0];
-		// Player qwertyC = test.loggedInUsers[1];
-		// asdfC.updateMoney((double)-10000);
-		// qwertyC.updateMoney((double)150);
-		// test.clientUpdate(qwertyC);
-		// test.clientUpdate(asdfC);
-		// while(test.clientsFinished < test.validClients && test.roundTimer < 2) {
-		// 	this_thread::sleep_for(chrono::seconds(1));
-		// 	test.roundTimer++;
-		// }
-
-		// for(int i = 0; i < test.loggedInUsers.size(); i++){
-		// 	if(test.loggedInUsers[i].getStatus() == "OUT"){
-		// 		test.loggedInUsers.erase(test.loggedInUsers.begin() + i);
-		// 	}
-		// }
-
-		// for(int i = 0; i < test.loggedInUsers.size(); i++){
-		// 	test.loggedInUsers[i].updateIndex(i);
-		// }
-
-		// cout << test.loggedInUsers[0].getMoney() << endl;
-		// cout << test.loggedInUsers[0].name << endl;
-		// cout << test.loggedInUsers[0].getIndex() << endl;
+		// END ROUND
+		{
+			for (auto& player : game.players) {
+				std::cout << "<" << player.name << "> $" << player.balance << std::endl;
+				player.status = "READY";
+			}
+		}
 	}
 }
 

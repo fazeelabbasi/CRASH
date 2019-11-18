@@ -12,9 +12,6 @@ class Game
 		vector<Player> players;
 		int roundsPlayed;
 		string roundStatus;
-		int validClients;
-		int clientsFinished;
-		int roundTimer;
 
 		Game();
 		virtual ~Game();
@@ -24,7 +21,6 @@ class Game
 
 		int getPlayerIndex(std::string username);
 		bool playerExists(const string& username);
-		Player getPlayer(const int& index);
 		Player* getPlayer(std::string username);
 		void setBalance(Player* p, double balance);
 };
