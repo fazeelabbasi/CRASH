@@ -7,8 +7,9 @@
 #include <unistd.h>
 #include "qcustomplot.h"
 #include <vector>
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
 #include "loginpage.h"
+#include <QMessageBox>
 
 using namespace std;
 
@@ -112,4 +113,25 @@ void MainWindow::on_readyButton_clicked()
     currentData.erase(currentData.begin());
     currentData.erase(currentData.begin());
 
+}
+
+void MainWindow::Win(){
+    //check if there is more than one user left. If there isn't, we have a winner. This method will need to be checked for every buyout
+    if(numPlayers==0){
+        //Pop up window that says you won!
+        QMessageBox::information(this,"Winner!","Congradulations!!! You Won!!");
+        //reset the game
+        ui->stockPlot->clearGraphs(); //I think this works to clear the graph
+        //are we keeping track of wins?
+    }
+}
+
+void MainWindow::Lose(){
+    //check if current capital and amount invested is zero
+    if(currentCapital==0 && amountInvested==0){
+        //take away their ability to click the buttons
+        ui->buy->setEnabled(false);
+        ui->sell->setEnabled(false);
+        numPlayers--;
+    }
 }
