@@ -37,6 +37,7 @@ void Game::mainLoop() {
                 char* msg = (char*) malloc(sizeof(char) * 1024);
                 std::cout << "Enter a message: ";
                 std::cin >> msg;
+                std::cout << "You entered <" << msg << ">" << std::endl;
                 this->net.sendAsync(this->net.sockfd, msg);
                 std::cin.clear();
                 free(msg);

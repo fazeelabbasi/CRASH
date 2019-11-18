@@ -8,12 +8,12 @@ class Network {
 public:
     int sockfd;
     int connectToServer(const char *serverAddr);
-    static void sendAsync(int sockfd, char* sendbuf);
+    static void sendAsync(int sockfd, std::string sendbuf);
     static void* sendRaw(void *raw);
     char* receiveBlocking(int sockfd);
 };
 
 struct sendInfo {
     int sockfd;
-    char* sendbuf;
+    std::string sendbuf;
 };

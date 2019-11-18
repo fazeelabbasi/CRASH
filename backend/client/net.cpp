@@ -16,21 +16,23 @@ void* Network::sendRaw(void *raw) {
     int iResult;
     struct sendInfo *info = (struct sendInfo*) raw;
     std::cout << "Sending raw message on [" << info->sockfd << "] <" << info->sendbuf << ">" << std::endl;
-    iResult = send(info->sockfd, info->sendbuf, (int)strlen(info->sendbuf), 0);
+    iResult = send(info->sockfd, info->sendbuf.c_str(), info->sendbuf.size(), 0);
     printf("[%d]\tBytes Sent: %d\n",info->sockfd, iResult);
     // return iResult;
-    free(info->sendbuf);
+    // free(info->sendbuf);
     free(raw);
 }
 
-void Network::sendAsync(int sockfd, char* sendbuf) {
+void Network::sendAsync(int sockfd, std::string sendbuf) {
+    std::cout << "Sending async message raw [" << sockfd << "] <" << sendbuf << ">" << std::endl;
+
     pthread_t t;
     struct sendInfo *info = (struct sendInfo*) malloc(sizeof(struct sendInfo));
     info->sockfd = sockfd;
-    info->sendbuf = (char*) malloc(sizeof(sendbuf));
-    memcpy(info->sendbuf,sendbuf,sizeof(sendbuf));
+    info->sendbuf = sendbuf;
+    // memcpy(info->sendbuf,sendbuf,sizeof(sendbuf) * sizeof(char));
 
-    std::cout << "Sending async message on [" << info->sockfd << "] <" << info->sendbuf << ">" << std::endl;
+    std::cout << "Sending async message struct [" << info->sockfd << "] <" << info->sendbuf << ">" << std::endl;
     if (pthread_create(&t, NULL, Network::sendRaw, (void *) info) != 0) {
         printf("Failed to send message\n");
     }
