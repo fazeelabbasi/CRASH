@@ -66,12 +66,25 @@ void Stock_CSV_Reader::ReadAndOutput(int interval)
 {
     double avg_ret = 0;
     double stdev = 0;
+    string tech;
+    string food;
+    vector<string> = description;
 
     vector<string> companyInfo = CompanySelect();
     string name =  companyInfo[0];
     string type = companyInfo[1];
     ifstream fin;
     fin.open(name+".csv");
+    
+    if(type == tech){
+        description = "This is a tech company"; //tech description
+    }
+    else if(type == food){
+        description = "This is a food company"; //food description
+    }
+    else{
+        description = "This is a clothing company"; //clothing description
+    }
 
     vector<vector<string> > data;
     string line_in;
@@ -115,6 +128,7 @@ void Stock_CSV_Reader::ReadAndOutput(int interval)
     cout << "Time interval of " << interval << " days" << endl;
     cout << "Average returns for " << name << ": " << avg_ret << endl;
     cout << "Standard deviation for "<<name<<": "<<stdev<<endl;
+    cout << "Description of " << name << ":" << description << endl;
 
     fin.close();
 
