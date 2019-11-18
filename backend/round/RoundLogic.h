@@ -17,9 +17,11 @@ class RoundLogic
         void playRound();
         Player getPlayer(const int& index);
         string getStatus();
+        bool playerExists(const string& username);
     protected:
 
     private:
+
         vector<Player> loggedInUsers;
         int roundsPlayed;
         string roundStatus;

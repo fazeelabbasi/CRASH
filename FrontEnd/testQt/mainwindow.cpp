@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stockPlot->addGraph();
     ui->stockPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCrossCircle);
     ui->stockPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
-    setData(rawdata);
+    setData(currentData);
 }
 
 MainWindow::~MainWindow()
@@ -32,7 +32,9 @@ MainWindow::~MainWindow()
 }
 
 
-
+vector<double> MainWindow::getData(){
+    return currentData;
+}
 
 void MainWindow::setData(vector<double> data){
     currentData = data;

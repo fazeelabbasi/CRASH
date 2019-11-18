@@ -11,12 +11,10 @@ int main(int argc, char *argv[])
     LoginPage login;
     login.show();
 
-//    MainWindow w;
-//    w.horizontalBarLimits(30);
-//    w.editStockDescription("Testing 1,2");
-//    w.show();
-//    w.plot();
-//    w.showLogin();
+    //Actual vector being used:
+
+//     w.setData(stockData);
+
     return a.exec();
 
 

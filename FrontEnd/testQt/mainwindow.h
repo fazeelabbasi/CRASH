@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QStatusBar>
 #include <qcustomplot.h>
+#include "StockGenerator.h"
 
 using namespace std;
 QT_BEGIN_NAMESPACE
@@ -22,6 +23,7 @@ public:
     ~MainWindow();
 
     //Note: making all methods void and public just for using purposes right now. This will need to be changed.
+    vector<double> getData();
     void horizontalBarLimits(double capital);
     void buyingStocks(double amountBought);
     void sellingStocks(double amountSold);
@@ -48,7 +50,7 @@ private:
     vector<double> Vector2Point();
     QVector<double> qv_x, qv_y;
     int Time = 0;
-    vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
+    //vector<double> rawdata{1,1.5,2,2.5,3,4,4,4,4,4,4,4};
     int NumPoints = 3;// Number of points plotted into the graph at a time
     vector<double> currentData;
     int numPlayers=0;
