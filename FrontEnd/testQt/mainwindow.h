@@ -35,12 +35,20 @@ public:
     void Win();
     void Lose();
 
+    //TEMP VARIABLES
+    int money = 1000 ;
+    int assets = 0;
 
 public slots:
     void plotNewOnButton(int x,int y);
+    void on_readyButton_clicked();
 
 private slots:
-    void on_readyButton_clicked();
+//    void on_readyButton_clicked();
+
+    void on_buy_clicked();
+
+    void on_sell_clicked();
 
 private:
     //All variables defined will not be assigned by us. They only exist for the sake of code readability.
