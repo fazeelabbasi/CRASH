@@ -50,6 +50,8 @@ private slots:
 
     void on_sell_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     //All variables defined will not be assigned by us. They only exist for the sake of code readability.
     double currentCapital; //These are doubles since I am not sure how large these numbers will get. I do not think we want these as decimals.

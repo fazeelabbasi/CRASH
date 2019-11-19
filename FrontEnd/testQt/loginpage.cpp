@@ -38,7 +38,11 @@ void LoginPage::on_pushButton_clicked()
 //        }
 
         w->setData(stockData);
-        w->show();
+        w->setWindowState(Qt::WindowFullScreen);
+        w->showFullScreen();
+
+
+//        w->show();
         w->plot();
 
 

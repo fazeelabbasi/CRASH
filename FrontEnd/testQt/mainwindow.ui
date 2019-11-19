@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="font">
    <font>
     <kerning>false</kerning>
@@ -160,6 +166,24 @@ padding: 6px</string>
       </property>
      </widget>
     </item>
+    <item row="3" column="3">
+     <widget class="QPushButton" name="pushButton">
+      <property name="styleSheet">
+       <string notr="true">color:red;
+background-color: rgb(81, 81, 81);
+border-style: outset;
+border-width: 2px;
+border-radius: 10px;
+border-color: beige;
+font: bold 14px;
+min-width: 10em;
+padding: 6px</string>
+      </property>
+      <property name="text">
+       <string>CLOSE</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -168,7 +192,7 @@ padding: 6px</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>31</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
