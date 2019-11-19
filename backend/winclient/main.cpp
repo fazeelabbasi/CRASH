@@ -13,15 +13,19 @@ int main(int argc, char** argv) {
 		return 1;
 
 
-	//std::thread send([&]() {
-		c->sendInfo();
-	//});
+	std::thread send([&]() {
+		for (;;) {
+			c->sendInfo();
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+		}
+	});
 
 	std::thread t([&]() {
 		c->receiveInfo();
 	});
 
-	std::this_thread::sleep_for(std::chrono::seconds(15));
+
+	std::this_thread::sleep_for(std::chrono::seconds(15000));
 	c->stop();
 	t.join();
 	
