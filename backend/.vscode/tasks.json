@@ -27,6 +27,26 @@
         },
         {
             "type": "shell",
+            "label": "build winclient",
+            "command": "g++",
+            "args": [
+                "-g",
+                "winclient/Client.cpp",
+                "winclient/Client.h",
+                "winclient/main.cpp",
+                "-o",
+                "winclient/a.out",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
             "label": "build server",
             "command": "/usr/bin/g++",
             "args": [
