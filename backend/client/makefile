@@ -1,3 +1,3 @@
 .DEFAULT_GOAL := main
 main:
-	g++ both.c -lpthread
+	g++ entry.cpp entry.h net.cpp net.h -lpthread
