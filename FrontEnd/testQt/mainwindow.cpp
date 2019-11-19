@@ -21,9 +21,26 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->stockPlot->setInteraction(QCP::iRangeDrag,true);
     ui->stockPlot->setInteraction(QCP::iRangeZoom,true);
+    ui->stockPlot->setBackground(QBrush(QColor("#000000")));
+
+    ui->stockPlot->xAxis->setLabel("Time");
+    ui->stockPlot->xAxis->setTickLabelColor(Qt::white);
+    ui->stockPlot->xAxis->setBasePen(QPen(Qt::white));
+    ui->stockPlot->xAxis->setLabelColor(Qt::white);
+    ui->stockPlot->xAxis->setTickPen(QPen(Qt::white));
+    ui->stockPlot->xAxis->setSubTickPen(QPen(Qt::white));
+
+    ui->stockPlot->yAxis->setLabel("Price ($)");
+    ui->stockPlot->yAxis->setTickLabelColor(Qt::white);
+    ui->stockPlot->yAxis->setBasePen(QPen(Qt::white));
+    ui->stockPlot->yAxis->setLabelColor(Qt::white);
+    ui->stockPlot->yAxis->setTickPen(QPen(Qt::white));
+    ui->stockPlot->yAxis->setSubTickPen(QPen(Qt::white));
+
     ui->stockPlot->addGraph();
     ui->stockPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssCrossCircle);
     ui->stockPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+    ui->stockPlot->graph(0)->setBrush(QBrush(QColor(0, 255, 0, 80)));
     ui->yourStats->setText("Money: 1000");
 }
 
@@ -136,7 +153,7 @@ void MainWindow::on_readyButton_clicked()
         plot();
 //        Sleep(100);
          QEventLoop obj;
-        for (int i = 0; i < 50000;i++) {
+        for (int i = 0; i < 10000;i++) {
 
            obj.processEvents();
         }

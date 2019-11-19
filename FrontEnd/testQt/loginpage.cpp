@@ -21,7 +21,7 @@ void LoginPage::on_pushButton_clicked()
     QString password = ui->Passwordin->text();
 
 
-    if(username == "admin" && password == "admin"){
+    //if(username == "admin" && password == "admin"){
 
 //        StockGenerator test(0.002,0.01);
         StockGenerator test(0.005,0.05);
@@ -42,7 +42,8 @@ void LoginPage::on_pushButton_clicked()
         w->plot();
 
 
-        hide();
-    }
+       // hide();
+
+   // }
 
 }
