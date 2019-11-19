@@ -1,3 +1,4 @@
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
@@ -33,8 +34,15 @@ void Game::mainLoop() {
 		std::cout << std::endl;
 		std::cout << "Action: ";
 		int action;
-		std::cin >> action;
-		std::cin.ignore();
+		std::string input;
+		getline(std::cin, input);
+		if (input.empty()) {
+			std::cout << "No input given." << std::endl;
+			continue;
+		} else {
+			std::istringstream ss(input);
+			ss >> action;
+		}
 		switch(action) {
 			case 1: {
 				std::string msg;
