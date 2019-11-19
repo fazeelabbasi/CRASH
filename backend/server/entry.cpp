@@ -36,16 +36,16 @@ void * listenBlocking(void *raw) {
 void onMessage(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	std::string msg(buffer);
-	if (msg.size() >= 5 && msg.substr(0,5) == "LOGIN") {
-		msg.erase(0,5);
-		std::stringstream ss(msg);
+	if (msg.size() >= 6 && msg.substr(0,6) == "LOGIN ") {
+		msg.erase(0,6);
+		std::istringstream ss(msg);
 		std::string username;
 		ss >> username;
 		game.clientLogin(username);
 		std::cout << "<" << username << "> has joined the game!" << std::endl;
-	} else if (msg.size() >= 6 && msg.substr(0,6) == "FINISH") {
-		msg.erase(0,6);
-		std::stringstream ss(msg);
+	} else if (msg.size() >= 7 && msg.substr(0,7) == "FINISH ") {
+		msg.erase(0,7);
+		std::istringstream ss(msg);
 		std::string username;
 		ss >> username;
 		Player* p = game.getPlayer(username);
@@ -55,9 +55,9 @@ void onMessage(uint16_t df, char *buffer) {
 		} else {
 			std::cout << "Failed to update status for <" << username << ">" << std::endl;
 		}
-	} else if (msg.size() >= 7 && msg.substr(0,7) == "BALANCE") {
+	} else if (msg.size() >= 8 && msg.substr(0,8) == "BALANCE ") {
 		msg.erase(0,7);
-		std::stringstream ss(msg);
+		std::istringstream ss(msg);
 		std::string username;
 		ss >> username;
 		double balance;
@@ -69,9 +69,9 @@ void onMessage(uint16_t df, char *buffer) {
 		} else {
 			std::cout << "Failed updating balance for <" << username << ">" << std::endl;
 		}
-	} else if (msg.size() >= 4 && msg.substr(0,4) == "DONE") {
-		msg.erase(0,4);
-		std::stringstream ss(msg);
+	} else if (msg.size() >= 5 && msg.substr(0,5) == "DONE ") {
+		msg.erase(0,5);
+		std::istringstream ss(msg);
 		std::string username;
 		ss >> username;
 		double balance;
