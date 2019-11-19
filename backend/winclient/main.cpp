@@ -31,3 +31,15 @@ int main(int argc, char** argv) {
 	
 	return 0;
 }
+
+/*
+Todo List:
+- Make Client::start accept an IP and a PORT
+- Make QT start connection
+
+- Make Client::sendInfo accept a string message
+
+- Make client check message payload for commands
+- Make server send clients the player money info
+- Make server send clients the graph points
+*/
