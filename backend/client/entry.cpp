@@ -11,7 +11,7 @@ void Game::login() {
 
 int Game::joinServer() {
 	std::string input;
-	std::cout << "Enter the server address: ";
+	std::cout << "Enter the server address [0.0.0.0]: ";
 	getline(std::cin, input);
 	if (input.empty()) {
 		input = "0.0.0.0";
