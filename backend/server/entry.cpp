@@ -94,12 +94,13 @@ void onDisconnect(uint16_t df) {
 
 void onConnect(uint16_t df) {
 	std::cout << df << " connected." << std::endl;
-	// pthread_t t;
-	// struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
-	// args->source_fd=df;
-	// if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
-	// 	printf("shit's fucked yo\n");
-	// }
+	
+	pthread_t t;
+	struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+	args->source_fd=df;
+	if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
+		printf("shit's fucked yo\n");
+	}
 }
 
 
