@@ -653,6 +653,7 @@ namespace FrontEnd {
 		}
 		step = (area.Width - 20)/(step+2);
 		scale = (area.Height - 20)/(max * 2);
+		scale = scale > 1 ? 1 : scale;
 		//g->DrawLine(blackPen, 0, 0, area.Width, area.Height);
 		//g->DrawLine(blackPen, 0, area.Height+padding, area.Width+padding, area.Height);
 		int prevX = padding/2, prevY = area.Height -this->graphPoints[0] * scale - padding/2;
