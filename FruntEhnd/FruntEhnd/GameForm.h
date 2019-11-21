@@ -444,10 +444,12 @@ namespace FrontEnd {
 ====================================================
 ====	App Functionality
 ====================================================
-*/
-	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+*/	private: System::Void quit() {
 		this->networkClient->stop();
 		Application::Exit();
+	}
+	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		this->quit();
 	}
 
 	private: void receiveLoop() {
@@ -597,6 +599,9 @@ namespace FrontEnd {
 			if (msg->Length >= 5 && args->Length == 2 && msg->Substring(0, 5) == "SEED ") {
 				this->startRound(System::Convert::ToInt16(args[1]));
 			}
+			if (msg->Length >= 4 && args->Length == 2 && msg->Substring(0, 4) == "WIN ") {
+				this->handleWinner(args[1]);
+			}
 			this->refresh();
 		} catch (Exception^ ignored) {}
 	}
@@ -691,6 +696,16 @@ namespace FrontEnd {
 			this->lstUsers->Items->Add(System::String::Format("<{0}> {1:C}", u->username, u->money));
 		}
 		this->Refresh();
+	}
+
+	private: void handleWinner(System::String^ winnerName) {
+		if (winnerName == this->username) {
+			MessageBox::Show(System::String::Format("You are the winner!"), "Win", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		}
+		else {
+			MessageBox::Show(System::String::Format("You are not the winner :(\nThe winner is {0}!",winnerName), "Loser", MessageBoxButtons::OK, MessageBoxIcon::Hand);
+		}
+		this->quit();
 	}
 
 	private: System::Void GameForm_OnPaintGraph(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ pe) {

@@ -235,10 +235,10 @@ void addPlayer(std::string username) {
 }
 
 void roundLoop() {
-	for (i=0;i<10;i++) {
+	for (int i=0;;i++) {
 		// WARMUP
 		{
-			std::cout << "Warmup started" << std::endl;
+			std::cout << "Warmup started for round" << i << std::endl;
 			game.roundsPlayed++;
 			game.roundStatus = "warmup";
 		}
@@ -279,17 +279,22 @@ void roundLoop() {
 				player.status = "READY";
 			}
 		}
-	}
-	if (game.players.size() == 0)
-		return;
-	Player& winner = game.players[0];
-	for (Player& p : game.players) {
-		if (p.balance > winner.balance) {
-			winner=p;
+
+		if (i>0 && i%2==0) {
+			if (game.players.size() == 0)
+				return;
+			Player& winner = game.players[0];
+			for (Player& p : game.players) {
+				if (p.balance > winner.balance) {
+					winner=p;
+				}
+			}
+			winnerName = winner.name;
+			std::cout << "The winner is " << winnerName << std::endl;
+			notifyWinner();
+			game.players.clear();
 		}
-	}
-	winnerName = winner.name;
-	notifyWinner(winner.name);
+	}	
 }
 
 /*
