@@ -58,7 +58,6 @@ namespace FrontEnd {
 	private: NetworkClient^ networkClient;
 	private: msclr::interop::marshal_context context;
 	private: System::Collections::Generic::List<int>^ graphPoints;
-	private: int graphPointCount = 0;
 	private: int graphIndex = 0;
 	private: System::Windows::Forms::Button^ btnSell;
 	private: System::Collections::Generic::List<User^>^ users;
@@ -448,7 +447,7 @@ namespace FrontEnd {
 
 	private: void roundTick() {
 		this->graphIndex++;
-		switch (this->graphIndex - this->graphPointCount) {
+		switch (this->graphIndex - this->graphPoints->Count) {
 		case 3: {
 			this->lblInfo->Text = "Crash!";
 			break;
@@ -463,9 +462,9 @@ namespace FrontEnd {
 	}
 
 	private: int getStockValue() {
-		if (this->graphPointCount == 0)
+		if (this->graphPoints->Count == 0)
 			return -1;
-		if (this->graphIndex >= this->graphPointCount)
+		if (this->graphIndex >= this->graphPoints->Count)
 			return -1;
 		return this->graphPoints[this->graphIndex];
 	}
@@ -520,17 +519,20 @@ namespace FrontEnd {
 
 	private: System::Void GameForm_OnMessageSafe(System::String^ msg) {
 		this->log(System::String::Format("Received <{0}>", msg));
-		auto args = msg->Split();
-		if (msg->Length > 5 && args->Length == 3 && msg->Substring(0, 5) == "USER ") {
-			this->updateOrCreateUser(args[1], System::Convert::ToDouble(args[2]));
-		}
-		if (msg->Length > 5 && args->Length == 2 && msg->Substring(0, 5) == "KICK ") {
-			this->kick(args[1]);
-		}
-		if (msg->Length >= 5 && args->Length == 2 && msg->Substring(0, 5) == "SEED ") {
-			this->startRound(System::Convert::ToInt16(args[1]));
-		}
-		this->refresh();
+		try {
+
+			auto args = msg->Split();
+			if (msg->Length > 5 && args->Length == 3 && msg->Substring(0, 5) == "USER ") {
+				this->updateOrCreateUser(args[1], System::Convert::ToDouble(args[2]));
+			}
+			if (msg->Length > 5 && args->Length == 2 && msg->Substring(0, 5) == "KICK ") {
+				this->kick(args[1]);
+			}
+			if (msg->Length >= 5 && args->Length == 2 && msg->Substring(0, 5) == "SEED ") {
+				this->startRound(System::Convert::ToInt16(args[1]));
+			}
+			this->refresh();
+		} catch (Exception^ ignored) {}
 	}
 
 /*
@@ -585,16 +587,13 @@ namespace FrontEnd {
 		double crashChance = 0.005;
 		int x = 0;
 		this->graphPoints->Add(1);
-		this->graphPointCount = 0;
 		this->graphIndex = 3;
 		for (int i = 0; i < 25 && r.NextDouble() > (crashChance*=1.1) ; i++) {
 			x = x + (int)(r.NextDouble() * 200) - 100;
 			x = x < 0 ? 0 : x;
 			this->graphPoints->Add(x);
-			this->graphPointCount++;
 		}
 		this->graphPoints->Add(0);
-		this->graphPointCount++;
 		this->pnlGraph->Refresh();
 	}
 
@@ -631,7 +630,7 @@ namespace FrontEnd {
 	private: System::Void GameForm_OnPaintGraph(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ pe) {
 		Graphics^ g = pe->Graphics;
 		g->Clear(Color::AntiqueWhite);
-		if (this->graphPointCount == 0)
+		if (this->graphPoints->Count == 0)
 			return;
 		System::Drawing::Rectangle area = this->pnlGraph->ClientRectangle;
 		const int padding = 10;
@@ -652,12 +651,12 @@ namespace FrontEnd {
 				max = d;
 			step++;
 		}
-		step = (area.Width - 20)/step;
-		scale = (area.Height - 20)/max;
-		g->DrawLine(blackPen, 0, 0, area.Width, area.Height);
-		g->DrawLine(blackPen, 0, area.Height+padding, area.Width+padding, area.Height);
+		step = (area.Width - 20)/(step+2);
+		scale = (area.Height - 20)/(max * 2);
+		//g->DrawLine(blackPen, 0, 0, area.Width, area.Height);
+		//g->DrawLine(blackPen, 0, area.Height+padding, area.Width+padding, area.Height);
 		int prevX = padding/2, prevY = area.Height -this->graphPoints[0] * scale - padding/2;
-		for (i = 0; i < this->graphIndex && i<this->graphPointCount; i++) {
+		for (i = 0; i <= this->graphIndex && i<this->graphPoints->Count; i++) {
 			int d = this->graphPoints[i];
 			int scaledY = area.Height - 2 - (d * scale);
 			g->DrawLine(redPen, prevX-padding, prevY - padding, prevX + step - padding, scaledY - padding);
