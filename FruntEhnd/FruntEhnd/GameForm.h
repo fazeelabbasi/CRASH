@@ -403,7 +403,7 @@ namespace FrontEnd {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::SystemColors::HotTrack;
+			this->BackColor = System::Drawing::SystemColors::ActiveCaption;
 			this->ClientSize = System::Drawing::Size(907, 581);
 			this->Controls->Add(this->lblUnit);
 			this->Controls->Add(this->btnBuyAll);
