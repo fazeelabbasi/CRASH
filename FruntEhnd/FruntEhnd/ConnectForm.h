@@ -125,6 +125,7 @@ namespace FrontEnd {
 			this->txtUsername->Name = L"txtUsername";
 			this->txtUsername->Size = System::Drawing::Size(100, 20);
 			this->txtUsername->TabIndex = 1;
+			this->txtUsername->TextChanged += gcnew System::EventHandler(this, &ConnectForm::txtUsername_TextChanged);
 			// 
 			// label3
 			// 
@@ -174,6 +175,9 @@ private: System::Void btnJoin_Click(System::Object^ sender, System::EventArgs^ e
 	GameForm^ gameForm = gcnew GameForm(networkClient, this->txtUsername->Text);
 	gameForm->Show();
 	this->Hide();
+}
+private: System::Void txtUsername_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->btnJoin->Enabled = this->txtUsername->Text->Length > 0;
 }
 };
 }

@@ -32,7 +32,7 @@ namespace FrontEnd {
 			this->networkThread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &GameForm::receiveLoop));
 			this->users = gcnew System::Collections::Generic::List<User^>();
 			this->networkThread->Start();
-			this->generateGraphValues(1,1,1);
+			this->generateGraphValues(this->seed);
 			this->refresh();
 			this->updateOrCreateUser(this->username, this->money);
 		}
