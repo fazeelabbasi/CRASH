@@ -34,6 +34,7 @@ namespace FrontEnd {
 			int x = 0;
 			for (int i = 0; i < 25; i++) {
 				int x = x + (int)(r.NextDouble() * 200) - 100;
+				x = x < 0 ? 0 : x;
 				this->graphPoints->Add(x);
 			}
 		}
@@ -55,8 +56,9 @@ namespace FrontEnd {
 	private: NetworkClient^ networkClient;
 	private: msclr::interop::marshal_context context;
 	private: System::Collections::Generic::List<int>^ graphPoints;
+	private: System::Windows::Forms::Button^ btnSell;
 
-	private: System::Windows::Forms::Button^ btnFinish;
+
 	private: System::Windows::Forms::TextBox^ txtLogs;
 	private: System::Windows::Forms::TextBox^ txtCmd;
 	private: System::Windows::Forms::Button^ btnSendPacket;
@@ -75,7 +77,7 @@ namespace FrontEnd {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->btnFinish = (gcnew System::Windows::Forms::Button());
+			this->btnSell = (gcnew System::Windows::Forms::Button());
 			this->txtLogs = (gcnew System::Windows::Forms::TextBox());
 			this->txtCmd = (gcnew System::Windows::Forms::TextBox());
 			this->btnSendPacket = (gcnew System::Windows::Forms::Button());
@@ -84,15 +86,15 @@ namespace FrontEnd {
 			this->groupBox1->SuspendLayout();
 			this->SuspendLayout();
 			// 
-			// btnFinish
+			// btnSell
 			// 
-			this->btnFinish->Location = System::Drawing::Point(110, 180);
-			this->btnFinish->Name = L"btnFinish";
-			this->btnFinish->Size = System::Drawing::Size(75, 23);
-			this->btnFinish->TabIndex = 0;
-			this->btnFinish->Text = L"Pull Out";
-			this->btnFinish->UseVisualStyleBackColor = true;
-			this->btnFinish->Click += gcnew System::EventHandler(this, &GameForm::btnFinish_Click);
+			this->btnSell->Location = System::Drawing::Point(110, 180);
+			this->btnSell->Name = L"btnSell";
+			this->btnSell->Size = System::Drawing::Size(75, 23);
+			this->btnSell->TabIndex = 0;
+			this->btnSell->Text = L"Sell";
+			this->btnSell->UseVisualStyleBackColor = true;
+			this->btnSell->Click += gcnew System::EventHandler(this, &GameForm::btnSell_Click);
 			// 
 			// txtLogs
 			// 
@@ -148,7 +150,7 @@ namespace FrontEnd {
 			this->ClientSize = System::Drawing::Size(284, 386);
 			this->Controls->Add(this->pnlGraph);
 			this->Controls->Add(this->groupBox1);
-			this->Controls->Add(this->btnFinish);
+			this->Controls->Add(this->btnSell);
 			this->Name = L"GameForm";
 			this->Text = L"Game";
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &GameForm::GameForm_FormClosed);
@@ -158,6 +160,10 @@ namespace FrontEnd {
 
 		}
 #pragma endregion
+	private: System::Void btnSell_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	}
+
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
 		std::string rawAddr = context.marshal_as<std::string>(this->txtCmd->Text);
 		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
@@ -215,12 +221,12 @@ namespace FrontEnd {
 			step++;
 		}
 		step = area.Width/step;
-		scale = 1/((max - min) / area.Height)/2;
+		scale = area.Height/max;
 
-		g->DrawLine(blackPen, 0, area.Height / 2, area.Width, area.Height / 2);
-		int prevX = 0, prevY = area.Height / 2;
+		g->DrawLine(blackPen, 0, area.Height, area.Width, area.Height);
+		int prevX = 0, prevY = area.Height -this->graphPoints[0] * scale;
 		for each (int d in this->graphPoints) {
-			int scaledY = d * scale + area.Height / 2;
+			int scaledY = area.Height-2 - (d * scale);
 			g->DrawLine(redPen, prevX, prevY, prevX+step, scaledY);
 			prevX += step;
 			prevY = scaledY;
