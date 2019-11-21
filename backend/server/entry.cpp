@@ -15,6 +15,7 @@ Server server(2878);
 Game game;
 std::vector<int> clients;
 int seed = 4;
+std::string winnerName;
 /*
 ====================================================
 ====	Network Send Protocols
@@ -50,6 +51,18 @@ void * sendRoundInfo(void *raw) {
 	ss << "SEED " << seed << std::endl;
 	server.sendMessage(*args, ss.str().c_str());
 	free(raw); 
+}
+
+void * sendWinnerInfo(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+	std::ostringstream ss;
+	ss << "WIN " << winnerName << std::endl;
+	server.sendMessage(*args, ss.str().c_str());
+	free(raw); 
+}
+
+void notifyWinner() {
+	notifyAll(sendWinnerInfo);
 }
 
 void notifyPlayerList() {
@@ -222,7 +235,7 @@ void addPlayer(std::string username) {
 }
 
 void roundLoop() {
-	for (;;) {
+	for (i=0;i<10;i++) {
 		// WARMUP
 		{
 			std::cout << "Warmup started" << std::endl;
@@ -267,6 +280,16 @@ void roundLoop() {
 			}
 		}
 	}
+	if (game.players.size() == 0)
+		return;
+	Player& winner = game.players[0];
+	for (Player& p : game.players) {
+		if (p.balance > winner.balance) {
+			winner=p;
+		}
+	}
+	winnerName = winner.name;
+	notifyWinner(winner.name);
 }
 
 /*
