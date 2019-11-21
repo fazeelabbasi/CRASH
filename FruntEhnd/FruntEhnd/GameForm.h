@@ -454,7 +454,9 @@ namespace FrontEnd {
 			break;
 		}
 		case 5:
+			this->stocks = 0;
 			this->networkClient->sendInfo(System::String::Format("FINISH {0}", this->username));
+			this->networkClient->sendInfo(System::String::Format("BALANCE {0} {1}", this->username, this->money));
 			break;
 		}
 		this->refresh();
