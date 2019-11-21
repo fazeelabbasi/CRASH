@@ -57,6 +57,7 @@ namespace FrontEnd {
 	private: NetworkClient^ networkClient;
 	private: msclr::interop::marshal_context context;
 	private: System::Collections::Generic::List<int>^ graphPoints;
+	private: int graphPointCount = 0;
 	private: int graphIndex = 0;
 	private: System::Windows::Forms::Button^ btnSell;
 	private: System::Collections::Generic::List<User^>^ users;
@@ -233,6 +234,8 @@ namespace FrontEnd {
 			// 
 			// timGraphTick
 			// 
+			this->timGraphTick->Enabled = true;
+			this->timGraphTick->Interval = 1000;
 			this->timGraphTick->Tick += gcnew System::EventHandler(this, &GameForm::timGraphTick_Tick);
 			// 
 			// lstUsers
@@ -352,7 +355,11 @@ namespace FrontEnd {
 	}
 
 	private: void roundTick() {
-
+		this->graphIndex++;
+		if (this->graphIndex > this->graphPointCount) {
+			this->networkClient->sendInfo(System::String::Format("FINISH {0}", this->username));
+		}
+		this->refresh();
 	}
 
 	private: System::Void timGraphTick_Tick(System::Object^ sender, System::EventArgs^ e) {
@@ -452,6 +459,7 @@ namespace FrontEnd {
 			int x = x + (int)(r.NextDouble() * 200) - 100;
 			x = x < 0 ? 0 : x;
 			this->graphPoints->Add(x);
+			this->graphPointCount++;
 		}
 		this->pnlGraph->Refresh();
 	}
@@ -479,12 +487,16 @@ namespace FrontEnd {
 
 		System::Drawing::Rectangle area = this->pnlGraph->ClientRectangle;
 		Pen^ redPen = gcnew Pen(Color::Red);
-		redPen->Width = 1;
+		redPen->Width = 4;
 		Pen^ blackPen = gcnew Pen(Color::Black);
 		blackPen->Width = 1;
 
 		double min = 0, max = 0, step = 0, scale=1;
+		int i = 0;
 		for each (int d in this->graphPoints) {
+			i++;
+			if (i > this->graphIndex)
+				break;
 			if (d < min)
 				min = d;
 			if (d > max)
@@ -496,9 +508,10 @@ namespace FrontEnd {
 
 		g->DrawLine(blackPen, 0, area.Height, area.Width, area.Height);
 		int prevX = 0, prevY = area.Height -this->graphPoints[0] * scale;
-		for each (int d in this->graphPoints) {
-			int scaledY = area.Height-2 - (d * scale);
-			g->DrawLine(redPen, prevX, prevY, prevX+step, scaledY);
+		for (i = 0; i < this->graphIndex && i<this->graphPointCount; i++) {
+			int d = this->graphPoints[i];
+			int scaledY = area.Height - 2 - (d * scale);
+			g->DrawLine(redPen, prevX, prevY, prevX + step, scaledY);
 			prevX += step;
 			prevY = scaledY;
 		}
