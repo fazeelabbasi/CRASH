@@ -2,7 +2,9 @@
 
 #include <thread>
 #include <chrono>
-
+#include <string>
+#include <msclr/marshal.h>
+#include <msclr\marshal_cppstd.h>
 #include "NetworkClient.h"
 
 namespace FrontEnd {
@@ -23,7 +25,8 @@ namespace FrontEnd {
 		GameForm(NetworkClient^ networkClient): networkClient(networkClient)
 		{
 			InitializeComponent();
-
+			networkThread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &GameForm::receiveLoop));
+			networkThread->Start();
 		}
 
 	protected:
@@ -39,7 +42,9 @@ namespace FrontEnd {
 		}
 
 	private:
+		System::Threading::Thread^ networkThread;
 		NetworkClient^ networkClient;
+		msclr::interop::marshal_context context;
 	private: System::Windows::Forms::Button^ btnFinish;
 	private: System::Windows::Forms::TextBox^ txtLogs;
 	private: System::Windows::Forms::TextBox^ txtCmd;
@@ -117,9 +122,27 @@ namespace FrontEnd {
 		}
 #pragma endregion
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
+		std::string rawAddr = context.marshal_as<std::string>(this->txtCmd->Text);
+		this->log(System::String::Format("Sent: <{0}>", this->txtCmd->Text));
+		networkClient->sendInfo(rawAddr);
 	}
 	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		Application::Exit();
+	}
+
+	private: void receiveLoop() {
+		for (;;) {
+			std::string msg = networkClient->receiveInfo();
+			this->log(msg);
+		}
+	}
+
+	private: System::Void log(std::string msg) {
+		this->log(gcnew System::String(msg.c_str()));
+	}
+	private: System::Void log(System::String^ msg) {
+		this->txtLogs->AppendText(msg);
+		this->txtLogs->AppendText("\n");
 	}
 };
 }
