@@ -51,6 +51,7 @@ namespace FrontEnd {
 
 	private: System::String^ username;
 	private: double money = 100;
+	private: int seed = 1;
 	private: delegate void SafeMessageEventDelegate(System::String^ msg);
 	private: System::Threading::Thread^ networkThread;
 	private: NetworkClient^ networkClient;
@@ -300,12 +301,12 @@ namespace FrontEnd {
 	private: System::Void GameForm_OnMessage(System::String^ msg) {
 		if (this->IsDisposed)
 			return;
-		if (!this->IsHandleCreated)
-			this->CreateHandle();
 		if (!this->Created)
 			return;
 		SafeMessageEventDelegate^ d = gcnew SafeMessageEventDelegate(this, &GameForm::GameForm_OnMessageSafe);
-		this->Invoke(d, msg);
+		
+		for each (auto line in msg->Split(gcnew array<System::String^>{ gcnew System::String("\n") }, System::StringSplitOptions::RemoveEmptyEntries))
+			this->Invoke(d, line);
 	}
 
 	private: System::Void GameForm_OnMessageSafe(System::String^ msg) {
@@ -314,9 +315,17 @@ namespace FrontEnd {
 		if (msg->Length > 5 && msg->Substring(0, 5) == "USER ") {
 			this->updateOrCreateUser(args[1], System::Convert::ToDouble(args[2]));
 		}
-		if (msg->Length > 4 && msg->Substring(0, 5) == "KICK ") {
+		if (msg->Length > 5 && msg->Substring(0, 5) == "KICK ") {
 			this->kick(args[1]);
 		}
+		if (msg->Length >= 5 && msg->Substring(0, 5) == "SEED ") {
+			this->startRound(System::Convert::ToInt16(args[1]));
+		}
+		this->refresh();
+	}
+
+	private: void startRound(int seed) {
+		this->generateGraphValues(seed);
 	}
 
 	private: System::Void updateOrCreateUser(System::String^ name, double money) {
@@ -331,17 +340,9 @@ namespace FrontEnd {
 		this->log(System::String::Format("Created user <{0}> with money {1:C}", name, money));
 		User^ u = gcnew User(name, money);
 		this->users->Add(u);
-		rebuildPlayerList();
+		this->refresh();
 	}
 
-	private: void rebuildPlayerList() {
-		this->lstUsers->Items->Clear();
-		for each (auto u in this->users) {
-			if (u->username == this->username)
-				continue;
-			this->lstUsers->Items->Add(System::String::Format("<{0}> {1:C}", u->username, u->money));
-		}
-	}
 
 	private: User^ getUser(System::String^ name) {
 		for each (auto u in users)
@@ -377,41 +378,9 @@ namespace FrontEnd {
 		this->txtLogs->AppendText("\n");
 	}
 
-	private: System::Void generateGraphValues(int randSeed, double ret, double volatility) {
+	private: System::Void generateGraphValues(int randSeed) {
 		System::Random r(randSeed);
 		this->graphPoints = gcnew System::Collections::Generic::List<int>();
-		//
-		//const int initValue = 1;
-		//const double d = 0.002;
-		//const double v = 0.01;
-
-		//double stockQuote = initValue;
-		//int crashChance = -10;
-		//int deltaCrashChance = 0;
-
-		//double drift = ret - (1 / 2) * (volatility * volatility);
-		//double diffusion = 0;
-		//double delta = 0;
-
-		//std::default_random_engine generator;
-		//std::normal_distribution<double> normalDistGen(0, 1);
-
-		//int i = 0;
-		//this->graphPoints->Add(1);
-
-		//this->log(System::String::Format("Generating with seed {0}, ret {1}, vol {2}", randSeed, ret, volatility));
-		//while (r.Next() % 10000 > (crashChance++ + deltaCrashChance) && i++ < 300) {
-		//	deltaCrashChance = 0;
-		//	stockQuote *= exp(5 * drift + diffusion);
-		//	diffusion = (normalDistGen(generator) * volatility);
-		//	this->graphPoints->Add(stockQuote);
-		//	delta = (0.5 * delta) + this->graphPoints[i] - this->graphPoints[i - 1];
-
-		//	if (delta < 0) {
-		//		deltaCrashChance = delta * 10;
-		//		//crashChance++;
-		//	}
-		//}
 		double crashChance = 0.005;
 		int x = 0;
 		this->graphPoints->Add(1);
@@ -426,6 +395,12 @@ namespace FrontEnd {
 	private: void refresh() {
 		this->lblUsername->Text = this->username;
 		this->lblMoney->Text = System::String::Format("{0:C}", this->money);
+		this->lstUsers->Items->Clear();
+		for each (auto u in this->users) {
+			if (u->username == this->username)
+				continue;
+			this->lstUsers->Items->Add(System::String::Format("<{0}> {1:C}", u->username, u->money));
+		}
 		this->Refresh();
 	}
 
@@ -461,7 +436,7 @@ namespace FrontEnd {
 	}
 private: System::Void btnNewGraph_Click(System::Object^ sender, System::EventArgs^ e) {
 	System::Random^ r = gcnew System::Random();
-	this->generateGraphValues(r->Next(), r->Next(), r->NextDouble());
+	this->generateGraphValues(this->seed=r->Next());
 }
 private: System::Void btnDbgMoney_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->money = System::Decimal::ToDouble(this->nudDbgMoney->Value);

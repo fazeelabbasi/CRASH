@@ -14,49 +14,105 @@
 Server server(2878);
 Game game;
 std::vector<int> clients;
+int seed = 4;
 /*
 ====================================================
-====	Network Communication
+====	Network Send Protocols
 ====================================================
 */
-void * asyncSend(void *raw) {
-	struct Server::Connector *args = (struct Server::Connector *) raw;
-	for(;;) {
-		usleep(5000000);
-		std::cout << "sending woohoo" << std::endl;
-		server.sendMessage(*args, "woohoo");
-	}
-	free(args);
-}
-
-void * sendPlayerList(void *raw) {
-	struct Server::Connector *args = (struct Server::Connector *) raw;
-
-	// send the balance for each user
-	for (auto p : game.players) {
-		std::ostringstream ss;
-		ss << "USER " << p.name << " " << p.balance << std::endl;
-		server.sendMessage(*args, ss.str().c_str());
-	}
-	free(raw); 
-}
-
-void notifyPlayerList() {
+void notifyAll(void *(f)(void *)) {
 	for (auto df : clients) {
 		pthread_t t;
 		struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
 		args->source_fd=df;
-		if (pthread_create(&t, NULL, sendPlayerList, (void *) args) != 0) {
+		if (pthread_create(&t, NULL, f, (void *) args) != 0) {
 			std::cout << "FAIL NOTIFYING PLAYER!" << std::endl;
 			return;
 		}
 	}
 }
 
-void * listenBlocking(void *raw) {
-	for(;;)
-		server.loop();
+void * sendPlayerList(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+
+	// send the balance for each user
+	std::ostringstream ss;
+	for (auto p : game.players) {
+		ss << "USER " << p.name << " " << p.balance << std::endl;
+	}
+	server.sendMessage(*args, ss.str().c_str());
+	free(raw); 
 }
+
+void * sendRoundInfo(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+	std::ostringstream ss;
+	ss << "SEED " << seed << std::endl;
+	server.sendMessage(*args, ss.str().c_str());
+	free(raw); 
+}
+
+void notifyPlayerList() {
+	notifyAll(sendPlayerList);
+}
+
+void notifyRoundBegin() {
+	seed++;
+	notifyAll(sendRoundInfo);
+}
+/*
+====================================================
+====	Periodic Updating
+====================================================
+*/
+
+void * asyncSend(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+	for(;;) {
+		usleep(5000000);
+		// std::cout << "sending woohoo" << std::endl;
+		// server.sendMessage(*args, "woohoo");
+		void *x = malloc(sizeof(struct Server::Connector));
+		memcpy(x,raw,sizeof(struct Server::Connector));
+		sendPlayerList(x);
+	}
+	free(args);
+}
+
+/*
+====================================================
+====	socket Join/Leave Handling
+====================================================
+*/
+
+void onDisconnect(uint16_t df) {
+	std::cout << df << " disconnected." << std::endl;
+	for (int i=0; i<clients.size(); i++) {
+		if (clients[i] == df) {
+			clients.erase(clients.begin()+i);
+			return;
+		}
+	}
+}
+
+void onConnect(uint16_t df) {
+	std::cout << df << " connected." << std::endl;
+	clients.push_back(df);
+	
+	pthread_t t;
+	struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+	args->source_fd=df;
+	if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
+		printf("shit's fucked yo\n");
+	}
+}
+
+/*
+====================================================
+====	Message Event Handling
+====================================================
+*/
+
 void onMessage(uint16_t df, char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	std::string msg(buffer);
@@ -67,7 +123,6 @@ void onMessage(uint16_t df, char *buffer) {
 		ss >> username;
 		game.clientLogin(username);
 		std::cout << "<" << username << "> has joined the game!" << std::endl;
-		notifyPlayerList();
 	} else if (msg.size() >= 7 && msg.substr(0,7) == "FINISH ") {
 		msg.erase(0,7);
 		std::istringstream ss(msg);
@@ -113,26 +168,9 @@ void onMessage(uint16_t df, char *buffer) {
 	// server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
 }
 
-void onDisconnect(uint16_t df) {
-	std::cout << df << " disconnected." << std::endl;
-	for (int i=0; i<clients.size(); i++) {
-		if (clients[i] == df) {
-			clients.erase(clients.begin()+i);
-			return;
-		}
-	}
-}
-
-void onConnect(uint16_t df) {
-	std::cout << df << " connected." << std::endl;
-	clients.push_back(df);
-	
-	pthread_t t;
-	struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
-	args->source_fd=df;
-	if (pthread_create(&t, NULL, sendPlayerList, (void * ) args) != 0){
-		printf("shit's fucked yo\n");
-	}
+void * listenBlocking(void *raw) {
+	for(;;)
+		server.loop();
 }
 
 void * setupServer(void* raw) {
@@ -149,17 +187,17 @@ void * setupServer(void* raw) {
 		server.init();
 	}
 	std::cout << "\t\tOK!" << std::endl;
-	std::cout << "Creating socket background thread...";
+	// std::cout << "Creating socket background thread...";
 	{
 		// pthread_t t;
 		// if (pthread_create(&t, NULL, listenBlocking, NULL) != 0) {
 		// 	std::cout << "FAIL!" << std::endl;
 		// 	return 1;
 		// }	
+		std::cout << "Server launched successfully!" << std::endl;
 		listenBlocking(nullptr);
 	}
-	std::cout << "\tOK!" << std::endl;
-	std::cout << "Server launched successfully!" << std::endl;
+	// std::cout << "\tOK!" << std::endl;
 }
 
 /*
@@ -171,8 +209,6 @@ void addPlayer(std::string username) {
 	game.clientLogin(username);
 }
 
-
-
 void roundLoop() {
 	for (;;) {
 		// WARMUP
@@ -180,7 +216,6 @@ void roundLoop() {
 			std::cout << "Warmup started" << std::endl;
 			game.roundsPlayed++;
 			game.roundStatus = "warmup";
-			notifyPlayerList();
 		}
 
 		// BEGIN
@@ -194,6 +229,7 @@ void roundLoop() {
 			game.roundStatus = "begin";
 			for (auto& player : game.players)
 				player.status = "WAITING";
+			notifyRoundBegin();
 		}
 
 		// WAIT (BLOCKING) 
@@ -220,7 +256,6 @@ void roundLoop() {
 		}
 	}
 }
-
 
 /*
 ====================================================
