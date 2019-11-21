@@ -34,6 +34,7 @@ namespace FrontEnd {
 			this->networkThread->Start();
 			this->generateGraphValues(1,1,1);
 			this->refresh();
+			this->updateOrCreateUser(this->username, this->money);
 		}
 
 	protected:
@@ -73,6 +74,7 @@ namespace FrontEnd {
 	private: System::Windows::Forms::ListBox^ lstUsers;
 	private: System::Windows::Forms::Label^ lblUsername;
 	private: System::Windows::Forms::Label^ lblMoney;
+	private: System::Windows::Forms::Button^ btnDbgFinish;
 	private: System::ComponentModel::IContainer^ components;
 
 		   /// <summary>
@@ -103,6 +105,7 @@ namespace FrontEnd {
 			this->lstUsers = (gcnew System::Windows::Forms::ListBox());
 			this->lblUsername = (gcnew System::Windows::Forms::Label());
 			this->lblMoney = (gcnew System::Windows::Forms::Label());
+			this->btnDbgFinish = (gcnew System::Windows::Forms::Button());
 			this->groupBox1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudDbgMoney))->BeginInit();
 			this->SuspendLayout();
@@ -133,6 +136,7 @@ namespace FrontEnd {
 			this->txtCmd->Name = L"txtCmd";
 			this->txtCmd->Size = System::Drawing::Size(163, 20);
 			this->txtCmd->TabIndex = 2;
+			this->txtCmd->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &GameForm::txtCmd_KeyPress);
 			// 
 			// btnSendPacket
 			// 
@@ -146,6 +150,7 @@ namespace FrontEnd {
 			// 
 			// groupBox1
 			// 
+			this->groupBox1->Controls->Add(this->btnDbgFinish);
 			this->groupBox1->Controls->Add(this->btnDbgName);
 			this->groupBox1->Controls->Add(this->txtDbgUsername);
 			this->groupBox1->Controls->Add(this->btnDbgMoney);
@@ -240,6 +245,16 @@ namespace FrontEnd {
 			this->lblMoney->TabIndex = 8;
 			this->lblMoney->Text = L"<Money>";
 			// 
+			// btnDbgFinish
+			// 
+			this->btnDbgFinish->Location = System::Drawing::Point(400, 76);
+			this->btnDbgFinish->Name = L"btnDbgFinish";
+			this->btnDbgFinish->Size = System::Drawing::Size(75, 23);
+			this->btnDbgFinish->TabIndex = 9;
+			this->btnDbgFinish->Text = L"Finish";
+			this->btnDbgFinish->UseVisualStyleBackColor = true;
+			this->btnDbgFinish->Click += gcnew System::EventHandler(this, &GameForm::btnDbgFinish_Click);
+			// 
 			// GameForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -268,9 +283,15 @@ namespace FrontEnd {
 	}
 
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
+		executeCommand();
+	}
+
+	private: void executeCommand() {
 		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
 		networkClient->sendInfo(this->txtCmd->Text);
+		this->txtCmd->Text = "";
 	}
+
 	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		this->networkClient->stop();
 		Application::Exit();
@@ -310,6 +331,16 @@ namespace FrontEnd {
 		this->log(System::String::Format("Created user <{0}> with money {1:C}", name, money));
 		User^ u = gcnew User(name, money);
 		this->users->Add(u);
+		rebuildPlayerList();
+	}
+
+	private: void rebuildPlayerList() {
+		this->lstUsers->Items->Clear();
+		for each (auto u in this->users) {
+			if (u->username == this->username)
+				continue;
+			this->lstUsers->Items->Add(System::String::Format("<{0}> {1:C}", u->username, u->money));
+		}
 	}
 
 	private: User^ getUser(System::String^ name) {
@@ -441,6 +472,15 @@ private: System::Void btnDbgName_Click(System::Object^ sender, System::EventArgs
 	this->username = this->txtDbgUsername->Text;
 	this->log(System::String::Format("Set username to <{0}>", this->username));
 	this->refresh();
+}
+private: System::Void txtCmd_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ kp) {
+	//this->log(System::String::Format("pressed <{0}>, checking <{1}>", kp->KeyChar, Keys::Enter));
+	if (kp->KeyChar == 13) {
+		executeCommand();
+	}
+}
+private: System::Void btnDbgFinish_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->networkClient->sendInfo(System::String::Format("FINISH {0}", this->username));
 }
 };
 }
