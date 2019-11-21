@@ -1,5 +1,6 @@
 #pragma once
 #include <msclr/marshal.h>
+#include <msclr\marshal_cppstd.h>
 #include <string>
 #include "GameForm.h"
 #include "NetworkClient.h"
@@ -155,7 +156,7 @@ namespace FrontEnd {
 private: System::Void btnJoin_Click(System::Object^ sender, System::EventArgs^ e) {
 	msclr::interop::marshal_context context;
 	std::string rawAddr = context.marshal_as<std::string>(this->txtAddr->Text);
-	std::string rawPort = context.marshal_as<std::string>(this->nudPort->Value);
+	std::string rawPort = context.marshal_as<std::string>(this->nudPort->Value.ToString());
 	NetworkClient^ networkClient = gcnew NetworkClient();
 
 	//todo: fail gracefully

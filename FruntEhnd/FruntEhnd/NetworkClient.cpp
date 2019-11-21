@@ -1,8 +1,6 @@
-#define WIN32_LEAN_AND_MEAN
-
+#include <winsock2.h>
 #include "NetworkClient.h"
 #include <windows.h>
-#include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,7 +21,6 @@ void NetworkClient::start(PCSTR host, PCSTR port) {
 		* ptr = NULL,
 		hints;
 	char* sendbuf = "this is a test";
-	char recvbuf[DEFAULT_BUFLEN];
 	int iResult;
 	int recvbuflen = DEFAULT_BUFLEN;
 
