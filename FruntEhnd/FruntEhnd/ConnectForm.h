@@ -86,6 +86,7 @@ namespace FrontEnd {
 			// 
 			// txtAddr
 			// 
+
 			this->txtAddr->Location = System::Drawing::Point(98, 6);
 			this->txtAddr->Name = L"txtAddr";
 			this->txtAddr->Size = System::Drawing::Size(100, 20);

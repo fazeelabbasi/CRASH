@@ -139,10 +139,9 @@ namespace FrontEnd {
 			// 
 			// btnSell
 			// 
-			this->btnSell->Location = System::Drawing::Point(620, 574);
-			this->btnSell->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnSell->Location = System::Drawing::Point(413, 373);
 			this->btnSell->Name = L"btnSell";
-			this->btnSell->Size = System::Drawing::Size(112, 35);
+			this->btnSell->Size = System::Drawing::Size(75, 23);
 			this->btnSell->TabIndex = 0;
 			this->btnSell->Text = L"Sell";
 			this->btnSell->UseVisualStyleBackColor = true;
@@ -150,30 +149,27 @@ namespace FrontEnd {
 			// 
 			// txtLogs
 			// 
-			this->txtLogs->Location = System::Drawing::Point(12, 29);
-			this->txtLogs->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->txtLogs->Location = System::Drawing::Point(8, 19);
 			this->txtLogs->Multiline = true;
 			this->txtLogs->Name = L"txtLogs";
 			this->txtLogs->ReadOnly = true;
 			this->txtLogs->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->txtLogs->Size = System::Drawing::Size(366, 107);
+			this->txtLogs->Size = System::Drawing::Size(245, 71);
 			this->txtLogs->TabIndex = 1;
 			// 
 			// txtCmd
 			// 
-			this->txtCmd->Location = System::Drawing::Point(14, 149);
-			this->txtCmd->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->txtCmd->Location = System::Drawing::Point(9, 97);
 			this->txtCmd->Name = L"txtCmd";
-			this->txtCmd->Size = System::Drawing::Size(242, 26);
+			this->txtCmd->Size = System::Drawing::Size(163, 20);
 			this->txtCmd->TabIndex = 2;
 			this->txtCmd->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &GameForm::txtCmd_KeyPress);
 			// 
 			// btnSendPacket
 			// 
-			this->btnSendPacket->Location = System::Drawing::Point(288, 146);
-			this->btnSendPacket->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnSendPacket->Location = System::Drawing::Point(192, 95);
 			this->btnSendPacket->Name = L"btnSendPacket";
-			this->btnSendPacket->Size = System::Drawing::Size(92, 35);
+			this->btnSendPacket->Size = System::Drawing::Size(61, 23);
 			this->btnSendPacket->TabIndex = 0;
 			this->btnSendPacket->Text = L"Send";
 			this->btnSendPacket->UseVisualStyleBackColor = true;
@@ -190,11 +186,9 @@ namespace FrontEnd {
 			this->grpDbg->Controls->Add(this->txtLogs);
 			this->grpDbg->Controls->Add(this->txtCmd);
 			this->grpDbg->Controls->Add(this->btnSendPacket);
-			this->grpDbg->Location = System::Drawing::Point(20, 651);
-			this->grpDbg->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->grpDbg->Location = System::Drawing::Point(13, 423);
 			this->grpDbg->Name = L"grpDbg";
-			this->grpDbg->Padding = System::Windows::Forms::Padding(4, 5, 4, 5);
-			this->grpDbg->Size = System::Drawing::Size(748, 225);
+			this->grpDbg->Size = System::Drawing::Size(499, 146);
 			this->grpDbg->TabIndex = 3;
 			this->grpDbg->TabStop = false;
 			this->grpDbg->Text = L"Debug";
@@ -202,10 +196,9 @@ namespace FrontEnd {
 			// 
 			// btnDbgFinish
 			// 
-			this->btnDbgFinish->Location = System::Drawing::Point(600, 117);
-			this->btnDbgFinish->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnDbgFinish->Location = System::Drawing::Point(400, 76);
 			this->btnDbgFinish->Name = L"btnDbgFinish";
-			this->btnDbgFinish->Size = System::Drawing::Size(112, 35);
+			this->btnDbgFinish->Size = System::Drawing::Size(75, 23);
 			this->btnDbgFinish->TabIndex = 9;
 			this->btnDbgFinish->Text = L"Finish";
 			this->btnDbgFinish->UseVisualStyleBackColor = true;
@@ -213,10 +206,9 @@ namespace FrontEnd {
 			// 
 			// btnDbgName
 			// 
-			this->btnDbgName->Location = System::Drawing::Point(600, 72);
-			this->btnDbgName->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnDbgName->Location = System::Drawing::Point(400, 47);
 			this->btnDbgName->Name = L"btnDbgName";
-			this->btnDbgName->Size = System::Drawing::Size(112, 35);
+			this->btnDbgName->Size = System::Drawing::Size(75, 23);
 			this->btnDbgName->TabIndex = 6;
 			this->btnDbgName->Text = L"Set Name";
 			this->btnDbgName->UseVisualStyleBackColor = true;
@@ -224,18 +216,16 @@ namespace FrontEnd {
 			// 
 			// txtDbgUsername
 			// 
-			this->txtDbgUsername->Location = System::Drawing::Point(411, 72);
-			this->txtDbgUsername->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->txtDbgUsername->Location = System::Drawing::Point(274, 47);
 			this->txtDbgUsername->Name = L"txtDbgUsername";
-			this->txtDbgUsername->Size = System::Drawing::Size(178, 26);
+			this->txtDbgUsername->Size = System::Drawing::Size(120, 20);
 			this->txtDbgUsername->TabIndex = 5;
 			// 
 			// btnNewGraph
 			// 
-			this->btnNewGraph->Location = System::Drawing::Point(600, 162);
-			this->btnNewGraph->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnNewGraph->Location = System::Drawing::Point(400, 105);
 			this->btnNewGraph->Name = L"btnNewGraph";
-			this->btnNewGraph->Size = System::Drawing::Size(112, 35);
+			this->btnNewGraph->Size = System::Drawing::Size(75, 23);
 			this->btnNewGraph->TabIndex = 5;
 			this->btnNewGraph->Text = L"New Data";
 			this->btnNewGraph->UseVisualStyleBackColor = true;
@@ -243,10 +233,9 @@ namespace FrontEnd {
 			// 
 			// btnDbgMoney
 			// 
-			this->btnDbgMoney->Location = System::Drawing::Point(600, 26);
-			this->btnDbgMoney->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnDbgMoney->Location = System::Drawing::Point(400, 17);
 			this->btnDbgMoney->Name = L"btnDbgMoney";
-			this->btnDbgMoney->Size = System::Drawing::Size(112, 35);
+			this->btnDbgMoney->Size = System::Drawing::Size(75, 23);
 			this->btnDbgMoney->TabIndex = 4;
 			this->btnDbgMoney->Text = L"Set Money";
 			this->btnDbgMoney->UseVisualStyleBackColor = true;
@@ -254,21 +243,19 @@ namespace FrontEnd {
 			// 
 			// nudDbgMoney
 			// 
-			this->nudDbgMoney->Location = System::Drawing::Point(411, 31);
-			this->nudDbgMoney->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->nudDbgMoney->Location = System::Drawing::Point(274, 20);
 			this->nudDbgMoney->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1215752191, 23, 0, 0 });
 			this->nudDbgMoney->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 999999999, 0, 0, System::Int32::MinValue });
 			this->nudDbgMoney->Name = L"nudDbgMoney";
-			this->nudDbgMoney->Size = System::Drawing::Size(180, 26);
+			this->nudDbgMoney->Size = System::Drawing::Size(120, 20);
 			this->nudDbgMoney->TabIndex = 3;
 			// 
 			// pnlGraph
 			// 
 			this->pnlGraph->Controls->Add(this->lblInfo);
-			this->pnlGraph->Location = System::Drawing::Point(20, 53);
-			this->pnlGraph->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->pnlGraph->Location = System::Drawing::Point(13, 34);
 			this->pnlGraph->Name = L"pnlGraph";
-			this->pnlGraph->Size = System::Drawing::Size(982, 512);
+			this->pnlGraph->Size = System::Drawing::Size(655, 333);
 			this->pnlGraph->TabIndex = 4;
 			this->pnlGraph->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &GameForm::GameForm_OnPaintGraph);
 			// 
@@ -277,10 +264,9 @@ namespace FrontEnd {
 			this->lblInfo->AutoSize = true;
 			this->lblInfo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 40, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblInfo->Location = System::Drawing::Point(310, 223);
-			this->lblInfo->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblInfo->Location = System::Drawing::Point(207, 145);
 			this->lblInfo->Name = L"lblInfo";
-			this->lblInfo->Size = System::Drawing::Size(369, 91);
+			this->lblInfo->Size = System::Drawing::Size(254, 63);
 			this->lblInfo->TabIndex = 0;
 			this->lblInfo->Text = L"Waiting...";
 			this->lblInfo->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -294,11 +280,9 @@ namespace FrontEnd {
 			// lstUsers
 			// 
 			this->lstUsers->FormattingEnabled = true;
-			this->lstUsers->ItemHeight = 20;
-			this->lstUsers->Location = System::Drawing::Point(1010, 235);
-			this->lstUsers->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->lstUsers->Location = System::Drawing::Point(673, 153);
 			this->lstUsers->Name = L"lstUsers";
-			this->lstUsers->Size = System::Drawing::Size(342, 324);
+			this->lstUsers->Size = System::Drawing::Size(229, 212);
 			this->lstUsers->TabIndex = 6;
 			// 
 			// lblUsername
@@ -306,10 +290,9 @@ namespace FrontEnd {
 			this->lblUsername->AutoSize = true;
 			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 27, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblUsername->Location = System::Drawing::Point(1012, 38);
-			this->lblUsername->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblUsername->Location = System::Drawing::Point(675, 25);
 			this->lblUsername->Name = L"lblUsername";
-			this->lblUsername->Size = System::Drawing::Size(340, 63);
+			this->lblUsername->Size = System::Drawing::Size(225, 40);
 			this->lblUsername->TabIndex = 7;
 			this->lblUsername->Text = L"<Username>";
 			// 
@@ -318,10 +301,9 @@ namespace FrontEnd {
 			this->lblMoney->AutoSize = true;
 			this->lblMoney->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 27, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblMoney->Location = System::Drawing::Point(1005, 126);
-			this->lblMoney->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblMoney->Location = System::Drawing::Point(670, 82);
 			this->lblMoney->Name = L"lblMoney";
-			this->lblMoney->Size = System::Drawing::Size(253, 63);
+			this->lblMoney->Size = System::Drawing::Size(167, 40);
 			this->lblMoney->TabIndex = 8;
 			this->lblMoney->Text = L"<Money>";
 			// 
@@ -330,20 +312,18 @@ namespace FrontEnd {
 			this->lblValue->AutoSize = true;
 			this->lblValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblValue->Location = System::Drawing::Point(423, 583);
-			this->lblValue->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblValue->Location = System::Drawing::Point(282, 379);
 			this->lblValue->Name = L"lblValue";
-			this->lblValue->Size = System::Drawing::Size(167, 40);
+			this->lblValue->Size = System::Drawing::Size(111, 29);
 			this->lblValue->TabIndex = 0;
 			this->lblValue->Text = L"Waiting...";
 			this->lblValue->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// btnBuy
 			// 
-			this->btnBuy->Location = System::Drawing::Point(262, 574);
-			this->btnBuy->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnBuy->Location = System::Drawing::Point(175, 373);
 			this->btnBuy->Name = L"btnBuy";
-			this->btnBuy->Size = System::Drawing::Size(112, 35);
+			this->btnBuy->Size = System::Drawing::Size(75, 23);
 			this->btnBuy->TabIndex = 9;
 			this->btnBuy->Text = L"Buy";
 			this->btnBuy->UseVisualStyleBackColor = true;
@@ -354,20 +334,18 @@ namespace FrontEnd {
 			this->lblStockOwned->AutoSize = true;
 			this->lblStockOwned->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblStockOwned->Location = System::Drawing::Point(807, 574);
-			this->lblStockOwned->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblStockOwned->Location = System::Drawing::Point(538, 373);
 			this->lblStockOwned->Name = L"lblStockOwned";
-			this->lblStockOwned->Size = System::Drawing::Size(167, 40);
+			this->lblStockOwned->Size = System::Drawing::Size(111, 29);
 			this->lblStockOwned->TabIndex = 0;
 			this->lblStockOwned->Text = L"Waiting...";
 			this->lblStockOwned->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// btnSellAll
 			// 
-			this->btnSellAll->Location = System::Drawing::Point(620, 618);
-			this->btnSellAll->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnSellAll->Location = System::Drawing::Point(413, 402);
 			this->btnSellAll->Name = L"btnSellAll";
-			this->btnSellAll->Size = System::Drawing::Size(112, 35);
+			this->btnSellAll->Size = System::Drawing::Size(75, 23);
 			this->btnSellAll->TabIndex = 10;
 			this->btnSellAll->Text = L"Sell All";
 			this->btnSellAll->UseVisualStyleBackColor = true;
@@ -375,10 +353,9 @@ namespace FrontEnd {
 			// 
 			// btnBuyAll
 			// 
-			this->btnBuyAll->Location = System::Drawing::Point(262, 618);
-			this->btnBuyAll->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
+			this->btnBuyAll->Location = System::Drawing::Point(175, 402);
 			this->btnBuyAll->Name = L"btnBuyAll";
-			this->btnBuyAll->Size = System::Drawing::Size(112, 35);
+			this->btnBuyAll->Size = System::Drawing::Size(75, 23);
 			this->btnBuyAll->TabIndex = 10;
 			this->btnBuyAll->Text = L"Buy All";
 			this->btnBuyAll->UseVisualStyleBackColor = true;
@@ -387,12 +364,12 @@ namespace FrontEnd {
 			// menuStrip2
 			// 
 			this->menuStrip2->BackColor = System::Drawing::Color::Transparent;
-			this->menuStrip2->GripMargin = System::Windows::Forms::Padding(2, 2, 0, 2);
 			this->menuStrip2->ImageScalingSize = System::Drawing::Size(24, 24);
 			this->menuStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->menuToolStripMenuItem });
 			this->menuStrip2->Location = System::Drawing::Point(0, 0);
 			this->menuStrip2->Name = L"menuStrip2";
-			this->menuStrip2->Size = System::Drawing::Size(1361, 33);
+			this->menuStrip2->Padding = System::Windows::Forms::Padding(4, 1, 0, 1);
+			this->menuStrip2->Size = System::Drawing::Size(907, 24);
 			this->menuStrip2->TabIndex = 12;
 			this->menuStrip2->Text = L"menuStrip2";
 			// 
@@ -400,13 +377,13 @@ namespace FrontEnd {
 			// 
 			this->menuToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->debugToolStripMenuItem });
 			this->menuToolStripMenuItem->Name = L"menuToolStripMenuItem";
-			this->menuToolStripMenuItem->Size = System::Drawing::Size(73, 29);
+			this->menuToolStripMenuItem->Size = System::Drawing::Size(50, 22);
 			this->menuToolStripMenuItem->Text = L"Menu";
 			// 
 			// debugToolStripMenuItem
 			// 
 			this->debugToolStripMenuItem->Name = L"debugToolStripMenuItem";
-			this->debugToolStripMenuItem->Size = System::Drawing::Size(168, 34);
+			this->debugToolStripMenuItem->Size = System::Drawing::Size(109, 22);
 			this->debugToolStripMenuItem->Text = L"Debug";
 			this->debugToolStripMenuItem->Click += gcnew System::EventHandler(this, &GameForm::debugToolStripMenuItem_Click);
 			// 
@@ -415,20 +392,19 @@ namespace FrontEnd {
 			this->lblUnit->AutoSize = true;
 			this->lblUnit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblUnit->Location = System::Drawing::Point(13, 583);
-			this->lblUnit->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblUnit->Location = System::Drawing::Point(9, 379);
 			this->lblUnit->Name = L"lblUnit";
-			this->lblUnit->Size = System::Drawing::Size(167, 40);
+			this->lblUnit->Size = System::Drawing::Size(111, 29);
 			this->lblUnit->TabIndex = 13;
 			this->lblUnit->Text = L"Waiting...";
 			this->lblUnit->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 			// 
 			// GameForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->ClientSize = System::Drawing::Size(1361, 894);
+			this->BackColor = System::Drawing::SystemColors::HotTrack;
+			this->ClientSize = System::Drawing::Size(907, 581);
 			this->Controls->Add(this->lblUnit);
 			this->Controls->Add(this->btnBuyAll);
 			this->Controls->Add(this->btnSellAll);
@@ -442,9 +418,8 @@ namespace FrontEnd {
 			this->Controls->Add(this->grpDbg);
 			this->Controls->Add(this->btnSell);
 			this->Controls->Add(this->menuStrip2);
-			this->Margin = System::Windows::Forms::Padding(4, 5, 4, 5);
 			this->Name = L"GameForm";
-			this->Text = L"Game";
+			this->Text = L"Stocks.io";
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &GameForm::GameForm_FormClosed);
 			this->grpDbg->ResumeLayout(false);
 			this->grpDbg->PerformLayout();
