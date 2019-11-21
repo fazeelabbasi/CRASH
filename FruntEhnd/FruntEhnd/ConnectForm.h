@@ -88,7 +88,7 @@ namespace FrontEnd {
 			this->txtAddr->Name = L"txtAddr";
 			this->txtAddr->Size = System::Drawing::Size(100, 20);
 			this->txtAddr->TabIndex = 1;
-			this->txtAddr->Text = L"0.0.0.0";
+			this->txtAddr->Text = L"127.0.0.1";
 			// 
 			// label1
 			// 
@@ -166,7 +166,8 @@ private: System::Void btnJoin_Click(System::Object^ sender, System::EventArgs^ e
 		return;
 	}
 	GameForm^ gameForm = gcnew GameForm(networkClient);
-	Application::Run(gameForm);
+	gameForm->Show();
+	this->Hide();
 }
 };
 }

@@ -99,7 +99,7 @@ namespace FrontEnd {
 			this->btnSendPacket->UseVisualStyleBackColor = true;
 			this->btnSendPacket->Click += gcnew System::EventHandler(this, &GameForm::btnFinish_Click);
 			// 
-			// Game
+			// GameForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -108,8 +108,9 @@ namespace FrontEnd {
 			this->Controls->Add(this->txtLogs);
 			this->Controls->Add(this->btnSendPacket);
 			this->Controls->Add(this->btnFinish);
-			this->Name = L"Game";
+			this->Name = L"GameForm";
 			this->Text = L"Game";
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &GameForm::GameForm_FormClosed);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -117,5 +118,8 @@ namespace FrontEnd {
 #pragma endregion
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
-	};
+	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		Application::Exit();
+	}
+};
 }
