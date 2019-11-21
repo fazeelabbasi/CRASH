@@ -32,7 +32,7 @@ namespace FrontEnd {
 			System::Random r;
 			this->graphPoints = gcnew System::Collections::Generic::List<int>();
 			int x = 0;
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 25; i++) {
 				int x = x + (int)(r.NextDouble() * 200) - 100;
 				this->graphPoints->Add(x);
 			}
@@ -169,9 +169,11 @@ namespace FrontEnd {
 	}
 
 	private: System::Void GameForm_OnMessage(System::String^ msg) {
+		if (this->IsDisposed)
+			return;
 		if (!this->IsHandleCreated)
 			this->CreateHandle();
-		if (this->IsDisposed)
+		if (!this->Created)
 			return;
 		SafeMessageEventDelegate^ d = gcnew SafeMessageEventDelegate(this, &GameForm::GameForm_OnMessageSafe);
 		this->Invoke(d, msg);
@@ -213,13 +215,13 @@ namespace FrontEnd {
 			step++;
 		}
 		step = area.Width/step;
-		scale = 1/((max - min) / area.Height);
+		scale = 1/((max - min) / area.Height)/2;
 
 		g->DrawLine(blackPen, 0, area.Height / 2, area.Width, area.Height / 2);
 		int prevX = 0, prevY = area.Height / 2;
 		for each (int d in this->graphPoints) {
-			int scaledY = d * scale;
-			g->DrawLine(redPen, prevX, prevY, prevX+step, scaledY + area.Height / 2);
+			int scaledY = d * scale + area.Height / 2;
+			g->DrawLine(redPen, prevX, prevY, prevX+step, scaledY);
 			prevX += step;
 			prevY = scaledY;
 		}
