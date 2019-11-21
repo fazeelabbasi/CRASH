@@ -7,3 +7,4 @@
 **/*.out
 **/*.gch
 **/*.exe
+.DS_Store
