@@ -4,7 +4,7 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <string>
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
@@ -75,12 +75,10 @@ void NetworkClient::start(PCSTR host, PCSTR port) {
 	}
 }
 
-void NetworkClient::sendInfo() {
+void NetworkClient::sendInfo(std::string msg) {
 	int iResult;
-	char* sendbuf = "this is a test";
-
 	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	iResult = send(ConnectSocket, msg.c_str(), msg.size(), 0);
 	if (iResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
@@ -95,7 +93,7 @@ bool NetworkClient::isConnected() {
 	return ConnectSocket != INVALID_SOCKET;
 }
 
-void NetworkClient::receiveInfo() {
+std::string NetworkClient::receiveInfo() {
 	int iResult;
 	char recvbuf[DEFAULT_BUFLEN];
 	int recvbuflen = DEFAULT_BUFLEN;
@@ -116,6 +114,8 @@ void NetworkClient::receiveInfo() {
 	closesocket(ConnectSocket);
 	ConnectSocket = INVALID_SOCKET;
 	WSACleanup();
+
+	return recvbuf;
 }
 
 void NetworkClient::stop() {
