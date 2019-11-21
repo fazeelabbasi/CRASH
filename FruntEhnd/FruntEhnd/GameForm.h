@@ -139,12 +139,13 @@ namespace FrontEnd {
 			// 
 			// btnSell
 			// 
+			this->btnSell->BackColor = System::Drawing::SystemColors::ControlLight;
 			this->btnSell->Location = System::Drawing::Point(413, 373);
 			this->btnSell->Name = L"btnSell";
 			this->btnSell->Size = System::Drawing::Size(75, 23);
 			this->btnSell->TabIndex = 0;
 			this->btnSell->Text = L"Sell";
-			this->btnSell->UseVisualStyleBackColor = true;
+			this->btnSell->UseVisualStyleBackColor = false;
 			this->btnSell->Click += gcnew System::EventHandler(this, &GameForm::btnSell_Click);
 			// 
 			// txtLogs
@@ -262,9 +263,11 @@ namespace FrontEnd {
 			// lblInfo
 			// 
 			this->lblInfo->AutoSize = true;
+			this->lblInfo->BackColor = System::Drawing::Color::Transparent;
 			this->lblInfo->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 40, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblInfo->Location = System::Drawing::Point(207, 145);
+			this->lblInfo->ForeColor = System::Drawing::SystemColors::Control;
+			this->lblInfo->Location = System::Drawing::Point(202, 90);
 			this->lblInfo->Name = L"lblInfo";
 			this->lblInfo->Size = System::Drawing::Size(254, 63);
 			this->lblInfo->TabIndex = 0;
@@ -288,6 +291,7 @@ namespace FrontEnd {
 			// lblUsername
 			// 
 			this->lblUsername->AutoSize = true;
+			this->lblUsername->BackColor = System::Drawing::Color::Transparent;
 			this->lblUsername->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 27, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblUsername->Location = System::Drawing::Point(675, 25);
@@ -299,6 +303,7 @@ namespace FrontEnd {
 			// lblMoney
 			// 
 			this->lblMoney->AutoSize = true;
+			this->lblMoney->BackColor = System::Drawing::Color::Transparent;
 			this->lblMoney->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 27, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblMoney->Location = System::Drawing::Point(670, 82);
@@ -310,6 +315,7 @@ namespace FrontEnd {
 			// lblValue
 			// 
 			this->lblValue->AutoSize = true;
+			this->lblValue->BackColor = System::Drawing::Color::Transparent;
 			this->lblValue->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblValue->Location = System::Drawing::Point(282, 379);
@@ -321,17 +327,19 @@ namespace FrontEnd {
 			// 
 			// btnBuy
 			// 
+			this->btnBuy->BackColor = System::Drawing::SystemColors::ControlLight;
 			this->btnBuy->Location = System::Drawing::Point(175, 373);
 			this->btnBuy->Name = L"btnBuy";
 			this->btnBuy->Size = System::Drawing::Size(75, 23);
 			this->btnBuy->TabIndex = 9;
 			this->btnBuy->Text = L"Buy";
-			this->btnBuy->UseVisualStyleBackColor = true;
+			this->btnBuy->UseVisualStyleBackColor = false;
 			this->btnBuy->Click += gcnew System::EventHandler(this, &GameForm::btnBuy_Click);
 			// 
 			// lblStockOwned
 			// 
 			this->lblStockOwned->AutoSize = true;
+			this->lblStockOwned->BackColor = System::Drawing::Color::Transparent;
 			this->lblStockOwned->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblStockOwned->Location = System::Drawing::Point(538, 373);
@@ -343,22 +351,24 @@ namespace FrontEnd {
 			// 
 			// btnSellAll
 			// 
+			this->btnSellAll->BackColor = System::Drawing::SystemColors::ControlLight;
 			this->btnSellAll->Location = System::Drawing::Point(413, 402);
 			this->btnSellAll->Name = L"btnSellAll";
 			this->btnSellAll->Size = System::Drawing::Size(75, 23);
 			this->btnSellAll->TabIndex = 10;
 			this->btnSellAll->Text = L"Sell All";
-			this->btnSellAll->UseVisualStyleBackColor = true;
+			this->btnSellAll->UseVisualStyleBackColor = false;
 			this->btnSellAll->Click += gcnew System::EventHandler(this, &GameForm::btnSellAll_Click);
 			// 
 			// btnBuyAll
 			// 
+			this->btnBuyAll->BackColor = System::Drawing::SystemColors::ControlLight;
 			this->btnBuyAll->Location = System::Drawing::Point(175, 402);
 			this->btnBuyAll->Name = L"btnBuyAll";
 			this->btnBuyAll->Size = System::Drawing::Size(75, 23);
 			this->btnBuyAll->TabIndex = 10;
 			this->btnBuyAll->Text = L"Buy All";
-			this->btnBuyAll->UseVisualStyleBackColor = true;
+			this->btnBuyAll->UseVisualStyleBackColor = false;
 			this->btnBuyAll->Click += gcnew System::EventHandler(this, &GameForm::btnBuyAll_Click);
 			// 
 			// menuStrip2
@@ -390,6 +400,7 @@ namespace FrontEnd {
 			// lblUnit
 			// 
 			this->lblUnit->AutoSize = true;
+			this->lblUnit->BackColor = System::Drawing::Color::Transparent;
 			this->lblUnit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->lblUnit->Location = System::Drawing::Point(9, 379);
@@ -708,7 +719,7 @@ namespace FrontEnd {
 
 	private: System::Void GameForm_OnPaintGraph(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ pe) {
 		Graphics^ g = pe->Graphics;
-		g->Clear(Color::AntiqueWhite);
+		g->Clear(Color::Black);
 		if (this->graphPoints->Count == 0)
 			return;
 		System::Drawing::Rectangle area = this->pnlGraph->ClientRectangle;
