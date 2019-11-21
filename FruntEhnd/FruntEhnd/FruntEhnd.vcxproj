@@ -138,11 +138,17 @@
     <ClInclude Include="ConnectForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="GameForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="NetworkClient.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameForm.resx">
+      <DependentUpon>GameForm.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

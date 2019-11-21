@@ -14,9 +14,9 @@
 #pragma comment (lib, "AdvApi32.lib")
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "2878"
+//#define DEFAULT_PORT "2878"
 
-void NetworkClient::start(PCSTR host) {
+void NetworkClient::start(PCSTR host, PCSTR port) {
 	WSADATA wsaData;
 	ConnectSocket = INVALID_SOCKET;
 	struct addrinfo* result = NULL,
@@ -40,7 +40,7 @@ void NetworkClient::start(PCSTR host) {
 	hints.ai_protocol = IPPROTO_TCP;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(host, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(host, port, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();

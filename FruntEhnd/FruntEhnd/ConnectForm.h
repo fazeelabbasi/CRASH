@@ -1,5 +1,8 @@
 #pragma once
-
+#include <msclr/marshal.h>
+#include <string>
+#include "GameForm.h"
+#include "NetworkClient.h"
 namespace FrontEnd {
 
 	using namespace System;
@@ -84,6 +87,7 @@ namespace FrontEnd {
 			this->txtAddr->Name = L"txtAddr";
 			this->txtAddr->Size = System::Drawing::Size(100, 20);
 			this->txtAddr->TabIndex = 1;
+			this->txtAddr->Text = L"0.0.0.0";
 			// 
 			// label1
 			// 
@@ -106,9 +110,11 @@ namespace FrontEnd {
 			// nudPort
 			// 
 			this->nudPort->Location = System::Drawing::Point(98, 33);
+			this->nudPort->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10000, 0, 0, 0 });
 			this->nudPort->Name = L"nudPort";
 			this->nudPort->Size = System::Drawing::Size(100, 20);
 			this->nudPort->TabIndex = 3;
+			this->nudPort->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2878, 0, 0, 0 });
 			// 
 			// textBox1
 			// 
@@ -126,7 +132,7 @@ namespace FrontEnd {
 			this->label3->TabIndex = 2;
 			this->label3->Text = L"Username";
 			// 
-			// Entrypoint
+			// ConnectForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -138,7 +144,7 @@ namespace FrontEnd {
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->txtAddr);
 			this->Controls->Add(this->btnJoin);
-			this->Name = L"Entrypoint";
+			this->Name = L"ConnectForm";
 			this->Text = L"Connect";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudPort))->EndInit();
 			this->ResumeLayout(false);
@@ -147,6 +153,19 @@ namespace FrontEnd {
 		}
 #pragma endregion
 private: System::Void btnJoin_Click(System::Object^ sender, System::EventArgs^ e) {
+	msclr::interop::marshal_context context;
+	std::string rawAddr = context.marshal_as<std::string>(this->txtAddr->Text);
+	std::string rawPort = context.marshal_as<std::string>(this->nudPort->Value);
+	NetworkClient^ networkClient = gcnew NetworkClient();
+
+	//todo: fail gracefully
+	networkClient->start(rawAddr.c_str(), rawPort.c_str());
+	if (!networkClient->isConnected()) {
+		MessageBox::Show(System::String::Format("Failed to connect to {0}:{1}", this->txtAddr->Text, this->nudPort->Value), "Info", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+		return;
+	}
+	GameForm^ gameForm = gcnew GameForm(networkClient);
+	Application::Run(gameForm);
 }
 };
 }

@@ -1,11 +1,11 @@
 #pragma once
 #include <winsock2.h>
 
-class NetworkClient {
+public ref class NetworkClient {
 	SOCKET ConnectSocket = INVALID_SOCKET;
 
 public:
-	void start(PCSTR host);
+	void start(PCSTR host, PCSTR port);
 	void sendInfo();
 	void receiveInfo();
 	bool isConnected();

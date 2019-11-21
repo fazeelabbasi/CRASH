@@ -29,5 +29,8 @@
     <ClInclude Include="NetworkClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
