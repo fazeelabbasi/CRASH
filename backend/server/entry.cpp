@@ -29,6 +29,30 @@ void * asyncSend(void *raw) {
 	free(args);
 }
 
+void * sendPlayerList(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+
+	// send the balance for each user
+	for (auto p : game.players) {
+		std::ostringstream ss;
+		ss << "USER " << p.name << " " << p.balance << std::endl;
+		server.sendMessage(*args, ss.str().c_str());
+	}
+	free(raw); 
+}
+
+void notifyPlayerList() {
+	for (auto df : clients) {
+		pthread_t t;
+		struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+		args->source_fd=df;
+		if (pthread_create(&t, NULL, sendPlayerList, (void *) args) != 0) {
+			std::cout << "FAIL NOTIFYING PLAYER!" << std::endl;
+			return;
+		}
+	}
+}
+
 void * listenBlocking(void *raw) {
 	for(;;)
 		server.loop();
@@ -43,6 +67,7 @@ void onMessage(uint16_t df, char *buffer) {
 		ss >> username;
 		game.clientLogin(username);
 		std::cout << "<" << username << "> has joined the game!" << std::endl;
+		notifyPlayerList();
 	} else if (msg.size() >= 7 && msg.substr(0,7) == "FINISH ") {
 		msg.erase(0,7);
 		std::istringstream ss(msg);
@@ -101,35 +126,12 @@ void onDisconnect(uint16_t df) {
 void onConnect(uint16_t df) {
 	std::cout << df << " connected." << std::endl;
 	clients.push_back(df);
-	// pthread_t t;
-	// struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
-	// args->source_fd=df;
-	// if (pthread_create(&t, NULL, asyncSend, (void * ) args) != 0){
-	// 	printf("shit's fucked yo\n");
-	// }
-}
-
-void * sendPlayerList(void *raw) {
-	struct Server::Connector *args = (struct Server::Connector *) raw;
-
-	// send the balance for each user
-	for (auto p : game.players) {
-		std::ostringstream ss;
-		ss << "USER " << p.name << " " << p.balance;
-		server.sendMessage(*args, ss.str().c_str());
-	}
-	free(raw); 
-}
-
-void notifyPlayerList() {
-	for (auto df : clients) {
-		pthread_t t;
-		struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
-		args->source_fd=df;
-		if (pthread_create(&t, NULL, sendPlayerList, (void *) args) != 0) {
-			std::cout << "FAIL NOTIFYING PLAYER!" << std::endl;
-			return;
-		}
+	
+	pthread_t t;
+	struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+	args->source_fd=df;
+	if (pthread_create(&t, NULL, sendPlayerList, (void * ) args) != 0){
+		printf("shit's fucked yo\n");
 	}
 }
 
