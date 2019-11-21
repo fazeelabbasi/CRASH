@@ -45,7 +45,8 @@ namespace FrontEnd {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::NumericUpDown^ nudPort;
-	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::TextBox^ txtUsername;
+
 	private: System::Windows::Forms::Label^ label3;
 	protected:
 
@@ -67,13 +68,14 @@ namespace FrontEnd {
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->nudPort = (gcnew System::Windows::Forms::NumericUpDown());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->txtUsername = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudPort))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// btnJoin
 			// 
+			this->btnJoin->Enabled = false;
 			this->btnJoin->Location = System::Drawing::Point(60, 99);
 			this->btnJoin->Name = L"btnJoin";
 			this->btnJoin->Size = System::Drawing::Size(75, 23);
@@ -117,12 +119,13 @@ namespace FrontEnd {
 			this->nudPort->TabIndex = 3;
 			this->nudPort->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2878, 0, 0, 0 });
 			// 
-			// textBox1
+			// txtUsername
 			// 
-			this->textBox1->Location = System::Drawing::Point(98, 59);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 20);
-			this->textBox1->TabIndex = 1;
+			this->txtUsername->Location = System::Drawing::Point(98, 59);
+			this->txtUsername->Name = L"txtUsername";
+			this->txtUsername->Size = System::Drawing::Size(100, 20);
+			this->txtUsername->TabIndex = 1;
+			this->txtUsername->TextChanged += gcnew System::EventHandler(this, &ConnectForm::txtUsername_TextChanged);
 			// 
 			// label3
 			// 
@@ -142,7 +145,7 @@ namespace FrontEnd {
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label1);
-			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->txtUsername);
 			this->Controls->Add(this->txtAddr);
 			this->Controls->Add(this->btnJoin);
 			this->Name = L"ConnectForm";
@@ -165,9 +168,15 @@ private: System::Void btnJoin_Click(System::Object^ sender, System::EventArgs^ e
 		MessageBox::Show(System::String::Format("Failed to connect to {0}:{1}", this->txtAddr->Text, this->nudPort->Value), "Info", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
 		return;
 	}
-	GameForm^ gameForm = gcnew GameForm(networkClient);
+
+	networkClient->sendInfo(System::String::Format("LOGIN {0}", this->txtUsername->Text));
+
+	GameForm^ gameForm = gcnew GameForm(networkClient, this->txtUsername->Text);
 	gameForm->Show();
 	this->Hide();
+}
+private: System::Void txtUsername_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	this->btnJoin->Enabled = this->txtUsername->Text->Length > 0;
 }
 };
 }

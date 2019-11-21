@@ -20,7 +20,6 @@ class Game
 		int getPlayerIndex(std::string username);
 		bool playerExists(const string& username);
 		Player* getPlayer(std::string username);
-		void setBalance(Player* p, double balance);
 };
 
 #endif // ROUNDLOGIC_H

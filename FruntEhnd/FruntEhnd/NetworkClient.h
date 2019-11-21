@@ -18,7 +18,8 @@ public:
 	};
 
 	void start(PCSTR host, PCSTR port);
-	void sendInfo(std::string);
+	void sendInfo(std::string msg);
+	void sendInfo(System::String^ msg);
 	std::string receiveInfo();
 	bool isConnected();
 	void stop();

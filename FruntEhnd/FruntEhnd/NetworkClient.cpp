@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <string>
 
+#include <msclr/marshal.h>
+#include <msclr\marshal_cppstd.h>
+
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -13,6 +16,7 @@
 
 #define DEFAULT_BUFLEN 512
 //#define DEFAULT_PORT "2878"
+
 
 void NetworkClient::start(PCSTR host, PCSTR port) {
 	WSADATA wsaData;
@@ -73,6 +77,12 @@ void NetworkClient::start(PCSTR host, PCSTR port) {
 		WSACleanup();
 		return;
 	}
+}
+
+void NetworkClient::sendInfo(System::String^ msg) {
+	msclr::interop::marshal_context context;
+	std::string raw = context.marshal_as<std::string>(msg);
+	this->sendInfo(raw);
 }
 
 void NetworkClient::sendInfo(std::string msg) {

@@ -13,7 +13,7 @@
 
 Server server(2878);
 Game game;
-
+std::vector<int> clients;
 /*
 ====================================================
 ====	Network Communication
@@ -90,11 +90,17 @@ void onMessage(uint16_t df, char *buffer) {
 
 void onDisconnect(uint16_t df) {
 	std::cout << df << " disconnected." << std::endl;
+	for (int i=0; i<clients.size(); i++) {
+		if (clients[i] == df) {
+			clients.erase(clients.begin()+i);
+			return;
+		}
+	}
 }
 
 void onConnect(uint16_t df) {
 	std::cout << df << " connected." << std::endl;
-	
+	clients.push_back(df);
 	// pthread_t t;
 	// struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
 	// args->source_fd=df;
@@ -103,6 +109,29 @@ void onConnect(uint16_t df) {
 	// }
 }
 
+void * sendPlayerList(void *raw) {
+	struct Server::Connector *args = (struct Server::Connector *) raw;
+
+	// send the balance for each user
+	for (auto p : game.players) {
+		std::ostringstream ss;
+		ss << "USER " << p.name << " " << p.balance;
+		server.sendMessage(*args, ss.str().c_str());
+	}
+	free(raw); 
+}
+
+void notifyPlayerList() {
+	for (auto df : clients) {
+		pthread_t t;
+		struct Server::Connector *args = (Server::Connector *) malloc(sizeof(struct Server::Connector));
+		args->source_fd=df;
+		if (pthread_create(&t, NULL, sendPlayerList, (void *) args) != 0) {
+			std::cout << "FAIL NOTIFYING PLAYER!" << std::endl;
+			return;
+		}
+	}
+}
 
 void * setupServer(void* raw) {
 	std::cout << "Launching server" << std::endl;
@@ -149,6 +178,7 @@ void roundLoop() {
 			std::cout << "Warmup started" << std::endl;
 			game.roundsPlayed++;
 			game.roundStatus = "warmup";
+			notifyPlayerList();
 		}
 
 		// BEGIN

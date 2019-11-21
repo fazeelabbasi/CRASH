@@ -3,9 +3,12 @@
 #include <thread>
 #include <chrono>
 #include <string>
+#include <math.h>
+#include <random>
 #include <msclr/marshal.h>
 #include <msclr\marshal_cppstd.h>
 #include "NetworkClient.h"
+#include "User.h"
 
 namespace FrontEnd {
 
@@ -22,21 +25,15 @@ namespace FrontEnd {
 	public ref class GameForm : public System::Windows::Forms::Form
 	{
 	public:
-		GameForm(NetworkClient^ networkClient): networkClient(networkClient)
+		GameForm(NetworkClient^ networkClient, System::String^ username): networkClient(networkClient), username(username)
 		{
 			InitializeComponent();
 			this->networkClient->onMessage += gcnew Del(this, &GameForm::GameForm_OnMessage);
 			this->networkThread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &GameForm::receiveLoop));
+			this->users = gcnew System::Collections::Generic::List<User^>();
 			this->networkThread->Start();
-
-			System::Random r;
-			this->graphPoints = gcnew System::Collections::Generic::List<int>();
-			int x = 0;
-			for (int i = 0; i < 25; i++) {
-				int x = x + (int)(r.NextDouble() * 200) - 100;
-				x = x < 0 ? 0 : x;
-				this->graphPoints->Add(x);
-			}
+			this->generateGraphValues(1,1,1);
+			this->refresh();
 		}
 
 	protected:
@@ -51,12 +48,15 @@ namespace FrontEnd {
 			}
 		}
 
+	private: System::String^ username;
+	private: double money = 100;
 	private: delegate void SafeMessageEventDelegate(System::String^ msg);
 	private: System::Threading::Thread^ networkThread;
 	private: NetworkClient^ networkClient;
 	private: msclr::interop::marshal_context context;
 	private: System::Collections::Generic::List<int>^ graphPoints;
 	private: System::Windows::Forms::Button^ btnSell;
+	private: System::Collections::Generic::List<User^>^ users;
 
 
 	private: System::Windows::Forms::TextBox^ txtLogs;
@@ -64,11 +64,21 @@ namespace FrontEnd {
 	private: System::Windows::Forms::Button^ btnSendPacket;
 	private: System::Windows::Forms::GroupBox^ groupBox1;
 	private: System::Windows::Forms::Panel^ pnlGraph;
+	private: System::Windows::Forms::Button^ btnNewGraph;
+	private: System::Windows::Forms::Button^ btnDbgName;
+	private: System::Windows::Forms::TextBox^ txtDbgUsername;
+	private: System::Windows::Forms::Button^ btnDbgMoney;
+	private: System::Windows::Forms::NumericUpDown^ nudDbgMoney;
+	private: System::Windows::Forms::Timer^ timGraphTick;
+	private: System::Windows::Forms::ListBox^ lstUsers;
+	private: System::Windows::Forms::Label^ lblUsername;
+	private: System::Windows::Forms::Label^ lblMoney;
+	private: System::ComponentModel::IContainer^ components;
 
 		   /// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -77,18 +87,29 @@ namespace FrontEnd {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->btnSell = (gcnew System::Windows::Forms::Button());
 			this->txtLogs = (gcnew System::Windows::Forms::TextBox());
 			this->txtCmd = (gcnew System::Windows::Forms::TextBox());
 			this->btnSendPacket = (gcnew System::Windows::Forms::Button());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->btnDbgName = (gcnew System::Windows::Forms::Button());
+			this->txtDbgUsername = (gcnew System::Windows::Forms::TextBox());
+			this->btnDbgMoney = (gcnew System::Windows::Forms::Button());
+			this->nudDbgMoney = (gcnew System::Windows::Forms::NumericUpDown());
 			this->pnlGraph = (gcnew System::Windows::Forms::Panel());
+			this->btnNewGraph = (gcnew System::Windows::Forms::Button());
+			this->timGraphTick = (gcnew System::Windows::Forms::Timer(this->components));
+			this->lstUsers = (gcnew System::Windows::Forms::ListBox());
+			this->lblUsername = (gcnew System::Windows::Forms::Label());
+			this->lblMoney = (gcnew System::Windows::Forms::Label());
 			this->groupBox1->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudDbgMoney))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// btnSell
 			// 
-			this->btnSell->Location = System::Drawing::Point(110, 180);
+			this->btnSell->Location = System::Drawing::Point(287, 394);
 			this->btnSell->Name = L"btnSell";
 			this->btnSell->Size = System::Drawing::Size(75, 23);
 			this->btnSell->TabIndex = 0;
@@ -125,29 +146,109 @@ namespace FrontEnd {
 			// 
 			// groupBox1
 			// 
+			this->groupBox1->Controls->Add(this->btnDbgName);
+			this->groupBox1->Controls->Add(this->txtDbgUsername);
+			this->groupBox1->Controls->Add(this->btnDbgMoney);
+			this->groupBox1->Controls->Add(this->nudDbgMoney);
 			this->groupBox1->Controls->Add(this->txtLogs);
 			this->groupBox1->Controls->Add(this->txtCmd);
 			this->groupBox1->Controls->Add(this->btnSendPacket);
-			this->groupBox1->Location = System::Drawing::Point(13, 228);
+			this->groupBox1->Location = System::Drawing::Point(13, 423);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(259, 146);
+			this->groupBox1->Size = System::Drawing::Size(499, 146);
 			this->groupBox1->TabIndex = 3;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Debug";
+			// 
+			// btnDbgName
+			// 
+			this->btnDbgName->Location = System::Drawing::Point(400, 47);
+			this->btnDbgName->Name = L"btnDbgName";
+			this->btnDbgName->Size = System::Drawing::Size(75, 23);
+			this->btnDbgName->TabIndex = 6;
+			this->btnDbgName->Text = L"Set Name";
+			this->btnDbgName->UseVisualStyleBackColor = true;
+			this->btnDbgName->Click += gcnew System::EventHandler(this, &GameForm::btnDbgName_Click);
+			// 
+			// txtDbgUsername
+			// 
+			this->txtDbgUsername->Location = System::Drawing::Point(274, 47);
+			this->txtDbgUsername->Name = L"txtDbgUsername";
+			this->txtDbgUsername->Size = System::Drawing::Size(120, 20);
+			this->txtDbgUsername->TabIndex = 5;
+			// 
+			// btnDbgMoney
+			// 
+			this->btnDbgMoney->Location = System::Drawing::Point(400, 17);
+			this->btnDbgMoney->Name = L"btnDbgMoney";
+			this->btnDbgMoney->Size = System::Drawing::Size(75, 23);
+			this->btnDbgMoney->TabIndex = 4;
+			this->btnDbgMoney->Text = L"Set Money";
+			this->btnDbgMoney->UseVisualStyleBackColor = true;
+			this->btnDbgMoney->Click += gcnew System::EventHandler(this, &GameForm::btnDbgMoney_Click);
+			// 
+			// nudDbgMoney
+			// 
+			this->nudDbgMoney->Location = System::Drawing::Point(274, 20);
+			this->nudDbgMoney->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1215752191, 23, 0, 0 });
+			this->nudDbgMoney->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 999999999, 0, 0, System::Int32::MinValue });
+			this->nudDbgMoney->Name = L"nudDbgMoney";
+			this->nudDbgMoney->Size = System::Drawing::Size(120, 20);
+			this->nudDbgMoney->TabIndex = 3;
 			// 
 			// pnlGraph
 			// 
 			this->pnlGraph->Location = System::Drawing::Point(13, 13);
 			this->pnlGraph->Name = L"pnlGraph";
-			this->pnlGraph->Size = System::Drawing::Size(253, 145);
+			this->pnlGraph->Size = System::Drawing::Size(655, 354);
 			this->pnlGraph->TabIndex = 4;
 			this->pnlGraph->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &GameForm::GameForm_OnPaintGraph);
+			// 
+			// btnNewGraph
+			// 
+			this->btnNewGraph->Location = System::Drawing::Point(593, 394);
+			this->btnNewGraph->Name = L"btnNewGraph";
+			this->btnNewGraph->Size = System::Drawing::Size(75, 23);
+			this->btnNewGraph->TabIndex = 5;
+			this->btnNewGraph->Text = L"New Data";
+			this->btnNewGraph->UseVisualStyleBackColor = true;
+			this->btnNewGraph->Click += gcnew System::EventHandler(this, &GameForm::btnNewGraph_Click);
+			// 
+			// lstUsers
+			// 
+			this->lstUsers->FormattingEnabled = true;
+			this->lstUsers->Location = System::Drawing::Point(674, 68);
+			this->lstUsers->Name = L"lstUsers";
+			this->lstUsers->Size = System::Drawing::Size(153, 134);
+			this->lstUsers->TabIndex = 6;
+			// 
+			// lblUsername
+			// 
+			this->lblUsername->AutoSize = true;
+			this->lblUsername->Location = System::Drawing::Point(675, 25);
+			this->lblUsername->Name = L"lblUsername";
+			this->lblUsername->Size = System::Drawing::Size(67, 13);
+			this->lblUsername->TabIndex = 7;
+			this->lblUsername->Text = L"<Username>";
+			// 
+			// lblMoney
+			// 
+			this->lblMoney->AutoSize = true;
+			this->lblMoney->Location = System::Drawing::Point(674, 42);
+			this->lblMoney->Name = L"lblMoney";
+			this->lblMoney->Size = System::Drawing::Size(51, 13);
+			this->lblMoney->TabIndex = 8;
+			this->lblMoney->Text = L"<Money>";
 			// 
 			// GameForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 386);
+			this->ClientSize = System::Drawing::Size(839, 581);
+			this->Controls->Add(this->lblMoney);
+			this->Controls->Add(this->lblUsername);
+			this->Controls->Add(this->lstUsers);
+			this->Controls->Add(this->btnNewGraph);
 			this->Controls->Add(this->pnlGraph);
 			this->Controls->Add(this->groupBox1);
 			this->Controls->Add(this->btnSell);
@@ -156,7 +257,9 @@ namespace FrontEnd {
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &GameForm::GameForm_FormClosed);
 			this->groupBox1->ResumeLayout(false);
 			this->groupBox1->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudDbgMoney))->EndInit();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -165,9 +268,8 @@ namespace FrontEnd {
 	}
 
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
-		std::string rawAddr = context.marshal_as<std::string>(this->txtCmd->Text);
 		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
-		networkClient->sendInfo(rawAddr);
+		networkClient->sendInfo(this->txtCmd->Text);
 	}
 	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
 		this->networkClient->stop();
@@ -187,6 +289,48 @@ namespace FrontEnd {
 
 	private: System::Void GameForm_OnMessageSafe(System::String^ msg) {
 		this->log(System::String::Format("Received <{0}>", msg));
+		auto args = msg->Split();
+		if (msg->Length > 5 && msg->Substring(0, 5) == "USER ") {
+			this->updateOrCreateUser(args[1], System::Convert::ToDouble(args[2]));
+		}
+		if (msg->Length > 4 && msg->Substring(0, 5) == "KICK ") {
+			this->kick(args[1]);
+		}
+	}
+
+	private: System::Void updateOrCreateUser(System::String^ name, double money) {
+		// update if exists
+		for each (auto u in users) {
+			if (u->username == name) {
+				u->money = money;
+				this->log(System::String::Format("Set <{0}> money to {1:C}", name, money));
+				return;
+			}
+		}
+		this->log(System::String::Format("Created user <{0}> with money {1:C}", name, money));
+		User^ u = gcnew User(name, money);
+		this->users->Add(u);
+	}
+
+	private: User^ getUser(System::String^ name) {
+		for each (auto u in users)
+			if (u->username == name)
+				return u;
+		return nullptr;
+	}
+
+	private: System::Boolean userExists(System::String^ name) {
+		return this->getUser(name) == nullptr;
+	}
+
+	private: System::Void kick(System::String^ name) {
+		User^ u;
+		if (u = getUser(name)) {
+			this->users->Remove(u);
+			this->log(System::String::Format("Kicked <{0}>", name));
+			return;
+		}
+		this->log(System::String::Format("Failed to kick <{0}>, doesn't exist", name));
 	}
 
 	private: void receiveLoop() {
@@ -200,6 +344,58 @@ namespace FrontEnd {
 	private: System::Void log(System::String^ msg) {
 		this->txtLogs->AppendText(msg);
 		this->txtLogs->AppendText("\n");
+	}
+
+	private: System::Void generateGraphValues(int randSeed, double ret, double volatility) {
+		System::Random r(randSeed);
+		this->graphPoints = gcnew System::Collections::Generic::List<int>();
+		//
+		//const int initValue = 1;
+		//const double d = 0.002;
+		//const double v = 0.01;
+
+		//double stockQuote = initValue;
+		//int crashChance = -10;
+		//int deltaCrashChance = 0;
+
+		//double drift = ret - (1 / 2) * (volatility * volatility);
+		//double diffusion = 0;
+		//double delta = 0;
+
+		//std::default_random_engine generator;
+		//std::normal_distribution<double> normalDistGen(0, 1);
+
+		//int i = 0;
+		//this->graphPoints->Add(1);
+
+		//this->log(System::String::Format("Generating with seed {0}, ret {1}, vol {2}", randSeed, ret, volatility));
+		//while (r.Next() % 10000 > (crashChance++ + deltaCrashChance) && i++ < 300) {
+		//	deltaCrashChance = 0;
+		//	stockQuote *= exp(5 * drift + diffusion);
+		//	diffusion = (normalDistGen(generator) * volatility);
+		//	this->graphPoints->Add(stockQuote);
+		//	delta = (0.5 * delta) + this->graphPoints[i] - this->graphPoints[i - 1];
+
+		//	if (delta < 0) {
+		//		deltaCrashChance = delta * 10;
+		//		//crashChance++;
+		//	}
+		//}
+		double crashChance = 0.005;
+		int x = 0;
+		this->graphPoints->Add(1);
+		for (int i = 0; i < 25 && r.NextDouble() > (crashChance*=1.1) ; i++) {
+			int x = x + (int)(r.NextDouble() * 200) - 100;
+			x = x < 0 ? 0 : x;
+			this->graphPoints->Add(x);
+		}
+		this->pnlGraph->Refresh();
+	}
+
+	private: void refresh() {
+		this->lblUsername->Text = this->username;
+		this->lblMoney->Text = System::String::Format("{0:C}", this->money);
+		this->Refresh();
 	}
 
 	private: System::Void GameForm_OnPaintGraph(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ pe) {
@@ -232,5 +428,19 @@ namespace FrontEnd {
 			prevY = scaledY;
 		}
 	}
+private: System::Void btnNewGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+	System::Random^ r = gcnew System::Random();
+	this->generateGraphValues(r->Next(), r->Next(), r->NextDouble());
+}
+private: System::Void btnDbgMoney_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->money = System::Decimal::ToDouble(this->nudDbgMoney->Value);
+	this->log(System::String::Format("Set money to {0:C}", this->money));
+	this->refresh();
+}
+private: System::Void btnDbgName_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->username = this->txtDbgUsername->Text;
+	this->log(System::String::Format("Set username to <{0}>", this->username));
+	this->refresh();
+}
 };
 }
