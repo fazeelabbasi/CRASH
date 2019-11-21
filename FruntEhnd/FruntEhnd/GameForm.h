@@ -57,6 +57,7 @@ namespace FrontEnd {
 	private: NetworkClient^ networkClient;
 	private: msclr::interop::marshal_context context;
 	private: System::Collections::Generic::List<int>^ graphPoints;
+	private: int graphIndex = 0;
 	private: System::Windows::Forms::Button^ btnSell;
 	private: System::Collections::Generic::List<User^>^ users;
 
@@ -96,6 +97,7 @@ namespace FrontEnd {
 			this->txtCmd = (gcnew System::Windows::Forms::TextBox());
 			this->btnSendPacket = (gcnew System::Windows::Forms::Button());
 			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->btnDbgFinish = (gcnew System::Windows::Forms::Button());
 			this->btnDbgName = (gcnew System::Windows::Forms::Button());
 			this->txtDbgUsername = (gcnew System::Windows::Forms::TextBox());
 			this->btnDbgMoney = (gcnew System::Windows::Forms::Button());
@@ -106,7 +108,6 @@ namespace FrontEnd {
 			this->lstUsers = (gcnew System::Windows::Forms::ListBox());
 			this->lblUsername = (gcnew System::Windows::Forms::Label());
 			this->lblMoney = (gcnew System::Windows::Forms::Label());
-			this->btnDbgFinish = (gcnew System::Windows::Forms::Button());
 			this->groupBox1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudDbgMoney))->BeginInit();
 			this->SuspendLayout();
@@ -166,6 +167,16 @@ namespace FrontEnd {
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"Debug";
 			// 
+			// btnDbgFinish
+			// 
+			this->btnDbgFinish->Location = System::Drawing::Point(400, 76);
+			this->btnDbgFinish->Name = L"btnDbgFinish";
+			this->btnDbgFinish->Size = System::Drawing::Size(75, 23);
+			this->btnDbgFinish->TabIndex = 9;
+			this->btnDbgFinish->Text = L"Finish";
+			this->btnDbgFinish->UseVisualStyleBackColor = true;
+			this->btnDbgFinish->Click += gcnew System::EventHandler(this, &GameForm::btnDbgFinish_Click);
+			// 
 			// btnDbgName
 			// 
 			this->btnDbgName->Location = System::Drawing::Point(400, 47);
@@ -220,6 +231,10 @@ namespace FrontEnd {
 			this->btnNewGraph->UseVisualStyleBackColor = true;
 			this->btnNewGraph->Click += gcnew System::EventHandler(this, &GameForm::btnNewGraph_Click);
 			// 
+			// timGraphTick
+			// 
+			this->timGraphTick->Tick += gcnew System::EventHandler(this, &GameForm::timGraphTick_Tick);
+			// 
 			// lstUsers
 			// 
 			this->lstUsers->FormattingEnabled = true;
@@ -246,16 +261,6 @@ namespace FrontEnd {
 			this->lblMoney->TabIndex = 8;
 			this->lblMoney->Text = L"<Money>";
 			// 
-			// btnDbgFinish
-			// 
-			this->btnDbgFinish->Location = System::Drawing::Point(400, 76);
-			this->btnDbgFinish->Name = L"btnDbgFinish";
-			this->btnDbgFinish->Size = System::Drawing::Size(75, 23);
-			this->btnDbgFinish->TabIndex = 9;
-			this->btnDbgFinish->Text = L"Finish";
-			this->btnDbgFinish->UseVisualStyleBackColor = true;
-			this->btnDbgFinish->Click += gcnew System::EventHandler(this, &GameForm::btnDbgFinish_Click);
-			// 
 			// GameForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -279,6 +284,81 @@ namespace FrontEnd {
 
 		}
 #pragma endregion
+/*
+====================================================
+====	App Functionality
+====================================================
+*/
+	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		this->networkClient->stop();
+		Application::Exit();
+	}
+
+	private: void receiveLoop() {
+		networkClient->receiveInfo();
+	}
+
+	private: System::Void log(std::string msg) {
+		this->log(gcnew System::String(msg.c_str()));
+	}
+
+	private: System::Void log(System::String^ msg) {
+		this->txtLogs->AppendText(msg);
+		this->txtLogs->AppendText("\n");
+	}
+
+/*
+====================================================
+====	Debug Logic
+====================================================
+*/
+	private: void executeCommand() {
+		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
+		networkClient->sendInfo(this->txtCmd->Text);
+		this->txtCmd->Text = "";
+	}
+
+	private: System::Void btnNewGraph_Click(System::Object^ sender, System::EventArgs^ e) {
+		System::Random^ r = gcnew System::Random();
+		this->generateGraphValues(this->seed = r->Next());
+	}
+	private: System::Void btnDbgMoney_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->money = System::Decimal::ToDouble(this->nudDbgMoney->Value);
+		this->log(System::String::Format("Set money to {0:C}", this->money));
+		this->refresh();
+	}
+	private: System::Void btnDbgName_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->username = this->txtDbgUsername->Text;
+		this->log(System::String::Format("Set username to <{0}>", this->username));
+		this->refresh();
+	}
+	private: System::Void txtCmd_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ kp) {
+		//this->log(System::String::Format("pressed <{0}>, checking <{1}>", kp->KeyChar, Keys::Enter));
+		if (kp->KeyChar == 13) {
+			executeCommand();
+		}
+	}
+	private: System::Void btnDbgFinish_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->networkClient->sendInfo(System::String::Format("FINISH {0}", this->username));
+	}
+
+/*
+====================================================
+====	Game Logic
+====================================================
+*/
+	private: void startRound(int seed) {
+		this->generateGraphValues(seed);
+	}
+
+	private: void roundTick() {
+
+	}
+
+	private: System::Void timGraphTick_Tick(System::Object^ sender, System::EventArgs^ e) {
+		this->roundTick();
+	}
+
 	private: System::Void btnSell_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	}
@@ -287,17 +367,11 @@ namespace FrontEnd {
 		executeCommand();
 	}
 
-	private: void executeCommand() {
-		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
-		networkClient->sendInfo(this->txtCmd->Text);
-		this->txtCmd->Text = "";
-	}
-
-	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
-		this->networkClient->stop();
-		Application::Exit();
-	}
-
+/*
+====================================================
+====	Networking, Message Handler
+====================================================
+*/
 	private: System::Void GameForm_OnMessage(System::String^ msg) {
 		if (this->IsDisposed)
 			return;
@@ -324,10 +398,11 @@ namespace FrontEnd {
 		this->refresh();
 	}
 
-	private: void startRound(int seed) {
-		this->generateGraphValues(seed);
-	}
-
+/*
+====================================================
+====	Utils
+====================================================
+*/
 	private: System::Void updateOrCreateUser(System::String^ name, double money) {
 		// update if exists
 		for each (auto u in users) {
@@ -365,18 +440,7 @@ namespace FrontEnd {
 		this->log(System::String::Format("Failed to kick <{0}>, doesn't exist", name));
 	}
 
-	private: void receiveLoop() {
-		networkClient->receiveInfo();
-	}
 
-	private: System::Void log(std::string msg) {
-		this->log(gcnew System::String(msg.c_str()));
-	}
-
-	private: System::Void log(System::String^ msg) {
-		this->txtLogs->AppendText(msg);
-		this->txtLogs->AppendText("\n");
-	}
 
 	private: System::Void generateGraphValues(int randSeed) {
 		System::Random r(randSeed);
@@ -392,6 +456,11 @@ namespace FrontEnd {
 		this->pnlGraph->Refresh();
 	}
 
+/*
+====================================================
+====	Rendering
+====================================================
+*/
 	private: void refresh() {
 		this->lblUsername->Text = this->username;
 		this->lblMoney->Text = System::String::Format("{0:C}", this->money);
@@ -434,28 +503,6 @@ namespace FrontEnd {
 			prevY = scaledY;
 		}
 	}
-private: System::Void btnNewGraph_Click(System::Object^ sender, System::EventArgs^ e) {
-	System::Random^ r = gcnew System::Random();
-	this->generateGraphValues(this->seed=r->Next());
-}
-private: System::Void btnDbgMoney_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->money = System::Decimal::ToDouble(this->nudDbgMoney->Value);
-	this->log(System::String::Format("Set money to {0:C}", this->money));
-	this->refresh();
-}
-private: System::Void btnDbgName_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->username = this->txtDbgUsername->Text;
-	this->log(System::String::Format("Set username to <{0}>", this->username));
-	this->refresh();
-}
-private: System::Void txtCmd_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ kp) {
-	//this->log(System::String::Format("pressed <{0}>, checking <{1}>", kp->KeyChar, Keys::Enter));
-	if (kp->KeyChar == 13) {
-		executeCommand();
-	}
-}
-private: System::Void btnDbgFinish_Click(System::Object^ sender, System::EventArgs^ e) {
-	this->networkClient->sendInfo(System::String::Format("FINISH {0}", this->username));
-}
+
 };
 }
