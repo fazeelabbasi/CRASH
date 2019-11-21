@@ -89,6 +89,7 @@ namespace FrontEnd {
 	private: System::Windows::Forms::MenuStrip^ menuStrip2;
 	private: System::Windows::Forms::ToolStripMenuItem^ menuToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ debugToolStripMenuItem;
+	private: System::Windows::Forms::Label^ lblUnit;
 	private: System::ComponentModel::IContainer^ components;
 
 		   /// <summary>
@@ -129,6 +130,7 @@ namespace FrontEnd {
 			this->menuStrip2 = (gcnew System::Windows::Forms::MenuStrip());
 			this->menuToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->debugToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->lblUnit = (gcnew System::Windows::Forms::Label());
 			this->grpDbg->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudDbgMoney))->BeginInit();
 			this->pnlGraph->SuspendLayout();
@@ -385,6 +387,7 @@ namespace FrontEnd {
 			// menuStrip2
 			// 
 			this->menuStrip2->BackColor = System::Drawing::Color::Transparent;
+			this->menuStrip2->GripMargin = System::Windows::Forms::Padding(2, 2, 0, 2);
 			this->menuStrip2->ImageScalingSize = System::Drawing::Size(24, 24);
 			this->menuStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->menuToolStripMenuItem });
 			this->menuStrip2->Location = System::Drawing::Point(0, 0);
@@ -407,11 +410,26 @@ namespace FrontEnd {
 			this->debugToolStripMenuItem->Text = L"Debug";
 			this->debugToolStripMenuItem->Click += gcnew System::EventHandler(this, &GameForm::debugToolStripMenuItem_Click);
 			// 
+			// lblUnit
+			// 
+			this->lblUnit->AutoSize = true;
+			this->lblUnit->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lblUnit->Location = System::Drawing::Point(13, 583);
+			this->lblUnit->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->lblUnit->Name = L"lblUnit";
+			this->lblUnit->Size = System::Drawing::Size(167, 40);
+			this->lblUnit->TabIndex = 13;
+			this->lblUnit->Text = L"Waiting...";
+			this->lblUnit->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+			// 
 			// GameForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(9, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::SystemColors::ControlDarkDark;
 			this->ClientSize = System::Drawing::Size(1361, 894);
+			this->Controls->Add(this->lblUnit);
 			this->Controls->Add(this->btnBuyAll);
 			this->Controls->Add(this->btnSellAll);
 			this->Controls->Add(this->btnBuy);
@@ -529,7 +547,7 @@ namespace FrontEnd {
 		this->refresh();
 	}
 
-	private: int getStockValue() {
+	private: int getStockValue(){
 		if (this->graphPoints->Count == 0)
 			return -1;
 		if (this->graphIndex >= this->graphPoints->Count)
@@ -677,9 +695,14 @@ namespace FrontEnd {
 		this->lblUsername->Text = this->username;
 		this->lblMoney->Text = System::String::Format("{0:C}", this->money);
 		this->pnlGraph->Refresh();
+	
 		if (this->getStockValue() >= 0) {
 			this->lblValue->Text = System::String::Format("{0:C}", this->getStockValue());
-			this->lblStockOwned->Text = System::String::Format("Owned: {0}\nValue: {0:C}", this->stocks, this->stocks * this->getStockValue());
+			this->lblStockOwned->Text = System::String::Format("Owned: {0}\nValue: {1:C}", this->stocks, this->stocks * this->getStockValue());
+
+			if (this->getStockValue() != 0) {
+				this->lblUnit->Text = System::String::Format("Units: {0}\nValue: {1:C}", int(this->money) / this->getStockValue(), (int(this->money) / this->getStockValue()) * this->getStockValue());
+			}
 			this->btnSell->Enabled = this->stocks > 0;
 			this->btnSellAll->Enabled = this->btnSell->Enabled;
 			this->btnBuy->Enabled = this->money > this->getStockValue() && this->getStockValue() > 0;
