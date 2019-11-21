@@ -235,7 +235,7 @@ void roundLoop() {
 		// WAIT (BLOCKING) 
 		{
 			bool done = false;
-			const int timeout = 30;
+			const int timeout = 999;
 			for (int roundTimer = 0; !done && roundTimer < timeout; roundTimer++) {
 				std::cout << "Waiting for all players to respond, " << (timeout - roundTimer) << "s remaining." << std::endl;
 				this_thread::sleep_for(chrono::seconds(1));
