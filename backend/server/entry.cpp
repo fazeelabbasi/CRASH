@@ -112,8 +112,7 @@ void onConnect(uint16_t df) {
 ====	Message Event Handling
 ====================================================
 */
-
-void onMessage(uint16_t df, char *buffer) {
+void handleMessage(uint16_t df, const char *buffer) {
 	std::cout << "[" << df << "]\t<" << buffer << ">" << std::endl; 
 	std::string msg(buffer);
 	if (msg.size() >= 6 && msg.substr(0,6) == "LOGIN ") {
@@ -165,7 +164,20 @@ void onMessage(uint16_t df, char *buffer) {
 	} else {
 		std::cout << "No action taken." << std::endl;
 	}
-	// server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");
+	// server.sendMessage((struct Server::Connector){.source_fd=df}, "yeet");	
+}
+
+void onMessage(uint16_t df, char *buffer) {
+	std::string msg(buffer);
+	int pos;
+	while (pos = msg.find("\n")) {
+		std::string chunk = msg.substr(0, pos);
+		handleMessage(df, chunk.c_str());
+		if (pos == msg.size()-1)
+			return;
+		msg = msg.substr(pos+1);
+	}
+	handleMessage(df, msg.c_str());
 }
 
 void * listenBlocking(void *raw) {

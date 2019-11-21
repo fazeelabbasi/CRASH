@@ -81,6 +81,7 @@ void NetworkClient::start(PCSTR host, PCSTR port) {
 
 void NetworkClient::sendInfo(System::String^ msg) {
 	msclr::interop::marshal_context context;
+	msg += "\n";
 	std::string raw = context.marshal_as<std::string>(msg);
 	this->sendInfo(raw);
 }
