@@ -25,6 +25,7 @@ namespace FrontEnd {
 		GameForm(NetworkClient^ networkClient): networkClient(networkClient)
 		{
 			InitializeComponent();
+			networkClient->onMessage += gcnew Del(this, &GameForm::GameForm_OnMessage);
 			networkThread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &GameForm::receiveLoop));
 			networkThread->Start();
 		}
@@ -41,10 +42,11 @@ namespace FrontEnd {
 			}
 		}
 
-	private:
-		System::Threading::Thread^ networkThread;
-		NetworkClient^ networkClient;
-		msclr::interop::marshal_context context;
+	private: delegate void SafeMessageEventDelegate(System::String^ msg);
+	private: System::Threading::Thread^ networkThread;
+	private: NetworkClient^ networkClient;
+	private: msclr::interop::marshal_context context;
+
 	private: System::Windows::Forms::Button^ btnFinish;
 	private: System::Windows::Forms::TextBox^ txtLogs;
 	private: System::Windows::Forms::TextBox^ txtCmd;
@@ -84,6 +86,7 @@ namespace FrontEnd {
 			this->txtLogs->Multiline = true;
 			this->txtLogs->Name = L"txtLogs";
 			this->txtLogs->ReadOnly = true;
+			this->txtLogs->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->txtLogs->Size = System::Drawing::Size(259, 71);
 			this->txtLogs->TabIndex = 1;
 			// 
@@ -123,26 +126,37 @@ namespace FrontEnd {
 #pragma endregion
 	private: System::Void btnFinish_Click(System::Object^ sender, System::EventArgs^ e) {
 		std::string rawAddr = context.marshal_as<std::string>(this->txtCmd->Text);
-		this->log(System::String::Format("Sent: <{0}>", this->txtCmd->Text));
+		this->log(System::String::Format("Sent <{0}>", this->txtCmd->Text));
 		networkClient->sendInfo(rawAddr);
 	}
 	private: System::Void GameForm_FormClosed(System::Object^ sender, System::Windows::Forms::FormClosedEventArgs^ e) {
+		this->networkClient->stop();
 		Application::Exit();
 	}
 
+	private: System::Void GameForm_OnMessage(System::String^ msg) {
+		if (!this->IsHandleCreated)
+			this->CreateHandle();
+		SafeMessageEventDelegate^ d = gcnew SafeMessageEventDelegate(this, &GameForm::GameForm_OnMessageSafe);
+		this->Invoke(d, msg);
+	}
+
+	private: System::Void GameForm_OnMessageSafe(System::String^ msg) {
+		this->log(System::String::Format("Received <{0}>", msg));
+	}
+
 	private: void receiveLoop() {
-		for (;;) {
-			std::string msg = networkClient->receiveInfo();
-			this->log(msg);
-		}
+		networkClient->receiveInfo();
 	}
 
 	private: System::Void log(std::string msg) {
 		this->log(gcnew System::String(msg.c_str()));
 	}
+
 	private: System::Void log(System::String^ msg) {
 		this->txtLogs->AppendText(msg);
 		this->txtLogs->AppendText("\n");
 	}
+
 };
 }

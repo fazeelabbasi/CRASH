@@ -2,13 +2,26 @@
 #include <winsock2.h>
 #include <string>
 
-public ref class NetworkClient {
-	SOCKET ConnectSocket = INVALID_SOCKET;
+public delegate void Del(System::String^ msg);
 
+interface struct MessageEventSource {
 public:
+	event Del ^ onMessage;
+	void fire(System::String^ msg);
+};
+
+public ref class NetworkClient: public MessageEventSource {
+public:
+	virtual event Del^ onMessage;
+	virtual void fire(System::String^ msg) {
+		onMessage(msg);
+	};
+
 	void start(PCSTR host, PCSTR port);
 	void sendInfo(std::string);
 	std::string receiveInfo();
 	bool isConnected();
 	void stop();
+private:
+	SOCKET ConnectSocket = INVALID_SOCKET;
 };

@@ -102,13 +102,16 @@ std::string NetworkClient::receiveInfo() {
 	do {
 
 		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-		if (iResult > 0)
+		if (iResult > 0) {
 			printf("Bytes received: %d\n", iResult);
-		else if (iResult == 0)
+			this->fire(gcnew System::String(recvbuf,0, iResult));
+		}
+		else if (iResult == 0) {
 			printf("Connection closed\n");
-		else
+		}
+		else {
 			printf("recv failed with error: %d\n", WSAGetLastError());
-
+		}
 	} while (iResult > 0);
 
 	closesocket(ConnectSocket);
