@@ -724,7 +724,7 @@ namespace FrontEnd {
 		this->lblUsername->Text = this->username;
 		this->lblMoney->Text = System::String::Format("{0:C}", this->money);
 		this->pnlGraph->Refresh();
-		this->lblPlayers->Text = System::String::Format("{0:C}", this->users->Count);
+		this->lblPlayers->Text = System::String::Format("Players: {0}", this->users->Count);
 		if (this->getStockValue() >= 0) {
 			this->lblValue->Text = System::String::Format("{0:C}", this->getStockValue());
 			this->lblStockOwned->Text = System::String::Format("Owned: {0}\nValue: {1:C}", this->stocks, this->stocks * this->getStockValue());
