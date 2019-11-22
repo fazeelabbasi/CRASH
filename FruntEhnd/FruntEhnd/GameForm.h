@@ -631,7 +631,7 @@ namespace FrontEnd {
 		}
 		catch (Exception^ ignored) {}
 	}
-
+	
 	private: System::Void GameForm_OnMessageSafe(System::String^ msg) {
 		this->log(System::String::Format("Received <{0}>", msg));
 		try {
