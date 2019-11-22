@@ -326,7 +326,7 @@ namespace FrontEnd {
 			this->lblMoney->BackColor = System::Drawing::Color::Transparent;
 			this->lblMoney->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 27, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lblMoney->Location = System::Drawing::Point(893, 61);
+			this->lblMoney->Location = System::Drawing::Point(898, 61);
 			this->lblMoney->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->lblMoney->Name = L"lblMoney";
 			this->lblMoney->Size = System::Drawing::Size(210, 52);
